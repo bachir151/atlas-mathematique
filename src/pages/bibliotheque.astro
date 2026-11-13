@@ -1,0 +1,33 @@
+---
+import Layout from '../layouts/Layout.astro';
+import LessonCard from '../components/LessonCard.astro';
+import { lessons } from '../data/catalog';
+---
+<Layout title="La bibliothèque">
+  <section class="page-heading wrap"><p class="eyebrow">À votre rythme</p><h1>La <em>bibliothèque.</em></h1><p>Une première manipulation à explorer, et des emplacements pour les cours à venir.</p></section>
+  <section class="wrap library" aria-label="Catalogue des cours" data-library>
+    <div class="library-toolbar"><label class="search-field"><span aria-hidden="true">⌕</span><span class="sr-only">Rechercher un cours</span><input type="search" name="search" placeholder="Rechercher un cours…" data-search autocomplete="off" disabled /></label><label class="domain-field"><span class="sr-only">Filtrer par domaine</span><select data-domain disabled><option value="all">Tous les domaines</option><option>Algèbre</option><option>Géométrie</option><option>Analyse</option></select></label></div>
+    <p class="result-count" data-result-count role="status">{lessons.length} résultats</p>
+    <div class="lesson-grid">{lessons.map(lesson => <LessonCard lesson={lesson} />)}</div>
+    <div class="empty-state" data-empty hidden><span aria-hidden="true">∅</span><h2>Aucun cours trouvé</h2><p>Essayez un autre titre ou un autre domaine.</p><button class="button secondary" data-clear type="button">Effacer les filtres</button></div>
+    <noscript><p>Les filtres nécessitent JavaScript. Tous les emplacements sont affichés ci-dessus.</p></noscript>
+  </section>
+  <section class="page-endnote wrap"><span class="status-dot"></span><p>Les emplacements « À venir » ne contiennent pas de cours. Le prototype interactif reste distinct des contenus scientifiques à valider.</p></section>
+</Layout>
+<script>
+  import { filterLessons } from '../data/catalog';
+  const library = document.querySelector<HTMLElement>('[data-library]')!;
+  const search = library.querySelector<HTMLInputElement>('[data-search]')!;
+  const domain = library.querySelector<HTMLSelectElement>('[data-domain]')!;
+  search.disabled = false;
+  domain.disabled = false;
+  const update = () => {
+    const visible = new Set(filterLessons(search.value, domain.value).map(lesson => lesson.id));
+    library.querySelectorAll<HTMLElement>('[data-lesson-id]').forEach(card => { card.hidden = !visible.has(card.dataset.lessonId!); });
+    library.querySelector<HTMLElement>('[data-result-count]')!.textContent = `${visible.size} résultat${visible.size === 1 ? '' : 's'}`;
+    library.querySelector<HTMLElement>('[data-empty]')!.hidden = visible.size > 0;
+  };
+  search.addEventListener('input', update);
+  domain.addEventListener('change', update);
+  library.querySelector('[data-clear]')!.addEventListener('click', () => { search.value = ''; domain.value = 'all'; update(); search.focus(); });
+</script>

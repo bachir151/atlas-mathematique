@@ -1,0 +1,24 @@
+---
+import { atlasNodes, atlasLinks, linkKinds, approvedLinks } from '../data/atlas';
+---
+<section class="atlas-app" data-atlas>
+  <div class="atlas-toolbar"><div class="segmented" role="group" aria-label="Mode d’affichage"><button type="button" data-mode="3d" aria-pressed="false" disabled>Vue 3D</button><button type="button" data-mode="2d" aria-pressed="true">Vue 2D</button></div><span class="eyebrow">{atlasNodes.length} thèmes · {approvedLinks(atlasLinks).length} lien validé</span></div>
+  <div class="atlas-layout">
+    <div class="atlas-stage" data-atlas-stage>
+      <div class="atlas-canvas" data-canvas hidden></div>
+      <div class="atlas-map" data-map role="group" aria-label="Carte en deux dimensions">
+        {atlasNodes.map((node, index) => <button type="button" class={`map-node map-node-${index}`} data-node={node.id} aria-pressed="false"><span style={`--node-color: ${node.color}`}></span>{node.label}</button>)}
+      </div>
+      <div class="atlas-hud"><span class="status-dot"></span><span data-atlas-status role="status">Vue 2D accessible · chargement de la 3D à l’approche de la carte.</span></div>
+      <div class="atlas-camera" data-camera hidden><button type="button" data-zoom="in" aria-label="Zoom avant">+</button><button type="button" data-zoom="out" aria-label="Zoom arrière">−</button><button type="button" data-reset aria-label="Réinitialiser la vue">↺</button></div>
+      <span class="atlas-coordinates" aria-hidden="true">ATLAS / V.01</span>
+    </div>
+    <aside class="atlas-sidebar" aria-label="Exploration des thèmes"><p class="eyebrow">Votre point de départ</p><h2>Choisir un thème</h2><p class="muted">La liste donne accès aux mêmes thèmes que la carte.</p><div class="atlas-node-list">{atlasNodes.map(node => <button type="button" data-node={node.id} aria-pressed="false"><span style={`--node-color: ${node.color}`} class="node-dot"></span>{node.label}<span aria-hidden="true">↗</span></button>)}</div><div class="node-detail" aria-live="polite" aria-atomic="true"><h3 data-node-title>Sélectionnez un thème</h3><p data-node-description>Les descriptions et connexions scientifiques attendent leur validation.</p><a data-node-link class="text-link" href="/cours/groupes-rotations/" hidden>Ouvrir le prototype <span aria-hidden="true">→</span></a></div></aside>
+  </div>
+  <div class="atlas-legend"><span class="eyebrow">Types de liens prévus</span>{Object.entries(linkKinds).map(([kind, label]) => <span><i class={`link-sample ${kind}`}></i>{label}</span>)}<p>Aucun lien scientifique n’est affiché avant validation de son type et de sa justification.</p></div>
+  <noscript><p class="technical-note">La carte interactive nécessite JavaScript. <a class="text-link" href="/cours/groupes-rotations/">Ouvrir le prototype sur les rotations du carré →</a></p></noscript>
+</section>
+<script>
+  import { initAtlas } from '../scripts/atlas';
+  document.querySelectorAll<HTMLElement>('[data-atlas]').forEach(initAtlas);
+</script>

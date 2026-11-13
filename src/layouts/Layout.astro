@@ -1,0 +1,35 @@
+---
+import '../styles/global.css';
+import Icon from '../components/Icon.astro';
+interface Props { title?: string; description?: string; }
+const { title = 'L’Atelier des abstractions', description = 'Prototype local : accueil, Atlas des connaissances et interfaces de leçons interactives.' } = Astro.props;
+const path = Astro.url.pathname;
+const navigation = [{ href: '/', label: 'L’Atelier' }, { href: '/atlas/', label: 'L’Atlas' }, { href: '/bibliotheque/', label: 'Les cours' }];
+---
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#f7f5ef" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{title === 'L’Atelier des abstractions' ? title : `${title} — L’Atelier des abstractions`}</title>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Aller au contenu</a>
+    <header class="site-header wrap">
+      <a class="brand" href="/" aria-label="L’Atelier des abstractions — Accueil"><span class="brand-mark"><Icon name="cube" size={29} /></span><span>L’Atelier<span class="brand-sub">des abstractions</span></span></a>
+      <nav class="main-nav" aria-label="Navigation principale">
+        {navigation.map(item => <a href={item.href} aria-current={path === item.href || (item.href === '/bibliotheque/' && path.startsWith('/cours/')) ? 'page' : undefined}>{item.label}</a>)}
+      </nav>
+      <span class="prototype-tag"><span class="status-dot"></span> Prototype local</span>
+    </header>
+    <main id="main" tabindex="-1"><slot /></main>
+    <footer class="site-footer wrap">
+      <a href="/" class="footer-brand">L’Atelier des abstractions<span>Un espace pour explorer les mathématiques.</span></a>
+      <div><span class="eyebrow">Version locale · 0.1</span><p>Contenus scientifiques en attente de validation.</p></div>
+      <a class="text-link" href="/bibliotheque/">Ouvrir la bibliothèque <Icon name="arrow" size={17} /></a>
+    </footer>
+  </body>
+</html>

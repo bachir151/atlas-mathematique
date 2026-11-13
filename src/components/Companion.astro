@@ -1,0 +1,12 @@
+---
+import Icon from './Icon.astro';
+---
+<aside class="companion panel" data-companion aria-labelledby="companion-title">
+  <div class="companion-heading"><span class="companion-icon"><Icon name="spark" size={23} /></span><div><h2 id="companion-title">Le compagnon</h2><span class="eyebrow">Simulation locale · facultative</span></div><button type="button" data-companion-toggle aria-expanded="true" aria-controls="companion-body" disabled>Masquer</button></div>
+  <div id="companion-body" data-companion-body><p class="muted">Réponses d’interface préprogrammées. Aucun modèle d’IA n’est connecté ; aucun message n’est transmis.</p><div class="companion-log" data-chat role="log" aria-live="polite" aria-relevant="additions" tabindex="0" aria-label="Conversation simulée"><p class="chat-message assistant">Bienvenue dans le prototype. Je peux vous indiquer où trouver les commandes ou les emplacements de contenu.</p></div><div class="quick-prompts" aria-label="Questions suggérées"><button type="button" data-prompt="commands" disabled>Où sont les commandes ?</button><button type="button" data-prompt="proof" disabled>Où est la preuve ?</button></div><form data-chat-form><label class="sr-only" for="companion-input">Message au compagnon simulé</label><div class="chat-input"><input id="companion-input" name="message" placeholder="Tester un message…" maxlength="300" disabled required autocomplete="off" /><button type="submit" disabled aria-label="Envoyer au simulateur"><Icon name="arrow" size={19} /></button></div></form><p class="technical-note">Les réponses ne constituent pas un contenu pédagogique validé. Historique limité à 20 messages, effacé en quittant la page.</p></div>
+  <noscript><p>La simulation du compagnon nécessite JavaScript.</p></noscript>
+</aside>
+<script>
+  import { initCompanion } from '../scripts/companion';
+  document.querySelectorAll<HTMLElement>('[data-companion]').forEach(initCompanion);
+</script>

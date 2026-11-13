@@ -1,0 +1,66 @@
+{
+  "check": {
+    "exitCode": 0,
+    "files": 28,
+    "errors": 0,
+    "warnings": 0,
+    "hints": 0
+  },
+  "tests": {
+    "exitCode": 0,
+    "core": 5,
+    "dom": 5
+  },
+  "build": {
+    "exitCode": 0,
+    "pages": 5,
+    "warnings": 0
+  },
+  "artifactVerification": {
+    "exitCode": 0,
+    "pages": 5,
+    "localReferences": 62
+  },
+  "threeBundle": {
+    "beforeKB": 704.89,
+    "afterKB": 473.93,
+    "beforeGzipKB": 181.19,
+    "afterGzipKB": 119.42
+  },
+  "runtimeLimits": {
+    "localServer": "EPERM on 127.0.0.1:4325",
+    "browser": "Firefox Snap cannot create /run/user/1000/snap.firefox",
+    "npmAuditOnline": "EAI_AGAIN",
+    "claude": "No new attempt; initial two-attempt limit preserved"
+  },
+  "vulnerablePackagesFromCache": {
+    "astro": {
+      "version": "5.18.2",
+      "severity": "critical"
+    },
+    "sharp": {
+      "version": "0.34.5",
+      "severity": "high"
+    },
+    "esbuild": {
+      "version": "0.27.7",
+      "severity": "low"
+    },
+    "zod-to-ts": {
+      "version": "1.2.0",
+      "severity": "high"
+    },
+    "@astrojs/mdx": {
+      "version": "4.3.14",
+      "severity": "low"
+    },
+    "zod": {
+      "version": "3.25.76",
+      "severity": "high"
+    },
+    "katex": {
+      "version": "0.16.47",
+      "severity": "low"
+    }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "staging": "/tmp/atelier-migration-0bjT5p",
+  "runtime": "/home/elbash/.nvm/versions/node/v22.23.4/bin/node",
+  "targetVersions": {
+    "astro": "7.4.12",
+    "mdx": "8.1.6",
+    "katex": "0.19.1"
+  },
+  "status": 1,
+  "signal": null,
+  "stdout": "",
+  "stderr": "",
+  "error": "spawnSync /home/elbash/.nvm/versions/node/v22.23.4/bin/node EPERM",
+  "rootManifestUnchanged": true
+}

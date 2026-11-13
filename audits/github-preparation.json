@@ -1,0 +1,326 @@
+{
+  "status": "ready_to_send",
+  "repository": "bachir151/atlas-mathematique",
+  "branch": "main",
+  "visibility": "public",
+  "commitPushAuthorized": true,
+  "localGitRepository": false,
+  "transferMethod": "GitHub connector Git data API",
+  "excludedDirectories": [
+    ".agents",
+    ".astro",
+    ".aws",
+    ".codex",
+    ".git",
+    ".npm-cache",
+    "__pycache__",
+    "dist",
+    "node_modules",
+    "playwright-report",
+    "test-results"
+  ],
+  "excludedPatterns": [
+    "*:Zone.Identifier",
+    "*.log",
+    ".env* except .env.example"
+  ],
+  "manifestSelfExcluded": true,
+  "sensitivePatternFindings": [],
+  "files": [
+    {
+      "path": ".gitignore",
+      "bytes": 123,
+      "sha256": "0de40fddebf6a9977d1281d3305efa7b269605abc8266876c72c24aaca14af07"
+    },
+    {
+      "path": ".npmrc",
+      "bytes": 50,
+      "sha256": "276ced737dd88622e921a89cef4fc585b0f4e01f1e21ae87a64a156a7a9732a0"
+    },
+    {
+      "path": ".nvmrc",
+      "bytes": 8,
+      "sha256": "0c4bf84f9bedd485b2c4eac05f59e35addc86ce7dbf0d90435528e04384c6314"
+    },
+    {
+      "path": "AGENTS.md",
+      "bytes": 6620,
+      "sha256": "227b28c5c0bbfbd143c33087f3ab779243f3c33d963c680a26804b95b72f7c53"
+    },
+    {
+      "path": "CLAUDE.md",
+      "bytes": 4517,
+      "sha256": "bf9a1c7263eb36ac9c56f3817b08eab98f30753d5bbd659be525c8437359ac85"
+    },
+    {
+      "path": "JURNAL.md",
+      "bytes": 21629,
+      "sha256": "4c8f90ed3ca5d484b8d933f99d50d5828cf12cda4d7b8b2e4d4762c6b6af8f78"
+    },
+    {
+      "path": "README.md",
+      "bytes": 6939,
+      "sha256": "986aaf697493a41e68f9c9c516647a60e8763350f3fb2cbf0f14c92b189c5d4e"
+    },
+    {
+      "path": "astro.config.mjs",
+      "bytes": 414,
+      "sha256": "e510636f2809adf55f3cc2de14617cc6604061a5dae07ffd4ea1f77a1ce037be"
+    },
+    {
+      "path": "audits/claude-1-sources.json",
+      "bytes": 6186,
+      "sha256": "650799f2ca5c89c6e197d9eb02431d57031258ae946224ce07dc93458bcea315"
+    },
+    {
+      "path": "audits/claude-1.md",
+      "bytes": 348,
+      "sha256": "64d76e3cf2cab82832f2cea3a1e1c815c91c8e2d22d4d8e6601fdcbdd97fb07c"
+    },
+    {
+      "path": "audits/claude-2-sources.json",
+      "bytes": 6922,
+      "sha256": "8cf161e9d9af10a067d7c0d5edc855138e68dfb4dc9ec90113a17c248c458d99"
+    },
+    {
+      "path": "audits/claude-2.md",
+      "bytes": 348,
+      "sha256": "ea513232a722c840ee3ef0e35d861da0929444e21f0e80cb612821c2c7c432ee"
+    },
+    {
+      "path": "audits/contrast-local.txt",
+      "bytes": 417,
+      "sha256": "6b3fa29037ec49ef28b5b37d507a5b6487a658186b045360a9d8309c91c42333"
+    },
+    {
+      "path": "audits/dependances-cache.json",
+      "bytes": 8532,
+      "sha256": "6be4cffcc818ece4ba524692408845b070f3befa3bacdba275b45a3908928618"
+    },
+    {
+      "path": "audits/migration-etat.md",
+      "bytes": 1776,
+      "sha256": "cfe0ddc456113f3d68a1bca307a4914294ede3183d21549fafd1faf2a68c9ea2"
+    },
+    {
+      "path": "audits/migration-preparation.json",
+      "bytes": 385,
+      "sha256": "949327ea6142e38dca5228a8e493be1b7d371eaa35706056aeb14350e9c4abc4"
+    },
+    {
+      "path": "audits/modifications-entre-passages.json",
+      "bytes": 846,
+      "sha256": "5fc4167b9470c3094e92dd14745845bbc28a8eb89a89cbd4441a807ca0fcb36e"
+    },
+    {
+      "path": "audits/reprise-verifications.json",
+      "bytes": 1281,
+      "sha256": "dbd7ae4e4bb364c659b7d855841fe9ebca7768bceab430330abb6b5c9679dee5"
+    },
+    {
+      "path": "audits/runtime-22.23.4-validation.txt",
+      "bytes": 788,
+      "sha256": "609c54a46f02879689ce523d9136ce556ebd45d18f050d1bd311cfbb48d68ef0"
+    },
+    {
+      "path": "audits/syntax-local.txt",
+      "bytes": 174,
+      "sha256": "ce53e25bc4a1b995b156e9ca707af4ffe5ab6008acd6366e51b3c84943a81c4f"
+    },
+    {
+      "path": "audits/tests-local.txt",
+      "bytes": 2687,
+      "sha256": "1cc4991837c571f71558269849c7be888568139b703bea145ce9a2d25c5dbbec"
+    },
+    {
+      "path": "docs/LIVRAISON.md",
+      "bytes": 6969,
+      "sha256": "72f2dd11bda015918d8a3d5ac636e3f6a381e602f46ed2c7c253a7cba7f5e68b"
+    },
+    {
+      "path": "docs/VERIFICATIONS.md",
+      "bytes": 7840,
+      "sha256": "4fd2845cc0d6be375643ebd961519c6e7c99f92f21f5e910408bd21894a5f8fd"
+    },
+    {
+      "path": "docs/migration/package.candidate.json",
+      "bytes": 880,
+      "sha256": "869d8d28057d8c882f7c98552684471bd46ffe754fa550589c6e349e51522b9d"
+    },
+    {
+      "path": "package-lock.json",
+      "bytes": 293550,
+      "sha256": "58c4a471d54282e77ba5195f61a17fb4d3f8eba5ca4f94449631f716d99d672e"
+    },
+    {
+      "path": "package.json",
+      "bytes": 909,
+      "sha256": "50b6a09c407e3727b7dc5164903cc7ec68e097b50c41c757ae52e2cb38ab754e"
+    },
+    {
+      "path": "public/favicon.svg",
+      "bytes": 310,
+      "sha256": "fbfbae6f060dfad0282fc039a6f230726d68d7dafd53bfe02b262c5342aae1cf"
+    },
+    {
+      "path": "scripts/audit_claude.py",
+      "bytes": 5736,
+      "sha256": "98080ecedef3b068fffb2e1be9273bb1218cacfbd6b5166da449b5418f583d08"
+    },
+    {
+      "path": "scripts/check-build.mjs",
+      "bytes": 2985,
+      "sha256": "00423958dd27f071a5eb48ad3a8b881cbb3da7dbac36ac93a583274ab747bc49"
+    },
+    {
+      "path": "src/components/Atlas.astro",
+      "bytes": 3000,
+      "sha256": "4425a22119f462cddf1314de4a8773072ad87ac0375aca4437d329291392e0ac"
+    },
+    {
+      "path": "src/components/Companion.astro",
+      "bytes": 1966,
+      "sha256": "0a80648c5eae67b9250a3c529a80117b29f0c325f77fe2f39a871181291c3896"
+    },
+    {
+      "path": "src/components/Diagram.astro",
+      "bytes": 1594,
+      "sha256": "34a609f8092e9dbef5f1783fc68a738fd9829af8fcad784964a8622158132b9b"
+    },
+    {
+      "path": "src/components/Formula.astro",
+      "bytes": 449,
+      "sha256": "87fbb8587731e20bb02a513df67c15a65ac2bd9adac693f140922345b3cc4460"
+    },
+    {
+      "path": "src/components/Icon.astro",
+      "bytes": 918,
+      "sha256": "af21f4dbe3f18925fa193f62b1d0c9fbc9bf17df5b6489604996aa37a633ba20"
+    },
+    {
+      "path": "src/components/LessonCard.astro",
+      "bytes": 972,
+      "sha256": "cec566f3f06d767d7bbdd132b0d72a0de5ba14f5ab1d69185acd8e84d28c210d"
+    },
+    {
+      "path": "src/components/Proof.astro",
+      "bytes": 1641,
+      "sha256": "94e619fcc654d0cbe8ca0d4c74a8fcc2433c7a69dd8874a8ff44769b49b01da8"
+    },
+    {
+      "path": "src/components/SquareExperiment.astro",
+      "bytes": 3157,
+      "sha256": "1d6ad4440031ded0dea6d6549c05b6291d3e1f570f889df44c264455f2471a9b"
+    },
+    {
+      "path": "src/content.config.ts",
+      "bytes": 352,
+      "sha256": "be1280e013821b233a832cc69fd8e887d873472e9059aa6ca91d5f226a613f43"
+    },
+    {
+      "path": "src/content/lessons/groupes-rotations.mdx",
+      "bytes": 481,
+      "sha256": "82faf15a01628d18a278f456a2e8da54ffbdf511d93345bf4f13903a123c7cd5"
+    },
+    {
+      "path": "src/data/atlas.ts",
+      "bytes": 1571,
+      "sha256": "86090cc5d6c289ef00820e76518fb2fcd489a67c06de4b7beb6faf909350c069"
+    },
+    {
+      "path": "src/data/catalog.ts",
+      "bytes": 1135,
+      "sha256": "b840c6dadf36203cadda14c3c587af72a4b17f56139d8662449d1b0807dacbde"
+    },
+    {
+      "path": "src/data/proof.ts",
+      "bytes": 759,
+      "sha256": "4c000a4a807bb14fabf51ea172d8d7b8490edf039c9622a811d11590a59dad30"
+    },
+    {
+      "path": "src/env.d.ts",
+      "bytes": 39,
+      "sha256": "9c9283a414423d9223e5ea86941b142443b8af7a007f77612dc2c098de2d2500"
+    },
+    {
+      "path": "src/layouts/Layout.astro",
+      "bytes": 2119,
+      "sha256": "7b89b212f0ea3a40ada76912446d1a28677f56ed408822378b9fdd0ce3bc802d"
+    },
+    {
+      "path": "src/lib/rotation.ts",
+      "bytes": 386,
+      "sha256": "8ef0d64f9816f15db06131b4b791de9212a531caf97bc180712a3b40d0baccce"
+    },
+    {
+      "path": "src/lib/three-primitives.ts",
+      "bytes": 363,
+      "sha256": "109ec30e99a492574ef79bc0eb6b2be8072cc4c95e5c9c372b47ff5e316daaa0"
+    },
+    {
+      "path": "src/pages/404.astro",
+      "bytes": 384,
+      "sha256": "02a8fb23ae455705079fbcacc9c99209ea1285c0b9c1571f816391ec626c11d6"
+    },
+    {
+      "path": "src/pages/atlas.astro",
+      "bytes": 663,
+      "sha256": "07d2b4c3e7df33efb16cff4370e2c9f46305cb480d267be8398741aa7dd9b672"
+    },
+    {
+      "path": "src/pages/bibliotheque.astro",
+      "bytes": 2868,
+      "sha256": "32dd66eb81464f6847ec094c1a33c1d23e112f2aca8a197c2b3ba4b7bb9f6364"
+    },
+    {
+      "path": "src/pages/cours/groupes-rotations.astro",
+      "bytes": 1462,
+      "sha256": "cd64725e91764ca0c76bf10f2a1444b1400ccc7555ff5e0c5164a0d5bceac692"
+    },
+    {
+      "path": "src/pages/index.astro",
+      "bytes": 5130,
+      "sha256": "8e6f128e5fff9ad994cccb41cd69b1c073aecdf8e001a0bb07d30aa34490c81e"
+    },
+    {
+      "path": "src/scripts/atlas.ts",
+      "bytes": 10228,
+      "sha256": "8adc491fe68da67295ad893d90702fd1a767bd16f1d0ab45d375bf3fb19c7f25"
+    },
+    {
+      "path": "src/scripts/companion.ts",
+      "bytes": 2115,
+      "sha256": "f82b0327ac298052780d6d36383afe14038a3f1685387a22db6f7d5192b59c25"
+    },
+    {
+      "path": "src/scripts/proof.ts",
+      "bytes": 941,
+      "sha256": "5e8db0b6e7f0fcb8264f7ac1f73bd261de213bb70beed90ef496688992f5f0a2"
+    },
+    {
+      "path": "src/scripts/square.ts",
+      "bytes": 1754,
+      "sha256": "a676e8162b8cfc834a5390e6dda59e61f80894e76d7051564fbff6dae7f4bc84"
+    },
+    {
+      "path": "src/styles/global.css",
+      "bytes": 36565,
+      "sha256": "fe745f3b122c2489fc943944196448eac9900c209fdd4a1cf38d78cedf1adeb4"
+    },
+    {
+      "path": "tests/core.test.mjs",
+      "bytes": 2599,
+      "sha256": "d8139e692696d199b1d3c6fef45776cede6b393c75487c83958ce5b5704ea1dc"
+    },
+    {
+      "path": "tests/dom.test.mjs",
+      "bytes": 9140,
+      "sha256": "a63b117f31ccef48361a3bc99cb5c17f23b8ff97b4592251f5065a34320775ac"
+    },
+    {
+      "path": "tsconfig.json",
+      "bytes": 188,
+      "sha256": "e6d0f00b7d5447e69da4b65358d33f005daa89c03b4dc55608842a2212ad3d67"
+    }
+  ]
+}

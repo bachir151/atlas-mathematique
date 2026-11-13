@@ -1,0 +1,92 @@
+
+> atelier-des-abstractions@0.1.0 test
+> npm run test:core && npm run test:dom
+
+
+> atelier-des-abstractions@0.1.0 test:core
+> node --experimental-strip-types tests/core.test.ts
+
+TAP version 13
+# Subtest: rotation state supports wraparound, negative input, and rejects invalid angles
+ok 1 - rotation state supports wraparound, negative input, and rejects invalid angles
+  ---
+  duration_ms: 1.107442
+  type: 'test'
+  ...
+# Subtest: library search tolerates accents, case and whitespace; filters combine
+ok 2 - library search tolerates accents, case and whitespace; filters combine
+  ---
+  duration_ms: 1.392307
+  type: 'test'
+  ...
+# Subtest: unvalidated and unjustified Atlas links never reach the renderer
+ok 3 - unvalidated and unjustified Atlas links never reach the renderer
+  ---
+  duration_ms: 0.161112
+  type: 'test'
+  ...
+# Subtest: Atlas data identifiers and positions are usable independently of Three.js
+ok 4 - Atlas data identifiers and positions are usable independently of Three.js
+  ---
+  duration_ms: 0.344186
+  type: 'test'
+  ...
+# Subtest: proof slots contain explicit placeholders; full proof has an independent state
+ok 5 - proof slots contain explicit placeholders; full proof has an independent state
+  ---
+  duration_ms: 0.192508
+  type: 'test'
+  ...
+1..5
+# tests 5
+# suites 0
+# pass 5
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 13.693801
+
+> atelier-des-abstractions@0.1.0 test:dom
+> node --experimental-strip-types tests/dom.test.mjs
+
+TAP version 13
+# Subtest: square controls update SVG, announce the angle, bound history and reset state
+ok 1 - square controls update SVG, announce the angle, bound history and reset state
+  ---
+  duration_ms: 115.076048
+  type: 'test'
+  ...
+# Subtest: companion displays user text literally, keeps bounded history and can be hidden
+ok 2 - companion displays user text literally, keeps bounded history and can be hidden
+  ---
+  duration_ms: 28.08279
+  type: 'test'
+  ...
+# Subtest: library controller combines filters and restores all cards when cleared
+ok 3 - library controller combines filters and restores all cards when cleared
+  ---
+  duration_ms: 15.421021
+  type: 'test'
+  ...
+# Subtest: progressive proof never hides the independent full-proof panel
+ok 4 - progressive proof never hides the independent full-proof panel
+  ---
+  duration_ms: 23.749964
+  type: 'test'
+  ...
+# Subtest: Atlas keeps the DOM map and selection usable when the 3D module is unavailable
+ok 5 - Atlas keeps the DOM map and selection usable when the 3D module is unavailable
+  ---
+  duration_ms: 22.607588
+  type: 'test'
+  ...
+1..5
+# tests 5
+# suites 0
+# pass 5
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 210.830742

@@ -1,0 +1,23 @@
+---
+import Icon from './Icon.astro';
+---
+<section class="experiment panel" data-square aria-labelledby="experiment-title">
+  <div class="panel-heading"><div><p class="eyebrow">01 / Manipulation</p><h2 id="experiment-title">Le carré en mouvement.</h2></div><span class="badge">Prototype technique</span></div>
+  <p class="muted">Sélectionnez une rotation pour tester l’animation. Les commandes fonctionnent aussi au clavier.</p>
+  <div class="square-stage">
+    <span class="stage-label">VUE 2D · INTERACTIVE</span>
+    <svg viewBox="0 0 480 350" role="img" aria-label="Carré à quatre sommets repérés A, B, C et D ; angle courant affiché sous la figure.">
+      <defs><pattern id="square-grid" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r=".8" fill="#33594b" opacity=".2" /></pattern></defs><rect width="480" height="350" fill="url(#square-grid)" /><circle cx="240" cy="175" r="122" stroke="#33594b" stroke-opacity=".12" fill="none" /><path d="M240 20v310M70 175h340" stroke="#33594b" stroke-opacity=".12" /><rect x="160" y="95" width="160" height="160" fill="none" stroke="#33594b" stroke-opacity=".35" stroke-dasharray="4 5" />
+      <g data-rotating-square class="rotating-square"><rect x="160" y="95" width="160" height="160" fill="#33594b" fill-opacity=".07" stroke="#33594b" stroke-width="2" /><path d="m160 95 160 160m0-160L160 255" stroke="#33594b" stroke-opacity=".17" /><circle cx="160" cy="95" r="6" fill="#a65b36" /><circle cx="320" cy="95" r="5" fill="#33594b" /><circle cx="320" cy="255" r="5" fill="#33594b" /><circle cx="160" cy="255" r="5" fill="#33594b" /><g font-family="Georgia" font-size="17" fill="#213c32"><text x="140" y="83">A</text><text x="332" y="83">B</text><text x="332" y="278">C</text><text x="140" y="278">D</text></g></g><circle cx="240" cy="175" r="4" fill="#33594b" />
+    </svg>
+    <div class="angle-display" role="status" aria-live="polite" aria-atomic="true"><span>Angle affiché</span><output data-angle>0°</output></div>
+  </div>
+  <div class="rotation-controls" role="group" aria-label="Appliquer une rotation au carré"><button type="button" data-rotation="90" disabled>+90° <span aria-hidden="true">↺</span></button><button type="button" data-rotation="180" disabled>+180° <span aria-hidden="true">↺</span></button><button type="button" data-rotation="270" disabled>+270° <span aria-hidden="true">↺</span></button><button type="button" data-square-reset disabled aria-label="Réinitialiser le carré"><Icon name="reset" size={18} /> Réinitialiser</button></div>
+  <div class="rotation-history"><span class="eyebrow">Historique · 8 dernières actions</span><ol data-history aria-label="Historique des commandes"><li>Aucune rotation appliquée.</li></ol></div>
+  <p class="technical-note">Simulation technique uniquement. Elle ne constitue ni une leçon validée ni une démonstration.</p>
+  <noscript><p>Activez JavaScript pour utiliser les commandes. La figure statique reste visible.</p></noscript>
+</section>
+<script>
+  import { initSquare } from '../scripts/square';
+  document.querySelectorAll<HTMLElement>('[data-square]').forEach(initSquare);
+</script>

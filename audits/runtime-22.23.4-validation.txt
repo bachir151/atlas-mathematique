@@ -1,0 +1,14 @@
+Validation de la version Astro 5 actuelle sous Node 22.23.4 / npm 10.9.9.
+Ne valide pas la migration Astro 7.
+
+Les premiers essais par sous-processus ayant produit des sorties vides, les commandes
+ont été relancées directement via le terminal avec le répertoire bin nvm dans PATH.
+Résultats constatés dans les sorties des appels directs :
+
+npm run check : code 0 ; 28 fichiers, 0 erreur, 0 avertissement, 0 indication.
+npm test : code 0 ; 5 tests de données et 5 tests DOM réussis.
+npm run build : code 0 ; 5 pages compilées, sans avertissement de collection ou de taille.
+npm run verify:build : code 0 ; 5 pages et 62 références locales vérifiées.
+
+Module Three.js : 473,93 ko ; gzip 119,42 ko.
+Aucun serveur HTTP, navigateur réel ou GPU réel vérifié par ces commandes.

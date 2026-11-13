@@ -1,0 +1,265 @@
+{
+  "note": "Données mises en cache lors de npm install ; audit en ligne inaccessible. La sortie npm audit --offline indiquant zéro ne valide pas la sécurité.",
+  "records": [
+    {
+      "name": "astro",
+      "dependency": "astro",
+      "title": "Astro: Reflected XSS via unescaped View Transition animation properties",
+      "url": "https://github.com/advisories/GHSA-4g3v-8h47-v7g6",
+      "severity": "moderate",
+      "range": ">=2.9.0 <=7.0.9",
+      "installed": "5.18.2",
+      "affected": true
+    },
+    {
+      "name": "astro",
+      "dependency": "astro",
+      "title": "Astro: XSS via Unescaped Attribute Names in Spread Props",
+      "url": "https://github.com/advisories/GHSA-jrpj-wcv7-9fh9",
+      "severity": "moderate",
+      "range": "<6.4.6",
+      "installed": "5.18.2",
+      "affected": true
+    },
+    {
+      "name": "zod-to-json-schema",
+      "dependency": "zod",
+      "title": "Depends on vulnerable versions of zod",
+      "url": null,
+      "severity": "high",
+      "range": "<=3.24.6",
+      "installed": "3.25.2",
+      "affected": false
+    },
+    {
+      "name": "astro",
+      "dependency": "astro",
+      "title": "Astro: XSS via attribute injection in dynamic tag names",
+      "url": "https://github.com/advisories/GHSA-mh32-jxcr-mh9f",
+      "severity": "low",
+      "range": "<=7.4.4",
+      "installed": "5.18.2",
+      "affected": true
+    },
+    {
+      "name": "astro",
+      "dependency": "astro",
+      "title": "Astro: Image endpoint in @astrojs/node can read files from a case-variant sibling of the output directory on case-sensitive filesystems",
+      "url": "https://github.com/advisories/GHSA-r3h5-4585-7x3w",
+      "severity": "moderate",
+      "range": ">=5.14.3 <=7.4.6",
+      "installed": "5.18.2",
+      "affected": true
+    },
+    {
+      "name": "sharp",
+      "dependency": "sharp",
+      "title": "sharp: Vulnerabilities in libheif: GHSA-g89c-p67h-r497 and GHSA-2jg2-4ch7-h545",
+      "url": "https://github.com/advisories/GHSA-rgj7-g3m4-5g8c",
+      "severity": "high",
+      "range": "<0.35.4",
+      "installed": "0.34.5",
+      "affected": true
+    },
+    {
+      "name": "esbuild",
+      "dependency": "esbuild",
+      "title": "esbuild allows arbitrary file read when running the development server on Windows",
+      "url": "https://github.com/advisories/GHSA-g7r4-m6w7-qqqr",
+      "severity": "low",
+      "range": ">=0.27.3 <0.28.1",
+      "installed": "0.27.7",
+      "affected": true
+    },
+    {
+      "name": "astro",
+      "dependency": "astro",
+      "title": "Astro: Host header SSRF in prerendered error page fetch",
+      "url": "https://github.com/advisories/GHSA-2pvr-wf23-7pc7",
+      "severity": "high",
+      "range": "<6.4.6",
+      "installed": "5.18.2",
+      "affected": true
+    },
+    {
+      "name": "astro",
+      "dependency": "zod",
+      "title": "Depends on vulnerable versions of zod",
+      "url": null,
+      "severity": "high",
+      "range": "<=0.0.0-xray-20231129021231 || 0.19.3 - 6.0.0-beta.20",
+      "installed": "5.18.2",
+      "affected": true
+    },
+    {
+      "name": "sharp",
+      "dependency": "sharp",
+      "title": "sharp inherited vulnerabilities in libvips: CVE-2026-33327, CVE-2026-33328, CVE-2026-35590, CVE-2026-35591",
+      "url": "https://github.com/advisories/GHSA-f88m-g3jw-g9cj",
+      "severity": "high",
+      "range": "<0.35.0",
+      "installed": "0.34.5",
+      "affected": true
+    },
+    {
+      "name": "zod-to-ts",
+      "dependency": "zod",
+      "title": "Depends on vulnerable versions of zod",
+      "url": null,
+      "severity": "high",
+      "range": "<=1.2.0",
+      "installed": "1.2.0",
+      "affected": true
+    },
+    {
+      "name": "astro",
+      "dependency": "astro",
+      "title": "Astro: Server island encrypted parameters vulnerable to cross-component replay",
+      "url": "https://github.com/advisories/GHSA-xr5h-phrj-8vxv",
+      "severity": "low",
+      "range": "<6.1.10",
+      "installed": "5.18.2",
+      "affected": true
+    },
+    {
+      "name": "astro",
+      "dependency": "astro",
+      "title": "Astro: XSS in define:vars via incomplete </script> tag sanitization",
+      "url": "https://github.com/advisories/GHSA-j687-52p2-xcff",
+      "severity": "moderate",
+      "range": "<6.1.6",
+      "installed": "5.18.2",
+      "affected": true
+    },
+    {
+      "name": "astro",
+      "dependency": "astro",
+      "title": "Astro: Authorization bypass from missing path-segment boundary check when stripping the configured base",
+      "url": "https://github.com/advisories/GHSA-376h-93r7-7g6f",
+      "severity": "moderate",
+      "range": "<=7.2.3",
+      "installed": "5.18.2",
+      "affected": true
+    },
+    {
+      "name": "astro",
+      "dependency": "astro",
+      "title": "Astro: Cross-site scripting via unescaped transition:* directive values on hydrated islands",
+      "url": "https://github.com/advisories/GHSA-7pw4-f3q4-r2p2",
+      "severity": "low",
+      "range": ">=3.10.0 <7.0.4",
+      "installed": "5.18.2",
+      "affected": true
+    },
+    {
+      "name": "@astrojs/mdx",
+      "dependency": "astro",
+      "title": "Depends on vulnerable versions of astro",
+      "url": null,
+      "severity": "low",
+      "range": "<=0.0.0-vercel-upgrade-20230905174957 || 1.0.0-beta.0 - 4.3.14",
+      "installed": "4.3.14",
+      "affected": true
+    },
+    {
+      "name": "astro",
+      "dependency": "astro",
+      "title": "Astro: Reflected XSS via unescaped slot name",
+      "url": "https://github.com/advisories/GHSA-8hv8-536x-4wqp",
+      "severity": "high",
+      "range": "<6.3.3",
+      "installed": "5.18.2",
+      "affected": true
+    },
+    {
+      "name": "astro",
+      "dependency": "astro",
+      "title": "Astro: Remote code execution through AVIF image optimization",
+      "url": "https://github.com/advisories/GHSA-26w7-cxv4-gfx2",
+      "severity": "critical",
+      "range": "<7.2.8",
+      "installed": "5.18.2",
+      "affected": true
+    },
+    {
+      "name": "sharp",
+      "dependency": "sharp",
+      "title": "sharp : Vulnerability in librsvg dependency CVE-2026-96889",
+      "url": "https://github.com/advisories/GHSA-wq5f-xc86-pv6w",
+      "severity": "high",
+      "range": "<0.35.5",
+      "installed": "0.34.5",
+      "affected": true
+    },
+    {
+      "name": "astro",
+      "dependency": "astro",
+      "title": "Astro: Reflected/Stored XSS via unescaped <script>/<style> tag content in JSX/MDX rendering",
+      "url": "https://github.com/advisories/GHSA-98hj-9722-w3j8",
+      "severity": "moderate",
+      "range": "<7.3.2",
+      "installed": "5.18.2",
+      "affected": true
+    },
+    {
+      "name": "zod",
+      "dependency": "zod",
+      "title": "Zod can exhaust memory while validating oversized constrained collections",
+      "url": "https://github.com/advisories/GHSA-mrhx-c7xc-m3w5",
+      "severity": "high",
+      "range": "<4.6.6",
+      "installed": "3.25.76",
+      "affected": true
+    },
+    {
+      "name": "astro",
+      "dependency": "esbuild",
+      "title": "Depends on vulnerable versions of esbuild",
+      "url": null,
+      "severity": "low",
+      "range": "5.17.3 - 7.0.0-beta.6",
+      "installed": "5.18.2",
+      "affected": true
+    },
+    {
+      "name": "astro",
+      "dependency": "zod-to-ts",
+      "title": "Depends on vulnerable versions of zod-to-ts",
+      "url": null,
+      "severity": "high",
+      "range": "<=0.0.0-env-race-condition-20241114151936 || 4.14.0 - 6.0.0-beta.20",
+      "installed": "5.18.2",
+      "affected": true
+    },
+    {
+      "name": "astro",
+      "dependency": "sharp",
+      "title": "Depends on vulnerable versions of sharp",
+      "url": null,
+      "severity": "high",
+      "range": "<=0.0.0-head-prop-20230323183456 || 2.1.0 - 2.3.3 || 3.0.0-beta.0 - 7.0.3",
+      "installed": "5.18.2",
+      "affected": true
+    },
+    {
+      "name": "katex",
+      "dependency": "katex",
+      "title": "KaTeX: Existing prototype pollution can bypass trust restrictions",
+      "url": "https://github.com/advisories/GHSA-238p-pmpm-9mq7",
+      "severity": "low",
+      "range": ">=0.11.0 <0.18.2",
+      "installed": "0.16.47",
+      "affected": true
+    },
+    {
+      "name": "astro",
+      "dependency": "astro",
+      "title": "Astro: XSS via unescaped spread attribute names in renderHTMLElement (incomplete fix for CVE-2026-54298)",
+      "url": "https://github.com/advisories/GHSA-f48w-9m4c-m7f5",
+      "severity": "moderate",
+      "range": "<7.0.6",
+      "installed": "5.18.2",
+      "affected": true
+    }
+  ]
+}

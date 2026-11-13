@@ -1,0 +1,29 @@
+{
+  "changed_or_added_between_attempts": [
+    "README.md",
+    "docs/LIVRAISON.md",
+    "package.json",
+    "src/components/Atlas.astro",
+    "src/components/Companion.astro",
+    "src/components/Proof.astro",
+    "src/content/lessons/groupes-rotations.mdx",
+    "src/pages/cours/groupes-rotations.astro",
+    "src/scripts/atlas.ts",
+    "src/scripts/companion.ts",
+    "src/scripts/proof.ts",
+    "src/scripts/square.ts",
+    "src/styles/global.css",
+    "tests/dom.test.mjs"
+  ],
+  "added_between_attempts": [
+    "README.md",
+    "docs/LIVRAISON.md",
+    "src/scripts/proof.ts",
+    "tests/dom.test.mjs"
+  ],
+  "after_second_attempt": [
+    "README.md",
+    "docs/LIVRAISON.md"
+  ],
+  "note": "Après le second passage, seuls le README et le bilan ont été actualisés pour enregistrer le résultat. Aucun rapport technique Claude reçu."
+}

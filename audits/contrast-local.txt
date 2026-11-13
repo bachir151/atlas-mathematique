@@ -1,0 +1,8 @@
+Texte principal: #232c26 sur #f7f5ef = 13.20:1
+Texte secondaire: #666a60 sur #f7f5ef = 5.08:1
+Accent et liens: #294c3d sur #f7f5ef = 8.77:1
+Accent orange: #a35b35 sur #f7f5ef = 4.69:1
+Bouton principal: #fffefa sur #294c3d = 9.48:1
+Encart Atlas: #c3ceb9 sur #294c3d = 5.85:1
+Messages compagnon: #3b4c3e sur #e9ede5 = 7.74:1
+Calcul sur les couleurs CSS principales ; aucun audit visuel ou lecteur d’écran effectué.
