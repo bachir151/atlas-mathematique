@@ -14,15 +14,15 @@ Ce fichier conserve l’état opérationnel de **L’Atelier des abstractions** 
 
 ## Tâche en cours
 
-**EN COURS — Envoi de la version actuelle sur `bachir151/atlas-mathematique`, branche `main`. Migration de sécurité toujours autorisée, préparée mais bloquée par npm.**
+**SAUVEGARDE GITHUB EFFECTUÉE — Sources vérifiées sur `bachir151/atlas-mathematique`, branche `main`. EN COURS — Migration de sécurité autorisée, préparée mais bloquée par npm.**
 
-La direction a autorisé explicitement le commit puis le push et fourni la destination `https://github.com/bachir151/atlas-mathematique.git`. Le dépôt distant a été vérifié : il est public, vide et sa branche par défaut est `main`, avec droit d’écriture disponible via le connecteur GitHub. Le dossier `.git` exposé localement reste vide et non utilisable comme dépôt Git ; l’envoi passe par les opérations Git du connecteur. Ne pas modifier d’autre dépôt ni déployer le site.
+La direction a autorisé explicitement le commit puis le push et fourni la destination `https://github.com/bachir151/atlas-mathematique.git`. Le dépôt distant, public et initialement vide, a été initialisé puis a reçu les sources sur `main` via les opérations Git du connecteur. Le commit de sources vérifié est `c355f625f1cd9ece6fc55993aff7ee7ab3b8a458` : les 60 fichiers transférés ont été comparés aux fichiers locaux par leurs empreintes Git, puis la référence distante `main` a été vérifiée. Le dossier `.git` exposé localement reste vide et ne représente pas cette sauvegarde distante ; utiliser le connecteur ou un clone autorisé pour vérifier l’historique. Aucun déploiement du site n’a été effectué.
 
-Préparation locale effectuée : sources et documentation, sans dépendances, caches, secrets d’environnement ou métadonnées Windows. Aucun motif de clé privée ou de jeton n’a été détecté par le contrôle effectué. Liste et empreintes dans `audits/github-preparation.json` ; archive temporaire dans `/tmp/atelier-github-source.tar.gz`, à recréer si nécessaire. La destination est maintenant connue ; **prochaine action : initialiser `main`, enregistrer le projet et vérifier son contenu distant.**
+Sources et documentation sauvegardées sans dépendances, caches, secrets d’environnement ou métadonnées Windows. Aucun motif de clé privée ou de jeton n’a été détecté par le contrôle effectué. Liste et empreintes dans `audits/github-preparation.json` ; archive temporaire dans `/tmp/atelier-github-source.tar.gz`, à recréer si nécessaire. Ce journal et le manifeste sont ensuite actualisés dans un commit documentaire pour consigner la sauvegarde réellement vérifiée ; le SHA ci-dessus désigne le commit de sources, pas nécessairement la tête documentaire la plus récente de `main`.
 
 Historique du blocage de création : le connecteur ne permettait pas de créer le dépôt et le CLI `gh` échouait. La direction a depuis créé et fourni le dépôt ci-dessus. La visibilité effectivement constatée est publique ; la suggestion antérieure d’un dépôt privé n’a pas été appliquée par Codex.
 
-Dernière demande de la direction : autorisation de la migration proposée, avec création préalable de `JURNAL.md` pour conserver ce qui est fait et ce qui reste à faire entre les sessions.
+Autorisation de migration reçue précédemment : création préalable de `JURNAL.md` pour conserver ce qui est fait et ce qui reste à faire entre les sessions, puis migration technique proposée.
 
 La création de ce journal a été la première modification de cette étape. **La migration n’est toujours pas appliquée** : le projet utilise encore Astro 5 et l’installation existante compile correctement. Node 22.23.4 a été trouvé dans `/home/elbash/.nvm/versions/node/v22.23.4/bin/node`, `.nvmrc` a été créé et le manifeste candidat est conservé dans `docs/migration/package.candidate.json`.
 
@@ -45,7 +45,7 @@ Autorisations reçues dans cette conversation :
 | Migration Astro 7 / MDX 8 / KaTeX récent, prérequis Node 22.23.4 minimum | Explicitement autorisée dans le dernier message |
 | Modifier des textes mathématiques validés | Non autorisé ; signaler toute incohérence et demander validation scientifique |
 | Modifier d’autres dépôts, notamment Bash World ou Encyclop-dia | Non autorisé |
-| Commit puis push de la version actuelle du projet | Explicitement autorisés vers `bachir151/atlas-mathematique`, branche par défaut `main` |
+| Commit puis push de la version actuelle du projet | Explicitement autorisés et réalisés vers `bachir151/atlas-mathematique`, branche `main` ; mise à jour documentaire de cette sauvegarde incluse |
 | Ouverture de PR, déploiement, publication du site | Non autorisés ; accord distinct nécessaire |
 | Audit Claude | Deux tentatives initiales maximum, déjà utilisées ; aucun nouveau cycle autorisé à ce stade |
 
@@ -147,15 +147,15 @@ Claude Code 2.1.322 était installé et authentifié lors de la première missio
 
 ## Reste à faire
 
-### Sauvegarde GitHub autorisée — priorité courante
+### Sauvegarde GitHub autorisée — terminée
 
 - [x] Recevoir l’autorisation explicite de commit puis de push de la version actuelle.
 - [x] Vérifier Git local et l’authentification : aucun dépôt configuré ; connecteur GitHub disponible.
 - [x] Préparer l’instantané local des 59 fichiers à sauvegarder et son manifeste d’empreintes ; contrôle de motifs sensibles effectué.
 - [x] Recevoir l’URL `https://github.com/bachir151/atlas-mathematique.git` et identifier la branche par défaut `main`.
 - [x] Vérifier la destination et son contenu : dépôt vide, public, accessible en écriture ; exclusions de l’instantané contrôlées.
-- [ ] Créer le commit et envoyer les sources, la documentation et le journal sans les dépendances, caches ou fichiers sensibles.
-- [ ] Vérifier le commit distant et consigner l’URL, la branche et le SHA dans ce journal.
+- [x] Créer le commit et envoyer les sources, la documentation et le journal sans les dépendances, caches ou fichiers sensibles.
+- [x] Vérifier les 60 fichiers distants et `main` ; consigner l’URL, la branche et le SHA du commit de sources dans ce journal.
 
 ### Migration autorisée — prochaine priorité
 
@@ -226,3 +226,7 @@ La direction autorise le commit puis le push demandés. Aucun dépôt ni remote 
 ### 13 novembre 2026 — Destination GitHub reçue
 
 La direction fournit `https://github.com/bachir151/atlas-mathematique.git`. Vérification via le connecteur : dépôt public, branche par défaut `main`, liste de branches vide et API de contenu indiquant un dépôt vide. La sauvegarde autorisée peut être effectuée sans remplacer de contenu existant. Le journal sera actualisé après vérification de l’envoi.
+
+### 13 novembre 2026 — Sauvegarde GitHub vérifiée
+
+Dépôt : https://github.com/bachir151/atlas-mathematique ; branche : `main`. Initialisation par le commit `dde597fea65eb7641842429195fe085547b8ca4c`, puis ajout du projet par le commit `c355f625f1cd9ece6fc55993aff7ee7ab3b8a458`. Les empreintes Git des 60 fichiers de sources et documentation ont été comparées aux fichiers locaux ; aucune différence. Mise à jour de `main` effectuée sans forçage, avec contrôle du parent attendu, puis tête distante vérifiée. Le présent journal et le manifeste de sauvegarde sont actualisés après cette vérification. La migration de sécurité reste à réaliser lorsque la résolution npm redevient possible ; ses résultats futurs devront être vérifiés séparément.

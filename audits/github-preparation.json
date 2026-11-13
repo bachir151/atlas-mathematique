@@ -1,5 +1,5 @@
 {
-  "status": "ready_to_send",
+  "status": "source_snapshot_verified",
   "repository": "bachir151/atlas-mathematique",
   "branch": "main",
   "visibility": "public",
@@ -54,8 +54,8 @@
     },
     {
       "path": "JURNAL.md",
-      "bytes": 21629,
-      "sha256": "4c8f90ed3ca5d484b8d933f99d50d5828cf12cda4d7b8b2e4d4762c6b6af8f78"
+      "bytes": 22849,
+      "sha256": "23283845da3f5065896ff8493732396f634c6c22a83958dce6866aa662f64237"
     },
     {
       "path": "README.md",
@@ -322,5 +322,10 @@
       "bytes": 188,
       "sha256": "e6d0f00b7d5447e69da4b65358d33f005daa89c03b4dc55608842a2212ad3d67"
     }
-  ]
+  ],
+  "initialCommit": "dde597fea65eb7641842429195fe085547b8ca4c",
+  "sourceCommit": "c355f625f1cd9ece6fc55993aff7ee7ab3b8a458",
+  "verifiedSourceTree": "30dbed916db562873cb8b6f1fc7fb0bba8892198",
+  "verifiedSourceFileCount": 60,
+  "documentaryFollowup": "JURNAL.md and this manifest record the verified source commit; their hashes reflect the documentary follow-up."
 }
