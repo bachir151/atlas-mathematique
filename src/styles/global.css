@@ -482,6 +482,8 @@ section,[id] {
 }
 
 .lesson-art {
+  /* Decorative strokes use the tone colour; labels use a darker ink (≥ 6:1 on the tone background). */
+  --tone-ink:#2f4d3d;
   position:relative;
   background:#e9ede4;
   color:#355644;
@@ -492,11 +494,13 @@ section,[id] {
 }
 
 .tone-orbit .lesson-art {
+  --tone-ink:#6b5032;
   background:#efebe2;
   color:#8c6c46;
 }
 
 .tone-wave .lesson-art {
+  --tone-ink:#43555f;
   background:#e7ebec;
   color:#586c78;
 }
@@ -507,13 +511,14 @@ section,[id] {
   top:15px;
   font-size:10px;
   letter-spacing:.08em;
-  opacity:.8;
+  color:var(--tone-ink);
 }
 
 .lesson-domain {
   position:absolute;
   bottom:15px;
   left:19px;
+  color:var(--tone-ink);
   font-size:9px;
   letter-spacing:.08em;
   text-transform:uppercase;
@@ -1138,10 +1143,18 @@ input[type=search] {
 
 .lesson-breadcrumb {
   display:flex;
+  align-items:center;
   gap:12px;
   font-size:10px;
   color:var(--muted);
   padding-top:28px;
+}
+
+.lesson-breadcrumb a {
+  /* WCAG 2.5.8: at least 24 px of target height for the small breadcrumb text. */
+  display:inline-flex;
+  align-items:center;
+  min-height:24px;
 }
 
 .lesson-breadcrumb a:hover {
@@ -1466,6 +1479,7 @@ input[type=search] {
 
 .companion-heading {
   display:flex;
+  flex-wrap:wrap; /* the toggle moves under the title rather than off-screen on 320 px screens */
   align-items:center;
   gap:10px;
 }
@@ -1984,12 +1998,14 @@ input[type=search] {
     font-size:10px;
   }
   .hero {
-    grid-template-columns:1fr;
+    /* minmax(0,…): a long word must never widen the column past the viewport. */
+    grid-template-columns:minmax(0,1fr);
     padding-top:39px;
     gap:32px;
   }
   .hero h1 {
-    font-size:74px;
+    /* 74 px from 370 px wide; scales down to keep 320 px layouts without horizontal scroll. */
+    font-size:clamp(48px,20vw,74px);
     margin-top:22px;
     margin-bottom:22px;
     letter-spacing:-3px;
@@ -2169,7 +2185,8 @@ input[type=search] {
     padding-top:38px;
   }
   .page-heading h1 {
-    font-size:48px;
+    /* Capped at 48 px; shrinks below ~396 px so long words ("connaissances.") fit 320 px screens. */
+    font-size:min(48px,calc((100vw - 36px) / 7.5));
     letter-spacing:-1.8px;
     overflow-wrap:normal;
   }

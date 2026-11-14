@@ -1,5 +1,44 @@
 # Vérifications p5 dans Firefox réel
 
+## Seconde suite : Atlas et accessibilité du site — 14 novembre 2026, 17:50
+
+`tests/browser_site.py` (lancé par `npm run test:browser` après la suite p5) réutilise le même pilote WebDriver. Rapport : `test-results/browser-site/report.json`. **21/21 sur deux passages consécutifs** (15 scénarios à 17:50, 6 ajoutés à 18:10).
+
+| Scénario | Vérification |
+| --- | --- |
+| `atlas-3d-load` | Modules Three.js chargés à la demande, contexte WebGL réel non perdu, vue 3D active, étiquettes dans la scène |
+| `atlas-selection-sync` | Un thème choisi dans la liste est marqué partout (carte 2D, liste, étiquette 3D) ; un clic sur une étiquette 3D garde la vue 3D |
+| `atlas-camera` | Zoom et réinitialisation modifient puis restaurent la projection |
+| `atlas-modes-keyboard` | Entrée/Espace sur « Vue 2D », Tab vers la carte, sélection au clavier, retour en 3D |
+| `atlas-context-loss` | `WEBGL_lose_context` : retour en 2D, scène libérée, 3D signalée indisponible, **focus conservé** (bouton) ou **transféré à la carte 2D** (étiquette 3D supprimée) |
+| `atlas-cleanup` | `pagehide` libère canevas et étiquettes |
+| `three-not-loaded-elsewhere` | Aucun module Three.js sur les quatre autres pages |
+| `skip-link` | Premier arrêt Tab visible ; Entrée place le focus sur `#main` |
+| `keyboard-focus` | Sur les six pages, chaque arrêt Tab est visible et dispose d’un contour |
+| `reflow-320` | Aucun défilement horizontal à 320 px CSS (WCAG 1.4.10) |
+| `text-zoom-200` | Police racine à 200 % dans une fenêtre de 640 px : aucun défilement horizontal |
+| `target-size` | Cibles d’au moins 24 × 24 px à 390 px (WCAG 2.5.8 ; liens dans une phrase exemptés) |
+| `contrast` | Contraste WCAG du texte sur les six pages (4,5:1, ou 3:1 pour le grand texte ; commandes inactives exemptées) |
+| `square-rotation` | Entrée/Espace sur les commandes ; position à l’écran du sommet marqué A conforme à l’angle affiché et au sens antihoraire annoncé par l’interface (coordonnées SVG via `getScreenCTM`) |
+| `square-reset-history` | Historique borné à 8 ; remise à zéro immédiate, sans animation inverse |
+| `proof-progressive` | Preuve intégrale hors des panneaux et toujours visible ; ouverture des étapes au clavier avec focus sur l’étape ouverte ; focus conservé en fin de progression ; lien de navigation vers la preuve |
+| `companion` | Masquer/Afficher avec `aria-expanded` ; saisie clavier réelle ; historique borné à 20 ; focus rendu au champ ; `maxlength` 300 |
+| `library-filters` | Recherche sans accents, filtre par domaine, état vide, effacement des filtres avec retour du focus |
+| `atlas-reduced-motion` | Avec mouvement réduit, l’Atlas démarre en 2D ; la 3D reste disponible sur demande |
+| `square-reduced-motion` | Avec mouvement réduit, la rotation du carré est immédiate (transition coupée) |
+| `page-errors` | Aucune erreur JavaScript non interceptée |
+
+**Largeurs étroites — correction d’une erreur de mesure.** Firefox ne réduit pas sa fenêtre en dessous d’environ 500 px CSS. Le scénario p5 `narrow-layout`, annoncé à 390 px, mesurait en réalité 500 px. Les largeurs de 320 et 390 px sont désormais obtenues dans une iframe de même origine et de taille exacte (`Driver.framed`), où les media queries s’appliquent ; chaque test vérifie la largeur obtenue.
+
+**Défauts trouvés et corrigés par cette suite :**
+
+- Perte du contexte WebGL : le bouton « Vue 3D » recevait `disabled` (focus perdu) et la suppression de la scène effaçait une étiquette 3D focalisée. Le bouton passe en `aria-disabled` (module commun `src/lib/availability.ts`, aussi utilisé par p5) ; le focus d’une étiquette est transféré au thème correspondant de la carte 2D ; le message de perte n’est plus écrasé.
+- Contraste : numéros et domaines des cartes de leçon entre 2,9:1 et 4,3:1. Ils utilisent maintenant une encre propre à chaque tonalité (6,3 à 7,9:1) ; les dessins gardent leurs couleurs.
+- Cible trop petite : lien « Les cours » du fil d’Ariane (42 × 15 px), porté à 24 px de hauteur.
+- Reflow à 320 px : titre de l’accueil (74 px fixes), titre de l’Atlas (« connaissances. ») et en-tête du compagnon (`nowrap`) provoquaient un défilement horizontal. Tailles fluides sous 370-396 px et passage à la ligne de l’en-tête ; affichage inchangé au-delà.
+
+Limites : WebGL logiciel (pas de GPU matériel), zoom texte simulé par la taille de police racine, fonds en image ou dégradé non évalués pour le contraste, pas de lecteur d’écran ni de téléphone réel.
+
 ## État au 14 novembre 2026, 17:15 — suite complète réussie
 
 **14 scénarios sur 14 réussis dans Firefox 152.0.1 headless, sur deux passages consécutifs (code de sortie 0).** Exécution par Claude dans un terminal autorisant les ports loopback, Firefox Snap et le CDN p5 2.4.0. Rapport : `test-results/browser/report.json`.

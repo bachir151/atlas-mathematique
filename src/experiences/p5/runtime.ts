@@ -1,10 +1,14 @@
 import type { P5Constructor } from './types.ts';
 
-// Official download documentation recommends this versioned CDN URL.
-// Replace the URL with a locally hosted copy to run fully offline.
+// Self-hosted copy of node_modules/p5/lib/p5.min.js (npm package pinned in
+// package.json / package-lock.json). scripts/vendor-p5.mjs copies it to
+// public/vendor/ before `dev` and `build`, and refuses any file whose hash
+// differs from `integrity`; the browser checks the same hash (SRI).
+// To upgrade: change the npm version, then `version` and `integrity` here.
 export const P5_RUNTIME = {
   version: '2.4.0',
-  url: 'https://cdn.jsdelivr.net/npm/p5@2.4.0/lib/p5.min.js',
+  url: '/vendor/p5/2.4.0/p5.min.js',
+  integrity: 'sha384-rcP1CPdkMPs3RfZNrF0DgxdaFM1t5rcIw5CmGbe+Y/2EVHpXRuKoaRqnjQfkg8/a',
 } as const;
 
 let pending: Promise<P5Constructor> | undefined;
@@ -18,6 +22,7 @@ export function loadP5(): Promise<P5Constructor> {
     const script = document.createElement('script');
     script.src = P5_RUNTIME.url;
     script.async = true;
+    script.integrity = P5_RUNTIME.integrity;
     script.crossOrigin = 'anonymous';
     script.referrerPolicy = 'no-referrer';
     script.dataset.atelierP5 = P5_RUNTIME.version;

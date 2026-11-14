@@ -11,6 +11,7 @@ const { rotate } = await import(pathToFileURL(resolve(root, 'src/lib/rotation.ts
 const { filterLessons, lessons } = await import(pathToFileURL(resolve(root, 'src/data/catalog.ts')));
 const { atlasNodes, atlasLinks, approvedLinks } = await import(pathToFileURL(resolve(root, 'src/data/atlas.ts')));
 const { proofSteps, fullProofPlaceholder } = await import(pathToFileURL(resolve(root, 'src/data/proof.ts')));
+const { setAvailable, isAvailable } = await import(pathToFileURL(resolve(root, 'src/lib/availability.ts')));
 const read = path => readFileSync(resolve(root, path), 'utf8');
 const component = path => read(path).replace(/^---[\s\S]*?---/, '').replace(/<script>[\s\S]*?<\/script>/g, '');
 const domFor = html => new JSDOM(html, { runScripts: 'outside-only', pretendToBeVisual: true, url: 'http://localhost/' });
@@ -118,7 +119,7 @@ test('Atlas keeps the DOM map and selection usable when the 3D module is unavail
     observe() {}
     disconnect() { this.disconnected = true; }
   };
-  evaluate(dom, read('src/scripts/atlas.ts'), { atlasNodes, atlasLinks, approvedLinks });
+  evaluate(dom, read('src/scripts/atlas.ts'), { atlasNodes, atlasLinks, approvedLinks, setAvailable });
   const doc = dom.window.document;
   dom.window.initAtlas(doc.querySelector('[data-atlas]'));
   doc.querySelector('[data-node="groupes"]').click();
@@ -129,7 +130,11 @@ test('Atlas keeps the DOM map and selection usable when the 3D module is unavail
   await new Promise(resolve => setTimeout(resolve, 0));
   assert.equal(doc.querySelector('[data-map]').hidden, false);
   assert.equal(doc.querySelector('[data-canvas]').hidden, true);
-  assert.equal(doc.querySelector('[data-mode="3d"]').disabled, true);
+  // Unavailable but still focusable (aria-disabled), and activating it keeps the 2D map.
+  assert.equal(isAvailable(doc.querySelector('[data-mode="3d"]')), false);
+  assert.equal(doc.querySelector('[data-mode="3d"]').disabled, false);
+  doc.querySelector('[data-mode="3d"]').click();
+  assert.equal(doc.querySelector('[data-map]').hidden, false);
   assert.match(doc.querySelector('[data-atlas-status]').textContent, /indisponible/);
   doc.querySelector('[data-node="topologie"]').click();
   assert.equal(doc.querySelector('[data-node-title]').textContent, 'Topologie');

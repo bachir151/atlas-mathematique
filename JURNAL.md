@@ -1,6 +1,6 @@
 # JURNAL — mémoire de continuité du projet
 
-Dernière mise à jour : 14 novembre 2026, 17:25 Europe/Paris (Claude).
+Dernière mise à jour : 14 novembre 2026, 18:15 Europe/Paris (Claude).
 
 Ce fichier conserve l’état opérationnel de **L’Atelier des abstractions** entre deux sessions. Il ne remplace ni les consignes de gouvernance ni les autorisations de la direction du projet. Distinguer les travaux terminés, les travaux en cours et les vérifications impossibles ; ne jamais transformer une intention en résultat acquis.
 
@@ -92,6 +92,7 @@ Autorisations reçues dans cette conversation :
 | Modifier des textes mathématiques validés | Non autorisé ; signaler toute incohérence et demander validation scientifique |
 | Modifier d’autres dépôts, notamment Bash World ou Encyclop-dia | Non autorisé |
 | Commit puis push de la version actuelle du projet | Explicitement autorisés et réalisés vers `bachir151/atlas-mathematique`, branche `main` ; mise à jour documentaire de cette sauvegarde incluse |
+| Second commit puis push (p5, tests Firefox, migration Astro 7) | Autorisé par la direction le 14 novembre (« vas-y » en réponse à la proposition nommant la cible) ; réalisé : commit `3d9c9e1` sur `main` |
 | Ouverture de PR, déploiement, publication du site | Non autorisés ; accord distinct nécessaire |
 | Anciens audits Claude | Abandonnés par la nouvelle gouvernance ; conserver les rapports historiques sans relancer d’audit |
 
@@ -126,7 +127,7 @@ La migration proposée prévoyait un fichier `.nvmrc` dans le projet, **sans mod
 | `astro.config.mjs` | Site statique, MDX, service d’image sans transformation |
 | `tests/core.test.mjs`, `tests/dom.test.mjs` | Deux suites de cinq tests chacune |
 | `scripts/check-build.mjs` | Vérification du véritable HTML compilé et de ses références locales |
-| `scripts/audit_claude.py` | Ancien lanceur d’audit conservé comme historique ; ne plus le lancer |
+| `scripts/audit_claude.py` | Ancien lanceur d’audit conservé comme historique ; ne plus le lancer (script npm `audit:claude` retiré le 14 novembre) |
 | `docs/LIVRAISON.md` | Historique de la première remise avant installation des dépendances |
 | `docs/VERIFICATIONS.md` | Bilan de reprise et plan de migration détaillé, mis à jour avec l’autorisation reçue et le blocage d’installation |
 | `docs/migration/package.candidate.json` | Manifeste cible à installer et vérifier avant de remplacer le manifeste fonctionnel |
@@ -222,7 +223,7 @@ Claude Code 2.1.322 était installé et authentifié lors de la première missio
 - [x] Constater le vrai rendu Canvas 2D et le chargement p5 2.4.0 dans le rapport Firefox de 16:50.
 - [x] Compléter les scénarios navigateur (14/14).
 - [ ] Vérifications d’accessibilité sur lecteur d’écran et téléphone réel.
-- [ ] Décider ultérieurement d’un auto-hébergement de la distribution et d’un contrôle d’intégrité des octets servis.
+- [x] Auto-hébergement de p5.js 2.4.0 et contrôle d’intégrité (décision de la direction du 14 novembre : « fais ce que tu recommandes »).
 - [ ] Soumettre toute véritable expérience mathématique à validation scientifique et pédagogique avant publication.
 
 ### Sauvegarde GitHub autorisée — terminée
@@ -253,8 +254,8 @@ Claude Code 2.1.322 était installé et authentifié lors de la première missio
 
 ### Validations encore manquantes
 
-- [ ] Vérification visuelle responsive, zoom du texte et clavier dans un véritable navigateur.
-- [ ] Vérification WebGL réel, perte de contexte, nettoyage GPU et préférence de mouvement réduit.
+- [x] Vérification responsive (320/390 px réels via iframe), zoom texte 200 %, clavier, cibles et contrastes automatisés dans Firefox (`tests/browser_site.py`, 15/15). Contrôle sur téléphone réel encore à faire.
+- [x] WebGL (rendu logiciel Firefox), perte de contexte, nettoyage à la sortie de page et mouvement réduit automatisés. GPU matériel réel non vérifié.
 - Ancienne demande d’avis technique indépendant de Claude annulée ; aucun rôle de relecteur ni cycle d’audit entre agents.
 - [ ] Réception et validation scientifique des cours, preuves, exercices et connexions de l’Atlas, puis intégration fidèle.
 - [x] Autorisation distincte pour le commit et le push de la version actuelle reçue ; destination `bachir151/atlas-mathematique`, branche `main`.
@@ -343,4 +344,32 @@ Vérifications réelles : `npm run check` 0 erreur/0 avertissement ; `npm test` 
 
 Résolution complète dans une copie isolée avec Node 22.23.4, puis bascule du projet (`package.json`, `package-lock.json`, `src/content.config.ts`) et `npm ci` (un premier `npm ci` a échoué sur `ENOTEMPTY` dans le cache `node_modules/.vite`, supprimé puis relancé avec succès ; aucun serveur actif). Commentaire obsolète de `astro.config.mjs` actualisé, configuration inchangée. Vérifications : audit npm 0 vulnérabilité ; typage 0 erreur/avertissement/indication ; 29 tests ; 6 pages et 72 références ; 14/14 Firefox ; comparaison texte et pixels des pages avant/après identique ; Atlas WebGL OK ; `astro dev` OK. Captures de comparaison : `test-results/visual-migration/`, `test-results/atlas-migration/`.
 
-**Attention pour la direction : Astro 7 refuse Node 22.22.3 (Node par défaut du terminal). Taper `nvm use` avant `npm run dev`.** Aucun commit, push ou déploiement. **Prochaines actions possibles : sauvegarde GitHub (autorisation distincte nécessaire), vérifications sur téléphone et lecteur d’écran, intégration des contenus de Codex lorsqu’ils seront validés.**
+**Attention pour la direction : Astro 7 refuse Node 22.22.3 (Node par défaut du terminal). Taper `nvm use` avant `npm run dev`.** Aucun commit, push ou déploiement. **Prochaines actions possibles : vérifications sur téléphone et lecteur d’écran, intégration des contenus de Codex lorsqu’ils seront validés.**
+
+### 14 novembre 2026 — Sauvegarde GitHub de l’intégration p5 et de la migration
+
+Autorisation de la direction pour le commit et le push vers `bachir151/atlas-mathematique`, branche `main`. Dossier local toujours sans `.git` : clone dans le scratchpad Claude, synchronisation des fichiers en respectant `.gitignore` (sans dépendances, `dist`, caches, résultats de tests ni métadonnées Windows), aucun fichier distant manquant localement. Contrôle de motifs sensibles sur les ajouts : aucun jeton, clé ou adresse électronique. Commit `3d9c9e187b8ab7dd421bc17f750e10f06150f126` (parent `ad97271`), 35 fichiers, push sans forçage via `gh` (compte `bachir151`). Vérification : tête distante égale au commit, empreintes Git des 83 fichiers distants identiques aux fichiers locaux. Cette entrée du journal est postérieure au commit et reste locale jusqu’à une prochaine sauvegarde. Aucun déploiement.
+
+### 14 novembre 2026 — Suite Firefox Atlas et accessibilité du site (Claude)
+
+Nouvelle suite `tests/browser_site.py`, intégrée à `npm run test:browser` : 15 scénarios (Atlas 3D, sélection, caméra, clavier, perte de contexte WebGL, nettoyage, absence de Three.js ailleurs, lien d’évitement, focus visible sur les six pages, reflow 320 px, zoom texte 200 %, cibles 24 px, contrastes, mouvement réduit, erreurs JS). Détails dans `docs/TESTS-NAVIGATEUR.md`.
+
+**Erreur de mesure corrigée :** Firefox ne descend pas sous ~500 px de fenêtre ; le scénario p5 `narrow-layout` annoncé à 390 px mesurait 500 px. Les largeurs étroites passent désormais par une iframe de taille exacte (`Driver.framed` dans `tests/browser_p5.py`), avec contrôle de la largeur obtenue.
+
+Défauts corrigés : focus perdu lors de la perte du contexte WebGL (`aria-disabled`, module commun `src/lib/availability.ts`, transfert du focus d’une étiquette 3D vers la carte 2D) ; contrastes des numéros/domaines des cartes de leçon (encre par tonalité, 6,3 à 7,9:1) ; lien du fil d’Ariane porté à 24 px ; débordements à 320 px (titres de l’accueil et de l’Atlas, en-tête du compagnon). Affichage inchangé au-delà de ~400 px. Fichiers : `src/lib/availability.ts`, `src/scripts/atlas.ts`, `src/scripts/p5-experience.ts`, `src/styles/global.css`, `tests/browser_site.py`, `tests/browser_p5.py`, `tests/dom.test.mjs`, `package.json`, `docs/TESTS-NAVIGATEUR.md`, `README.md`, ce journal.
+
+Vérifications : typage 0/0/0 ; 29 tests ; 6 pages et 72 références ; `npm run test:browser` complet : p5 14/14 et site 15/15 (site également 15/15 sur deux passages séparés). Aucun commit, push ou déploiement depuis `3d9c9e1`. Décision sur l’auto-hébergement de p5.js prise ensuite (voir entrée suivante).
+
+### 14 novembre 2026 — p5.js auto-hébergé avec contrôle d’intégrité (Claude)
+
+La direction retient la recommandation : héberger p5.js avec le site. `p5` 2.4.0 ajouté en dépendance npm exacte (npm : 0 vulnérabilité). `scripts/vendor-p5.mjs` (hooks `predev` et `prebuild`) copie `p5.min.js` et la licence LGPL vers `public/vendor/p5/2.4.0/` (ignoré par Git) et refuse toute version ou empreinte différente de `P5_RUNTIME` ; refus vérifié sur un fichier altéré dans une arborescence temporaire. Le chargeur utilise l’URL locale avec `integrity` SRI. Empreinte SHA-384 du paquet npm identique à celle du fichier servi auparavant par jsDelivr. `verify:build` recalcule l’empreinte compilée ; le test Firefox `real-canvas` contrôle origine, SRI et absence de requête externe.
+
+Fichiers : `package.json`, `package-lock.json`, `.gitignore`, `scripts/vendor-p5.mjs`, `scripts/check-build.mjs`, `src/experiences/p5/runtime.ts`, `tests/p5.test.mjs`, `tests/browser_p5.py`, `docs/P5.md`, `README.md`, ce journal. Vérifications : typage 0/0/0 ; 29 tests ; 6 pages, 72 références, p5 compilé conforme ; `npm run test:browser` p5 14/14 et site 15/15 ; fichier servi avec la bonne empreinte par le serveur `npm run dev` de la direction (port 4321, laissé en marche). Aucun commit, push ou déploiement depuis `3d9c9e1`.
+
+**Note de reprise :** après un `git clone`, lancer `npm ci` puis `npm run dev` ou `npm run build` ; la copie de p5 est faite automatiquement.
+
+### 14 novembre 2026 — Scénarios Firefox de la page du cours et de la bibliothèque (Claude)
+
+Six scénarios ajoutés à `tests/browser_site.py` (21 au total) : rotation du carré au clavier avec contrôle de la position affichée du sommet A, historique et remise à zéro, preuve progressive et accès permanent à la preuve intégrale, compagnon simulé, filtres de la bibliothèque, rotation immédiate en mouvement réduit. Aucun défaut applicatif trouvé ; une erreur de conversion de coordonnées SVG dans le test lui-même a été corrigée (`getScreenCTM`). Script npm `audit:claude` retiré de `package.json` (le fichier historique reste). Vérifications : typage 0/0, 29 tests, `npm run test:browser` p5 14/14 et site 21/21, site 21/21 sur un second passage. Aucun commit, push ou déploiement depuis `3d9c9e1`.
+
+**Reste à faire :** vérifications sur téléphone et lecteur d’écran (direction) ; intégration des contenus de Codex une fois validés ; sauvegarde GitHub des travaux depuis `3d9c9e1` (autorisation à recevoir).

@@ -120,6 +120,27 @@ class Driver:
     def screenshot(self, path):
         path.write_bytes(base64.b64decode(self.command('GET', '/screenshot')))
 
+    def framed(self, base, path, width, height):
+        """Load a page in a same-origin iframe of exact size and switch into it.
+
+        Firefox will not shrink its window below about 500 CSS px, so narrow
+        layouts are emulated in an iframe, where media queries use its width.
+        """
+        self.command('POST', '/frame', {'id': None})
+        self.navigate(base + '/__qa__/frame-host')  # any same-origin URL (a 404 page is fine)
+        frame = self.js('document.body.replaceChildren();document.body.style.margin="0";'
+                        'const f=document.createElement("iframe");f.style.cssText=`border:0;width:${arguments[0]}px;height:${arguments[1]}px`;'
+                        'f.src=arguments[2];document.body.append(f);return f;', width, height, path)
+        wait_for(lambda: self.js('const f=document.querySelector("iframe");const l=f.contentWindow.location;return f.contentDocument?.readyState==="complete"&&l.pathname+l.search===arguments[0];', path),
+                 'Page non chargée dans le cadre : ' + path)
+        self.command('POST', '/frame', {'id': frame})
+        size = self.js('return {width:innerWidth,height:innerHeight};')
+        assert size['width'] == width, f'Largeur de cadre inattendue : {size}'
+        return size
+
+    def top(self):
+        self.command('POST', '/frame', {'id': None})
+
 
 # Observe the real constructor and public methods; rendering is never replaced.
 INSTRUMENT = r'''
@@ -213,7 +234,7 @@ class BrowserChecks:
         except AssertionError as error:
             state = d.js(f"return {{constructor:typeof window.p5,status:{WIDGET}[arguments[0]].querySelector('[data-p5-status]').textContent}};", index)
             if state['constructor'] == 'undefined':
-                raise EnvironmentBlocked('p5 non chargé : vérifier CDN, réseau et CSP. ' + json.dumps(state)) from error
+                raise EnvironmentBlocked('p5 non chargé : vérifier la copie public/vendor (npm run build) et la CSP. ' + json.dumps(state)) from error
             raise
         wait_for(lambda: d.js('return !!window.__p5BrowserQA.instances[arguments[0]]?.canvas;', index), 'Instance p5 non initialisée')
         wait_for(lambda: self.frames(index) > 0, 'Première image p5 non dessinée')
@@ -224,7 +245,7 @@ class BrowserChecks:
         self.fresh('desktop')
 
         def initial():
-            state = d.js("return {scripts:document.querySelectorAll('script[data-atelier-p5]').length,canvases:document.querySelectorAll('p5-experience canvas').length,resources:performance.getEntriesByType('resource').filter(e=>e.name.includes('/p5@')).length,fallbacks:document.querySelectorAll('.p5-fallback').length};")
+            state = d.js("return {scripts:document.querySelectorAll('script[data-atelier-p5]').length,canvases:document.querySelectorAll('p5-experience canvas').length,resources:performance.getEntriesByType('resource').filter(e=>e.name.includes('/vendor/p5/')).length,fallbacks:document.querySelectorAll('.p5-fallback').length};")
             assert state == {'scripts': 0, 'canvases': 0, 'resources': 0, 'fallbacks': 2}, state
             return state
         self.case('initial-load', initial)
@@ -234,6 +255,11 @@ class BrowserChecks:
             state = d.js("const p=window.__p5BrowserQA.instances[0];const c=p.canvas;return {context:!!c.getContext('2d'),width:c.width,height:c.height,version:window.p5.VERSION||window.p5.prototype.VERSION||null,pixels:Array.from(c.getContext('2d').getImageData(0,0,1,1).data)};")
             assert state['context'] and state['width'] > 0 and state['height'] > 0
             assert state['pixels'][3] > 0, 'Canevas non peint'
+            origin = d.js("const s=document.querySelector('script[data-atelier-p5]');return {sameOrigin:new URL(s.src).origin===location.origin,integrity:s.integrity,external:performance.getEntriesByType('resource').map(e=>e.name).filter(n=>new URL(n).origin!==location.origin)};")
+            assert origin['sameOrigin'], 'p5.js doit être servi par le site lui-même'
+            assert origin['integrity'].startswith('sha384-'), 'Attribut SRI absent'
+            assert not origin['external'], f"Requêtes vers d'autres domaines : {origin['external']}"
+            state['selfHosted'] = True; state['sri'] = origin['integrity'][:19] + '…'
             before = self.frames(0); image = self.canvas_digest(0)
             time.sleep(0.3); assert self.frames(0) > before, 'Animation immobile'
             assert self.canvas_digest(0) != image, 'Le canevas ne change pas malgré les frames'
@@ -341,11 +367,18 @@ class BrowserChecks:
         self.case('keyboard', keyboard)
 
         def narrow():
+            # Real 390 px layout in an iframe (the window cannot go below ~500 px).
+            self.collect_errors()
+            d.framed(self.base, '/experiences/p5/?qa=narrow', 390, 844)
+            wait_for(lambda: d.js(f"return {WIDGET}.length===2 && {AVAILABLE}({WIDGET}[0].querySelector('[data-p5-play]'));"), 'Contrôleurs non initialisés dans le cadre')
+            d.js(f"{WIDGET}[0].querySelector('[data-p5-play]').click();")
+            wait_for(lambda: d.js("return !!document.querySelector('p5-experience canvas');"), 'Canevas absent dans le cadre étroit')
             data = d.js("return {width:innerWidth,overflow:document.documentElement.scrollWidth>innerWidth+1,controls:Array.from(document.querySelectorAll('.p5-controls button')).map(b=>({width:b.getBoundingClientRect().width,height:b.getBoundingClientRect().height})),touch:getComputedStyle(document.querySelector('p5-experience canvas')).touchAction};")
-            assert data['width'] <= 500, 'Viewport étroit non obtenu'
+            assert data['width'] == 390, f"Viewport étroit non obtenu : {data['width']}"
             assert not data['overflow'], 'Débordement horizontal'
             assert all(item['height'] >= 44 for item in data['controls']), 'Cible de commande trop petite'
             assert 'pan-y' in data['touch'], 'Défilement vertical non autorisé sur le canevas'
+            d.top()
             d.screenshot(self.output / 'narrow.png')
             return data
         self.case('narrow-layout', narrow)

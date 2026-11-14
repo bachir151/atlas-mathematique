@@ -309,7 +309,10 @@ test('the runtime loader shares one versioned script and supports retry after a 
   assert.equal(e.window.document.querySelectorAll('script').length, 0);
   const first = loadP5(), same = loadP5(); assert.equal(first, same);
   let script = e.window.document.querySelector('script');
-  assert.equal(script.src, P5_RUNTIME.url);
+  assert.equal(new URL(script.src).pathname, P5_RUNTIME.url);
+  assert.equal(new URL(script.src).origin, e.window.location.origin, 'self-hosted, same origin');
+  assert.match(P5_RUNTIME.integrity, /^sha384-[A-Za-z0-9+/]{64}$/);
+  assert.equal(script.integrity, P5_RUNTIME.integrity);
   assert.equal(script.referrerPolicy, 'no-referrer');
   script.dispatchEvent(new e.window.Event('error'));
   await assert.rejects(first, /Chargement/);

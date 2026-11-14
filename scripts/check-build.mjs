@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { createHash } from 'node:crypto';
 import { existsSync, readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { JSDOM } from 'jsdom';
@@ -54,7 +55,7 @@ for (const page of pages) {
     assert.ok(doc.querySelector('.p5-fallback svg'), 'Alternative statique transmise par le slot MDX');
     assert.match(doc.querySelectorAll('.p5-fallback')[1].textContent, /propre horloge/);
     assert.ok([...doc.querySelectorAll('.p5-controls button')].every(button => button.disabled), 'Commandes désactivées avant initialisation JavaScript');
-    assert.equal(doc.querySelector('script[src*="cdn.jsdelivr.net"]'), null, 'Bibliothèque absente du chargement HTML initial');
+    assert.equal(doc.querySelector('script[src*="p5"], script[data-atelier-p5]'), null, 'Bibliothèque absente du chargement HTML initial');
   } else {
     assert.equal(doc.querySelector('p5-experience'), null);
     assert.ok(![...doc.querySelectorAll('script[src]')].some(script => /P5Experience/i.test(script.src)), 'Contrôleur p5 absent des autres pages');
@@ -62,4 +63,13 @@ for (const page of pages) {
   console.log(`OK ${page}`);
   dom.window.close();
 }
+// Self-hosted p5.js: present in the build, byte-identical to the pinned hash, with its licence.
+const runtime = readFileSync(resolve('src/experiences/p5/runtime.ts'), 'utf8');
+const p5Url = runtime.match(/url: '([^']+)'/)[1], p5Integrity = runtime.match(/integrity: '([^']+)'/)[1];
+assert.match(p5Url, /^\/vendor\/p5\//, 'p5.js servi depuis le site');
+const p5File = resolve(output, p5Url.slice(1));
+assert.ok(existsSync(p5File), `p5.js absent de la compilation : ${p5Url}`);
+assert.equal('sha384-' + createHash('sha384').update(readFileSync(p5File)).digest('base64'), p5Integrity, 'Empreinte de p5.js compilé différente de la valeur SRI');
+assert.ok(existsSync(resolve(p5File, '../LICENSE.txt')), 'Licence LGPL de p5.js absente');
+console.log(`OK ${p5Url} (empreinte SRI vérifiée, licence présente)`);
 console.log(`${pages.length} pages compilées vérifiées ; ${references} références locales résolues. Aucun navigateur ni serveur HTTP utilisé.`);

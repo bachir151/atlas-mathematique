@@ -6,6 +6,8 @@ dist/
 .env.*
 !.env.example
 test-results/
+# Copied from node_modules/p5 by scripts/vendor-p5.mjs (verified hash)
+public/vendor/
 playwright-report/
 *.log
 *:Zone.Identifier

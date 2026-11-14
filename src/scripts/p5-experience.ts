@@ -2,6 +2,7 @@ import { resolveViewport } from '../experiences/p5/model.ts';
 import { getExperience, loadSketch } from '../experiences/p5/registry.ts';
 import { loadP5 } from '../experiences/p5/runtime.ts';
 import { createInstance } from '../experiences/p5/instance.ts';
+import { isAvailable as available, setAvailable } from '../lib/availability.ts';
 import type { ManagedInstance, P5Constructor, SketchFactory } from '../experiences/p5/types.ts';
 
 export interface P5Dependencies {
@@ -37,19 +38,7 @@ export function mountP5Experience(root: HTMLElement, dependencies: P5Dependencie
   const active = () => visible && !document.hidden && document.readyState === 'complete';
   const animated = () => active() && userWantsMotion && !motion.matches;
 
-  /**
-   * Controls stay focusable while unavailable: a natively disabled button that
-   * holds focus drops it to <body>, so keyboard users would lose their place
-   * during loading or after stopping. The server-rendered `disabled` state only
-   * covers the no-JavaScript case and is lifted once the controller is mounted.
-   */
-  function setAvailable(button: HTMLButtonElement, available: boolean) {
-    button.disabled = false;
-    if (available) button.removeAttribute('aria-disabled');
-    else button.setAttribute('aria-disabled', 'true');
-  }
-  const available = (button: HTMLButtonElement) => button.getAttribute('aria-disabled') !== 'true';
-
+  // Unavailable controls keep keyboard focus: see ../lib/availability.ts.
   function updateControls() {
     if (disposed) return;
     setAvailable(play, !(loading || removing || (requested && (!ready || motion.matches))));

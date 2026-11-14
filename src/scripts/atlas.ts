@@ -1,4 +1,5 @@
 import { atlasNodes, atlasLinks, approvedLinks } from '../data/atlas';
+import { setAvailable } from '../lib/availability';
 
 /** The graph data has no dependency on Three.js. The DOM map is the default. */
 export function initAtlas(root: HTMLElement): void {
@@ -45,7 +46,8 @@ export function initAtlas(root: HTMLElement): void {
     const node = event.target.closest<HTMLButtonElement>('[data-node]');
     if (node) { modeChosenByUser = true; select(node.dataset.node!); }
     const mode = event.target.closest<HTMLButtonElement>('[data-mode]')?.dataset.mode;
-    if (mode === '2d' || mode === '3d') { modeChosenByUser = true; setMode(mode); }
+    // An unavailable 3D button stays focusable but does nothing (and keeps its explanatory status).
+    if (mode === '2d' || (mode === '3d' && sceneAvailable)) { modeChosenByUser = true; setMode(mode); }
   }, { signal });
   map.addEventListener('focusin', () => { modeChosenByUser = true; }, { signal });
 
@@ -150,16 +152,20 @@ export function initAtlas(root: HTMLElement): void {
         requestRender?.();
       }, { signal: sceneController.signal });
       renderer.domElement.addEventListener('webglcontextlost', event => {
-        event.preventDefault(); sceneAvailable = false; threeButton.disabled = true; setMode('2d');
+        event.preventDefault(); sceneAvailable = false; setAvailable(threeButton, false);
+        // Removing the scene would drop focus held by a 3D label: move it to the 2D map first.
+        const focusInScene = host.contains(document.activeElement);
+        setMode('2d');
+        if (focusInScene) (map.querySelector<HTMLButtonElement>(`[data-node="${selectedId}"]`) ?? map.querySelector<HTMLButtonElement>('[data-node]'))?.focus();
         status.textContent = 'Le contexte WebGL a été perdu. La carte 2D et la liste restent disponibles.';
         cleanupScene?.();
       }, { signal: sceneController.signal });
-      sceneAvailable = true; threeButton.disabled = false;
+      sceneAvailable = true; setAvailable(threeButton, true);
       // No automatic movement; reduced-motion users start in the DOM map.
       if (!modeChosenByUser && !matchMedia('(prefers-reduced-motion: reduce)').matches) setMode('3d');
       else setMode('2d');
     } catch {
-      cleanupScene?.(); sceneAvailable = false; threeButton.disabled = true; host.replaceChildren(); setMode('2d');
+      cleanupScene?.(); sceneAvailable = false; setAvailable(threeButton, false); host.replaceChildren(); setMode('2d');
       status.textContent = 'La vue 3D est indisponible. La carte 2D et la liste restent utilisables.';
     }
   }
