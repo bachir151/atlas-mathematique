@@ -1,0 +1,108 @@
+---
+# Fixture technique du gabarit : aucun contenu mathématique.
+# Statut « draft » : visible avec `npm run dev` ou ATELIER_DRAFTS=1, jamais en production.
+title: "Exemple de gabarit"
+heading:
+  lead: "Exemple"
+  emphasis: "de gabarit."
+summary: "Page technique qui montre chaque composant de leçon avec des textes provisoires. Elle ne contient aucun énoncé mathématique."
+domain: "Algèbre"
+number: "99"
+breadcrumb: "Gabarit"
+status: "draft"
+companion: false
+sections:
+  - { id: "cours", label: "Le cours" }
+  - { id: "exercices", label: "Exercices" }
+  - { id: "demonstration", label: "Démonstration" }
+  - { id: "preuve-integrale", label: "Preuve intégrale" }
+---
+
+<CourseSection id="cours" eyebrow="01 / Le cours" title="[Titre de section]">
+
+[Paragraphe d’introduction à fournir.] Formule en ligne d’exemple typographique : $\frac{x}{y}$, puis $\sum_{k=1}^{n} u_k$.
+
+$$
+\int_a^b f(t)\,\mathrm{d}t \qquad \begin{pmatrix} a & b \\ c & d \end{pmatrix}
+$$
+
+### [Sous-titre]
+
+<Definition number="1" name="[Nom]" id="definition-1">
+
+[Texte de la définition à fournir.]
+
+</Definition>
+
+<Theorem kind="Proposition" number="1" name="[Nom]" id="proposition-1">
+
+[Énoncé à fournir.] Exemple typographique : $x_1, \dots, x_n$.
+
+</Theorem>
+
+<Example name="[Nom]">
+
+[Exemple à fournir.]
+
+</Example>
+
+<Remark>
+
+[Remarque à fournir.]
+
+</Remark>
+
+<Historical name="[Titre]">
+
+[Commentaire historique ou philosophique à fournir.]
+
+</Historical>
+
+- [Élément de liste 1]
+- [Élément de liste 2]
+
+</CourseSection>
+
+<CourseSection id="exercices" eyebrow="02 / Exercices" title="[Titre de section]">
+
+<Exercise number="1" name="[Nom]" level="[Niveau]">
+
+[Énoncé de l’exercice à fournir.]
+
+<Hint>
+
+[Indice à fournir.]
+
+</Hint>
+
+<Solution>
+
+[Correction à fournir.]
+
+$$
+\lim_{n \to \infty} u_n
+$$
+
+</Solution>
+
+</Exercise>
+
+</CourseSection>
+
+<Proof eyebrow="03 / Démonstration" intro="[Introduction de la démonstration à fournir.]">
+  <ProofStep title="[Étape 1]" open>
+
+[Texte de l’étape 1.]
+
+  </ProofStep>
+  <ProofStep title="[Étape 2]">
+
+[Texte de l’étape 2.]
+
+  </ProofStep>
+  <FullProof slot="full">
+
+[Preuve intégrale à fournir.]
+
+  </FullProof>
+</Proof>

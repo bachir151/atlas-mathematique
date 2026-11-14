@@ -5,9 +5,10 @@ export function initProof(root: HTMLElement): void {
 
   function update() {
     const open = steps.filter(step => step.open).length;
-    status.textContent = `${open} emplacement${open === 1 ? '' : 's'} ouvert${open === 1 ? '' : 's'} sur ${steps.length}`;
+    const plural = open > 1 ? 's' : ''; // French: 0 and 1 take the singular
+    status.textContent = `${open} étape${plural} ouverte${plural} sur ${steps.length}`;
     button.disabled = open === steps.length;
-    button.textContent = open === steps.length ? 'Tous les emplacements sont ouverts' : 'Afficher l’emplacement suivant →';
+    button.textContent = open === steps.length ? 'Toutes les étapes sont ouvertes' : 'Afficher l’étape suivante →';
   }
 
   button.addEventListener('click', () => {

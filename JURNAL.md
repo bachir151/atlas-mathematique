@@ -93,6 +93,7 @@ Autorisations reçues dans cette conversation :
 | Modifier d’autres dépôts, notamment Bash World ou Encyclop-dia | Non autorisé |
 | Commit puis push de la version actuelle du projet | Explicitement autorisés et réalisés vers `bachir151/atlas-mathematique`, branche `main` ; mise à jour documentaire de cette sauvegarde incluse |
 | Second commit puis push (p5, tests Firefox, migration Astro 7) | Autorisé par la direction le 14 novembre (« vas-y » en réponse à la proposition nommant la cible) ; réalisé : commit `3d9c9e1` sur `main` |
+| Troisième commit puis push (suite site, accessibilité, p5 auto-hébergé) | Autorisé le 14 novembre (« oui fais le commit dans la branche » en réponse à la proposition commit + push sur `main`) ; réalisé : commit `df29d9b` |
 | Ouverture de PR, déploiement, publication du site | Non autorisés ; accord distinct nécessaire |
 | Anciens audits Claude | Abandonnés par la nouvelle gouvernance ; conserver les rapports historiques sans relancer d’audit |
 
@@ -119,8 +120,11 @@ La migration proposée prévoyait un fichier `.nvmrc` dans le projet, **sans mod
 | `src/pages/`, `src/layouts/`, `src/components/` | Pages, structure et composants Astro |
 | `src/scripts/atlas.ts`, `square.ts`, `proof.ts`, `companion.ts` | Contrôleurs des interactions |
 | `src/content.config.ts` | Collection MDX explicite et schéma de métadonnées |
-| `src/content/lessons/groupes-rotations.mdx` | Emplacement du contenu scientifique à intégrer après validation |
-| `src/data/proof.ts` | Emplacements des étapes et de la preuve intégrale |
+| `src/content/lessons/groupes-rotations.mdx` | Leçon d’emplacements (cours, étapes et preuve intégrale) à remplacer après validation |
+| `src/content/lessons/exemple-gabarit.mdx` | Brouillon technique montrant chaque composant, sans contenu mathématique |
+| `src/components/lesson/`, `src/styles/lesson.css` | Gabarit de leçon (blocs mathématiques, exercices, démonstration progressive) ; guide `docs/GABARIT-LECON.md` |
+| `src/pages/cours/[slug].astro` | Page générique d’une leçon ; brouillons exclus de la production |
+| `src/lib/math-plugin.mjs` | Rendu KaTeX des formules `$…$` et `$$…$$` à la compilation |
 | `src/data/atlas.ts`, `catalog.ts` | Données indépendantes du rendu et métadonnées de navigation |
 | `src/lib/three-primitives.ts` | Exports Three.js limités aux primitives utiles à l’Atlas |
 | `src/lib/rotation.ts` | État technique des angles |
@@ -372,4 +376,19 @@ Fichiers : `package.json`, `package-lock.json`, `.gitignore`, `scripts/vendor-p5
 
 Six scénarios ajoutés à `tests/browser_site.py` (21 au total) : rotation du carré au clavier avec contrôle de la position affichée du sommet A, historique et remise à zéro, preuve progressive et accès permanent à la preuve intégrale, compagnon simulé, filtres de la bibliothèque, rotation immédiate en mouvement réduit. Aucun défaut applicatif trouvé ; une erreur de conversion de coordonnées SVG dans le test lui-même a été corrigée (`getScreenCTM`). Script npm `audit:claude` retiré de `package.json` (le fichier historique reste). Vérifications : typage 0/0, 29 tests, `npm run test:browser` p5 14/14 et site 21/21, site 21/21 sur un second passage. Aucun commit, push ou déploiement depuis `3d9c9e1`.
 
-**Reste à faire :** vérifications sur téléphone et lecteur d’écran (direction) ; intégration des contenus de Codex une fois validés ; sauvegarde GitHub des travaux depuis `3d9c9e1` (autorisation à recevoir).
+**Reste à faire :** vérifications sur téléphone et lecteur d’écran (direction) ; intégration des contenus de Codex une fois validés ; sauvegarde GitHub faite ensuite (voir entrée suivante).
+
+### 14 novembre 2026 — Sauvegarde GitHub `df29d9b`
+
+Commit `df29d9bc9aa27a77389c424d960e22fb89a03b6e` (parent `3d9c9e1`) poussé sans forçage sur `bachir151/atlas-mathematique`, branche `main` : 18 fichiers (suite `tests/browser_site.py`, corrections d’accessibilité et de reflow, module `src/lib/availability.ts`, p5.js auto-hébergé via `scripts/vendor-p5.mjs`, documentation). `public/vendor/` exclu comme prévu. Contrôle de motifs sensibles : aucun. Empreintes des fichiers distants identiques aux fichiers locaux. Cette entrée du journal reste locale jusqu’à la prochaine sauvegarde. Aucun déploiement.
+
+### 14 novembre 2026 — Gabarit générique de leçon et lisibilité des petits textes (Claude)
+
+- **Gabarit de leçon :** page unique `src/pages/cours/[slug].astro` pour tous les fichiers de `src/content/lessons/` ; schéma enrichi (`status` placeholder/draft/validated, `validation` obligatoire pour validated, sections de navigation, compagnon facultatif) ; composants `src/components/lesson/` ; styles `src/styles/lesson.css` ; formules `$…$`/`$$…$$` rendues par KaTeX à la compilation (`src/lib/math-plugin.mjs`, MathML, `trust: false`, compilation en échec sur formule invalide). Brouillons construits seulement en développement ou avec `ATELIER_DRAFTS=1`. Une leçon publiée sans entrée de catalogue fait échouer la compilation.
+- **Leçon existante convertie** sans changement de texte, sauf une mention à signaler à la direction : « validation par ChatGPT et la direction du projet » devient « validation par la direction du projet » (nouvelle gouvernance). Les étapes et la preuve intégrale sont désormais dans le MDX ; `src/data/proof.ts`, `src/components/Proof.astro` et `src/pages/cours/groupes-rotations.astro` sont supprimés. Libellés de progression : « N étape(s) ouverte(s) sur M » (singulier pour 0 et 1).
+- **Brouillon technique** `src/content/lessons/exemple-gabarit.mdx` : textes entre crochets et formules purement typographiques, aucun énoncé mathématique. **Guide** `docs/GABARIT-LECON.md` pour Codex.
+- **Petits textes :** 128 tailles de 6 à 11 px relevées (6–9 px → 11 px, 10–11 px → 12 px), plus deux oubliés (5,8 px et une police abrégée de 10 px). Texte des étapes et de la preuve intégrale à 15 px. En-tête du compagnon réorganisé pour ne pas déborder.
+- **Confidentialité :** p5.js 2.4.0 tente à son chargement de récupérer ses traductions sur jsDelivr. Une politique `connect-src 'self'` (balise meta, production) bloque ces connexions ; `verify:build` la contrôle. À reprendre dans l’en-tête HTTP lors du déploiement.
+- **Vérifications :** typage 0 erreur/0 avertissement ; tests unitaires 29/29 (réécrits sans `src/data/proof.ts`) ; compilation 6 pages ; `verify:build` étendu (brouillons absents, aucune formule brute, politique de connexion) ; Firefox p5 14/14 et site 21/21 sur deux passages ; comparaison visuelle : seules les zones attendues changent.
+
+**Reste à faire :** valider le changement de mention ci-dessus ; vérifications sur téléphone et lecteur d’écran ; contenus de Codex. Aucun commit, push ou déploiement depuis `df29d9b`.

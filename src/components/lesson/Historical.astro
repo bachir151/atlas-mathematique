@@ -1,0 +1,7 @@
+---
+import MathBlock from './MathBlock.astro';
+/** Historical or philosophical commentary, kept visually distinct from mathematical statements. */
+interface Props { label?: string; name?: string; id?: string }
+const { label = 'Commentaire historique', name, id } = Astro.props;
+---
+<MathBlock variant="historical" label={label} name={name} id={id}><slot /></MathBlock>

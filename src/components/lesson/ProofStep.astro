@@ -1,0 +1,6 @@
+---
+/** One step of a progressive proof; numbering comes from CSS counters. */
+interface Props { title: string; open?: boolean }
+const { title, open = false } = Astro.props;
+---
+<details open={open} data-step><summary><span class="step-number" aria-hidden="true"></span>{title}<span class="step-plus" aria-hidden="true">+</span></summary><div><slot /></div></details>

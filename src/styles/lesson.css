@@ -1,0 +1,253 @@
+/* Lesson template: blocks available to MDX lessons (see docs/GABARIT-LECON.md). */
+
+/* Content written for readers is set at a comfortable reading size, unlike the
+   small interface labels of the prototype. */
+.lesson-content {
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--ink);
+}
+
+/* Placeholder slots keep the interface typography of the prototype. */
+.lesson-content .pending-content {
+  font-size: 15px;
+  line-height: 1.65;
+}
+
+.lesson-content > :where(p, ul, ol, .math-display, .math-block, h3) + :where(p, ul, ol, .math-display, .math-block, h3) {
+  margin-top: 1em;
+}
+
+.lesson-content :where(ul, ol) {
+  padding-left: 1.4em;
+}
+
+.lesson-section-title {
+  font: 30px/1.15 var(--serif);
+  letter-spacing: -.5px;
+  margin: 10px 0 22px;
+}
+
+.lesson-content h3 {
+  font: 22px/1.25 var(--serif);
+  margin-top: 1.6em;
+}
+
+/* Display math scrolls inside its own box rather than widening the page. */
+.math-display {
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 2px 0;
+}
+
+.math-display:focus-visible {
+  outline: 3px solid var(--orange);
+  outline-offset: 3px;
+}
+
+.katex {
+  font-size: 1.08em;
+}
+
+/* Labelled blocks: definition, theorem, example, remark, commentary, exercise. */
+.math-block {
+  --block-accent: var(--green);
+  --block-background: transparent;
+  border-left: 3px solid var(--block-accent);
+  background: var(--block-background);
+  padding: 14px 18px 14px 20px;
+  border-radius: 0 var(--radius) var(--radius) 0;
+}
+
+.math-definition {
+  --block-background: var(--green-soft);
+}
+
+.math-theorem {
+  --block-accent: var(--orange);
+  --block-background: #f6eee7;
+}
+
+.math-example {
+  --block-accent: #8a9b8e;
+}
+
+.math-remark {
+  --block-accent: var(--line);
+}
+
+/* Commentary is visibly not a mathematical statement. */
+.math-historical {
+  --block-accent: #b9a58a;
+  --block-background: #f4f0e8;
+  font-family: var(--serif);
+}
+
+.math-exercise {
+  --block-accent: var(--green);
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--block-accent);
+  background: var(--surface);
+}
+
+.math-label {
+  font-size: 13px;
+  letter-spacing: .02em;
+  margin-bottom: 6px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px .35em;
+  align-items: baseline;
+}
+
+.math-kind {
+  font-weight: 700;
+  color: var(--green);
+}
+
+.math-theorem .math-kind {
+  color: #8a4a29;
+}
+
+.math-historical .math-label {
+  font-family: var(--sans);
+}
+
+.math-name {
+  color: var(--ink);
+}
+
+.math-meta {
+  margin-left: auto;
+  font-size: 12px;
+  color: var(--muted);
+  padding-left: 12px;
+}
+
+.math-body > * + * {
+  margin-top: .8em;
+}
+
+.math-theorem .math-body {
+  font-style: italic;
+}
+
+.math-theorem .math-body .katex {
+  font-style: normal;
+}
+
+/* Hints and corrections are closed by default: readers try first. */
+.math-reveal {
+  margin-top: 12px;
+  border-top: 1px solid var(--line);
+}
+
+.math-reveal > summary {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  cursor: pointer;
+  font-size: 14px;
+  color: var(--green);
+  list-style: none;
+}
+
+.math-reveal > summary::-webkit-details-marker {
+  display: none;
+}
+
+.math-reveal > summary::before {
+  content: '+';
+  font-size: 18px;
+  line-height: 1;
+  width: 14px;
+  transition: transform .2s;
+}
+
+.math-reveal[open] > summary::before {
+  transform: rotate(45deg);
+}
+
+.math-reveal > div {
+  padding: 4px 0 6px;
+}
+
+.math-reveal > div > * + * {
+  margin-top: .8em;
+}
+
+/* Progressive proof: numbering without hard-coded indices. */
+.proof-steps {
+  counter-reset: proof-step;
+}
+
+.proof-steps details {
+  counter-increment: proof-step;
+}
+
+.proof-steps .step-number::before {
+  content: counter(proof-step, decimal-leading-zero);
+}
+
+/* Proof text is read like the course, not like an interface label. */
+.proof-steps details > div,
+.full-proof-body,
+.full-proof-body p {
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--ink);
+}
+
+.full-proof-body > * + * {
+  margin-top: .8em;
+}
+
+/* Status of the page content. */
+.lesson-status {
+  display: inline-block;
+  margin-top: 16px;
+  padding: 6px 12px;
+  border-radius: 3px;
+  font-size: 13px;
+}
+
+.lesson-status-draft {
+  background: #f6e6d8;
+  color: #6f3a1e;
+  border: 1px solid #e1bfa3;
+}
+
+.lesson-status-validated {
+  background: var(--green-soft);
+  color: var(--green);
+}
+
+.lesson-workspace[data-lesson-status='validated'] .pending-only {
+  display: none;
+}
+
+/* Lessons without the companion use the full width. */
+.lesson-workspace.lesson-workspace-single {
+  grid-template-columns: minmax(0, 1fr);
+  max-width: 860px;
+}
+
+@media (max-width: 560px) {
+  .lesson-content {
+    font-size: 15px;
+  }
+  .math-block {
+    padding: 12px 14px 12px 16px;
+  }
+  .lesson-section-title {
+    font-size: 26px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .math-reveal > summary::before {
+    transition: none;
+  }
+}

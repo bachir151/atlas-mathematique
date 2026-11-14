@@ -1,0 +1,19 @@
+---
+/**
+ * Progressive proof with permanent access to the full proof (never locked,
+ * never inside a collapsible panel). One per page: ids #demonstration and
+ * #preuve-integrale are fixed so the section navigation can target them.
+ */
+interface Props { eyebrow?: string; title?: string; intro?: string }
+const { eyebrow = 'Démonstration', title = 'Chaque étape, à votre rythme.', intro } = Astro.props;
+---
+<section class="proof panel" id="demonstration" data-proof aria-labelledby="proof-title">
+  <div class="panel-heading"><div><p class="eyebrow">{eyebrow}</p><h2 id="proof-title">{title}</h2></div><a href="#preuve-integrale" class="text-link">Preuve intégrale <span aria-hidden="true">↗</span></a></div>
+  {intro && <p class="muted">{intro}</p>}
+  <div class="proof-layout"><div class="proof-progress"><p class="eyebrow" data-proof-progress role="status">Démonstration par étapes</p><div class="proof-steps"><slot /></div><button type="button" class="button secondary" data-next-step disabled>Afficher l’étape suivante <span aria-hidden="true">→</span></button></div><aside class="full-proof" id="preuve-integrale" tabindex="-1"><span class="eyebrow">Accessible en permanence</span><h3>Preuve intégrale</h3><span class="badge pending-only">En attente de validation</span><slot name="full" /></aside></div>
+  <noscript><p>Ouvrez chaque étape à l’aide de son titre. La preuve intégrale reste accessible sur cette page.</p></noscript>
+</section>
+<script>
+  import { initProof } from '../../scripts/proof';
+  document.querySelectorAll<HTMLElement>('[data-proof]').forEach(initProof);
+</script>

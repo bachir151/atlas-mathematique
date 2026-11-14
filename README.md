@@ -61,20 +61,20 @@ src/
     index.astro
     atlas.astro
     bibliotheque.astro
-    cours/groupes-rotations.astro
+    cours/[slug].astro
     experiences/p5.astro
     404.astro
   layouts/Layout.astro
   components/
     Atlas.astro
     SquareExperiment.astro
-    Proof.astro
     Companion.astro
     LessonCard.astro
     Diagram.astro
     Formula.astro
     Icon.astro
     experiences/P5Experience.astro
+    lesson/                 # gabarit de leçon : blocs, preuve, exercices
   scripts/
     atlas.ts
     square.ts
@@ -92,13 +92,17 @@ src/
   data/
     atlas.ts
     catalog.ts
-    proof.ts
-  content/lessons/groupes-rotations.mdx
+  content/lessons/
+    groupes-rotations.mdx
+    exemple-gabarit.mdx     # brouillon technique, exclu de la production
   lib/
+    math-plugin.mjs
+    availability.ts
     rotation.ts
     three-primitives.ts
   content.config.ts
   styles/global.css
+  styles/lesson.css
   styles/p5-experience.css
   env.d.ts
 tests/
@@ -110,6 +114,7 @@ scripts/check-build.mjs
 docs/LIVRAISON.md
 docs/VERIFICATIONS.md
 docs/P5.md
+docs/GABARIT-LECON.md
 audits/
   claude-1.md
   claude-1-sources.json
@@ -129,12 +134,14 @@ package.json
 
 Astro produit un site statique avec TypeScript strict et MDX. Aucun framework de composants supplémentaire n’est nécessaire. Les données de l’Atlas restent indépendantes de Three.js ; les liens ont un type, une justification et un état de validation. La liste des liens est vide : aucune relation scientifique n’est inventée. Les tokens CSS permettent de changer le thème sans toucher aux contenus.
 
+Les leçons utilisent un gabarit générique : un fichier MDX par leçon dans `src/content/lessons/`, publié à `/cours/<slug>/`, avec des composants de définition, d’énoncé, d’exemple, de remarque, de commentaire historique, d’exercice avec indice et correction, et de démonstration progressive. Les formules `$…$` et `$$…$$` sont rendues par KaTeX à la compilation ; une formule invalide fait échouer la compilation. Les brouillons (`status: "draft"`) sont exclus de la production. Guide d’intégration : [docs/GABARIT-LECON.md](docs/GABARIT-LECON.md).
+
 `Formula.astro` fournit un rendu KaTeX avec MathML, `trust: false` et erreur de compilation sur une formule invalide. Aucune formule pédagogique nouvelle n’est ajoutée pour illustrer ce composant. L’intégration directe de MDX suit la [documentation officielle Astro](https://docs.astro.build/en/guides/integrations-guide/mdx/#using-mdx-in-astro).
 
 ## Contenus à intégrer après validation
 
 - Corps du cours : `src/content/lessons/groupes-rotations.mdx`.
-- Étapes et texte intégral de la preuve : `src/data/proof.ts`, actuellement constitués uniquement d’emplacements.
+- Étapes et texte intégral de la preuve : composants `<ProofStep>` et `<FullProof>` du même fichier MDX, actuellement constitués uniquement d’emplacements.
 - Descriptions et connexions scientifiques de l’Atlas : `src/data/atlas.ts`.
 
 La zone de preuve intégrale reste indépendante de l’ouverture des étapes. Une navigation de leçon collante permet d’y accéder pendant le défilement. Les illustrations de l’accueil sont des compositions graphiques ; aucun lien de l’Atlas n’y est affirmé.

@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { normalizeAngle, rotate } from '../src/lib/rotation.ts';
 import { filterLessons, lessons } from '../src/data/catalog.ts';
 import { atlasNodes, atlasLinks, approvedLinks } from '../src/data/atlas.ts';
-import { proofSteps, fullProofPlaceholder } from '../src/data/proof.ts';
+import { readFileSync } from 'node:fs';
 
 test('rotation state supports wraparound, negative input, and rejects invalid angles', () => {
   assert.equal(normalizeAngle(-90), 270);
@@ -42,10 +42,13 @@ test('Atlas data identifiers and positions are usable independently of Three.js'
   }
 });
 
-test('proof slots contain explicit placeholders; full proof has an independent state', () => {
-  assert.ok(proofSteps.length > 0);
-  assert.equal(new Set(proofSteps.map(step => step.id)).size, proofSteps.length);
-  assert.ok(proofSteps.every(step => step.placeholder.includes('attente de validation')));
-  assert.match(fullProofPlaceholder, /Aucune démonstration validée/);
-  assert.match(fullProofPlaceholder, /sans déverrouillage/);
+test('the placeholder lesson keeps explicit placeholders and an independent full proof', () => {
+  const mdx = readFileSync(new URL('../src/content/lessons/groupes-rotations.mdx', import.meta.url), 'utf8');
+  assert.match(mdx, /^status: "placeholder"$/m);
+  const steps = [...mdx.matchAll(/<ProofStep[^>]*>([\s\S]*?)<\/ProofStep>/g)].map(match => match[1]);
+  assert.equal(steps.length, 3);
+  assert.ok(steps.every(step => step.includes('attente de validation')));
+  const full = mdx.match(/<FullProof slot="full">([\s\S]*?)<\/FullProof>/)?.[1] ?? '';
+  assert.match(full, /Aucune démonstration validée/);
+  assert.match(full, /sans déverrouillage/);
 });

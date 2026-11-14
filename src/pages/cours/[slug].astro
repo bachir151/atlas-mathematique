@@ -1,0 +1,42 @@
+---
+import { getCollection, render } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import Companion from '../../components/Companion.astro';
+import { lessonComponents } from '../../components/lesson/index';
+import { lessons as catalog } from '../../data/catalog';
+import 'katex/dist/katex.min.css';
+import '../../styles/lesson.css';
+
+export async function getStaticPaths() {
+  // Drafts are never part of a normal production build.
+  // Read at build time from the shell (no @types/node in this project).
+  const buildEnv = (globalThis as { process?: { env: Record<string, string | undefined> } }).process?.env ?? {};
+  const includeDrafts = import.meta.env.DEV || buildEnv.ATELIER_DRAFTS === '1';
+  const entries = await getCollection('lessons', entry => includeDrafts || entry.data.status !== 'draft');
+  return entries.map(entry => ({ params: { slug: entry.id }, props: { entry } }));
+}
+
+const { entry } = Astro.props;
+const lesson = entry.data;
+const href = `/cours/${entry.id}/`;
+if (lesson.status !== 'draft' && !catalog.some(item => item.href === href)) {
+  throw new Error(`Le cours « ${entry.id} » doit avoir une entrée dans src/data/catalog.ts (href: '${href}').`);
+}
+const { Content } = await render(entry);
+const heading = lesson.heading ?? { lead: lesson.title };
+---
+<Layout title={lesson.title}>
+  <div class="wrap lesson-breadcrumb"><a href="/bibliotheque/">Les cours</a><span aria-hidden="true">/</span><span>{lesson.breadcrumb ?? lesson.title}</span></div>
+  <section class="page-heading lesson-heading wrap">
+    <p class="eyebrow">Exploration {lesson.number} · {lesson.domain}</p>
+    <h1>{heading.lead}{heading.emphasis && <><br /><em>{heading.emphasis}</em></>}</h1>
+    <p>{lesson.summary}</p>
+    {lesson.status === 'draft' && <p class="lesson-status lesson-status-draft" role="note">Brouillon non validé : visible uniquement en développement.</p>}
+    {lesson.status === 'validated' && <p class="lesson-status lesson-status-validated" data-validation={lesson.validation}>Contenu validé par la direction du projet.</p>}
+  </section>
+  <div class="lesson-section-nav"><nav class="lesson-nav wrap" aria-label="Sections de l’exploration">{lesson.sections.map(section => <a href={`#${section.id}`}>{section.label}{section.id === 'preuve-integrale' && <span aria-hidden="true">{'\u00a0↗'}</span>}</a>)}</nav></div>
+  <div class:list={['lesson-workspace wrap', { 'lesson-workspace-single': !lesson.companion }]} data-lesson-status={lesson.status}>
+    <div class="lesson-main"><Content components={lessonComponents} /></div>
+    {lesson.companion && <div class="companion-column"><Companion /></div>}
+  </div>
+</Layout>

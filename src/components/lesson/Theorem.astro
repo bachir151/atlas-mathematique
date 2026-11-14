@@ -1,0 +1,6 @@
+---
+import MathBlock from './MathBlock.astro';
+interface Props { kind?: 'Théorème' | 'Proposition' | 'Lemme' | 'Corollaire'; name?: string; number?: string; id?: string }
+const { kind = 'Théorème', name, number, id } = Astro.props;
+---
+<MathBlock variant="theorem" label={number ? `${kind} ${number}` : kind} name={name} id={id}><slot /></MathBlock>

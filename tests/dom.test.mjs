@@ -10,7 +10,6 @@ const { JSDOM } = createRequire(resolve(root, 'package.json'))('jsdom');
 const { rotate } = await import(pathToFileURL(resolve(root, 'src/lib/rotation.ts')));
 const { filterLessons, lessons } = await import(pathToFileURL(resolve(root, 'src/data/catalog.ts')));
 const { atlasNodes, atlasLinks, approvedLinks } = await import(pathToFileURL(resolve(root, 'src/data/atlas.ts')));
-const { proofSteps, fullProofPlaceholder } = await import(pathToFileURL(resolve(root, 'src/data/proof.ts')));
 const { setAvailable, isAvailable } = await import(pathToFileURL(resolve(root, 'src/lib/availability.ts')));
 const read = path => readFileSync(resolve(root, path), 'utf8');
 const component = path => read(path).replace(/^---[\s\S]*?---/, '').replace(/<script>[\s\S]*?<\/script>/g, '');
@@ -87,7 +86,9 @@ test('library controller combines filters and restores all cards when cleared', 
 });
 
 test('progressive proof never hides the independent full-proof panel', async () => {
-  const dom = domFor(`<section data-proof><p data-proof-progress></p>${proofSteps.map((step, index) => `<details data-step ${index === 0 ? 'open' : ''}><summary>${step.title}</summary><p>${step.placeholder}</p></details>`).join('')}<button data-next-step disabled>Suivant</button><aside id="preuve-integrale">${fullProofPlaceholder}</aside></section>`);
+  // Neutral fixture: three steps and an independent full-proof panel.
+  const steps = [1, 2, 3].map(index => `<details data-step ${index === 1 ? 'open' : ''}><summary>Étape ${index}</summary><p>Texte ${index}</p></details>`).join('');
+  const dom = domFor(`<section data-proof><p data-proof-progress></p>${steps}<button data-next-step disabled>Suivant</button><aside id="preuve-integrale">Preuve intégrale de test</aside></section>`);
   evaluate(dom, read('src/scripts/proof.ts'));
   dom.window.initProof(dom.window.document.querySelector('[data-proof]'));
   const doc = dom.window.document;
@@ -101,13 +102,13 @@ test('progressive proof never hides the independent full-proof panel', async () 
   assert.equal(doc.activeElement, doc.querySelectorAll('summary')[1]);
   button.click();
   assert.equal(button.disabled, true);
-  assert.match(doc.querySelector('[data-proof-progress]').textContent, /3 emplacements ouverts sur 3/);
+  assert.match(doc.querySelector('[data-proof-progress]').textContent, /3 étapes ouvertes sur 3/);
   for (const step of doc.querySelectorAll('[data-step]')) step.open = false;
   await new Promise(resolve => setTimeout(resolve, 10));
   assert.equal(button.disabled, false);
-  assert.match(doc.querySelector('[data-proof-progress]').textContent, /0 emplacements ouverts sur 3/);
+  assert.match(doc.querySelector('[data-proof-progress]').textContent, /0 étape ouverte sur 3/);
   assert.equal(full.hidden, false);
-  assert.match(full.textContent, /Aucune démonstration validée/);
+  assert.match(full.textContent, /Preuve intégrale de test/);
   dom.window.close();
 });
 

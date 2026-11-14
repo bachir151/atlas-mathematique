@@ -111,7 +111,7 @@ section,[id] {
 }
 
 .eyebrow {
-  font-size:10px;
+  font-size:12px;
   font-weight:600;
   line-height:1.6;
   letter-spacing:.14em;
@@ -228,7 +228,7 @@ section,[id] {
   border:1px solid #d3d8cc;
   border-radius:30px;
   padding:5px 10px;
-  font-size:10px;
+  font-size:12px;
   line-height:1.5;
   color:var(--green);
   white-space:nowrap;
@@ -237,7 +237,7 @@ section,[id] {
 
 .technical-note {
   color:var(--muted);
-  font-size:11px;
+  font-size:12px;
   line-height:1.65;
 }
 
@@ -268,7 +268,7 @@ section,[id] {
 .brand-sub {
   display:block;
   font-family:var(--sans);
-  font-size:9px;
+  font-size:11px;
   letter-spacing:.13em;
   margin-top:6px;
 }
@@ -305,7 +305,7 @@ section,[id] {
   display:flex;
   align-items:center;
   gap:8px;
-  font-size:10px;
+  font-size:12px;
   color:var(--muted);
   border:1px solid var(--line);
   padding:6px 10px;
@@ -352,7 +352,7 @@ section,[id] {
   display:flex;
   align-items:center;
   gap:9px;
-  font-size:10px;
+  font-size:12px;
   color:var(--muted);
 }
 
@@ -374,14 +374,14 @@ section,[id] {
 .visual-index {
   display:flex;
   justify-content:space-between;
-  font-size:9px;
+  font-size:11px;
   letter-spacing:.12em;
   color:var(--muted);
   padding:0 10px;
 }
 
 .visual-index span {
-  font-size:8px;
+  font-size:11px;
 }
 
 .hero-square {
@@ -395,7 +395,7 @@ section,[id] {
   gap:14px;
   margin:0 14px;
   color:var(--muted);
-  font-size:10px;
+  font-size:12px;
   line-height:1.7;
 }
 
@@ -430,11 +430,11 @@ section,[id] {
   display:flex;
   gap:17px;
   align-items:center;
-  font-size:11px;
+  font-size:12px;
 }
 
 .tiny-index {
-  font-size:9px;
+  font-size:11px;
   color:var(--orange);
 }
 
@@ -509,7 +509,7 @@ section,[id] {
   position:absolute;
   left:19px;
   top:15px;
-  font-size:10px;
+  font-size:12px;
   letter-spacing:.08em;
   color:var(--tone-ink);
 }
@@ -519,7 +519,7 @@ section,[id] {
   bottom:15px;
   left:19px;
   color:var(--tone-ink);
-  font-size:9px;
+  font-size:11px;
   letter-spacing:.08em;
   text-transform:uppercase;
 }
@@ -536,7 +536,7 @@ section,[id] {
 
 .lesson-card-body>.eyebrow {
   color:var(--muted);
-  font-size:8px;
+  font-size:11px;
   letter-spacing:.12em;
 }
 
@@ -549,7 +549,7 @@ section,[id] {
 }
 
 .lesson-card p {
-  font-size:10px;
+  font-size:12px;
   color:var(--muted);
   min-height:32px;
   line-height:1.6;
@@ -562,7 +562,7 @@ section,[id] {
   margin-top:18px;
   padding:16px 0;
   border-top:1px solid var(--line);
-  font-size:10px;
+  font-size:12px;
   min-height:53px;
 }
 
@@ -591,7 +591,7 @@ section,[id] {
 
 .teaser-copy>.eyebrow {
   color:#c3ceb9;
-  font-size:9px;
+  font-size:11px;
 }
 
 .atlas-teaser h2 {
@@ -620,7 +620,7 @@ section,[id] {
 
 .teaser-note {
   display:block;
-  font-size:9px;
+  font-size:11px;
   color:#c3ceb9;
 }
 
@@ -635,7 +635,7 @@ section,[id] {
 }
 
 .atlas-illustration>span {
-  font-size:8px;
+  font-size:11px;
   color:#c3ceb9;
   display:block;
 }
@@ -647,7 +647,7 @@ section,[id] {
 
 .closing-note .eyebrow {
   color:var(--orange);
-  font-size:9px;
+  font-size:11px;
 }
 
 .closing-note p {
@@ -663,7 +663,7 @@ section,[id] {
 }
 
 .closing-note>span:last-child {
-  font-size:10px;
+  font-size:12px;
   color:var(--muted);
 }
 
@@ -683,23 +683,23 @@ section,[id] {
 
 .footer-brand span {
   display:block;
-  font:10px var(--sans);
+  font:12px var(--sans);
   color:var(--muted);
   margin-top:8px;
 }
 
 .site-footer .eyebrow {
-  font-size:8px;
+  font-size:11px;
 }
 
 .site-footer p {
-  font-size:9px;
+  font-size:11px;
   color:var(--muted);
   margin-top:4px;
 }
 
 .site-footer .text-link {
-  font-size:10px;
+  font-size:12px;
 }
 
 .page-heading {
@@ -736,7 +736,7 @@ section,[id] {
 .page-endnote p {
   max-width:800px;
   color:var(--muted);
-  font-size:11px;
+  font-size:12px;
   line-height:1.8;
 }
 
@@ -794,7 +794,7 @@ input[type=search] {
 }
 
 .result-count {
-  font-size:10px;
+  font-size:12px;
   color:var(--muted);
   margin:18px 0;
 }
@@ -840,7 +840,7 @@ input[type=search] {
 }
 
 .atlas-toolbar>.eyebrow {
-  font-size:9px;
+  font-size:11px;
   color:var(--muted);
 }
 
@@ -855,7 +855,7 @@ input[type=search] {
 .segmented button {
   border:0;
   padding:7px 17px;
-  font-size:11px;
+  font-size:12px;
   border-radius:2px;
   min-height:36px;
 }
@@ -904,7 +904,7 @@ input[type=search] {
   align-items:center;
   gap:8px;
   max-width:calc(100% - 98px);
-  font-size:9px;
+  font-size:11px;
   line-height:1.6;
   pointer-events:none;
   background:#f7f5efed;
@@ -916,7 +916,7 @@ input[type=search] {
   position:absolute;
   left:24px;
   top:24px;
-  font-size:9px;
+  font-size:11px;
   letter-spacing:.12em;
   color:var(--muted);
   pointer-events:none;
@@ -953,7 +953,7 @@ input[type=search] {
   position:absolute;
   z-index:1;
   transform:translate(-50%,0);
-  font-size:10px;
+  font-size:12px;
   white-space:nowrap;
   background:#fffefae8;
   border:1px solid #d6dcce;
@@ -975,7 +975,7 @@ input[type=search] {
   align-items:center;
   gap:12px;
   transform:translate(-50%,-50%);
-  font-size:11px;
+  font-size:12px;
   border:0;
   padding:10px;
   white-space:nowrap;
@@ -1029,7 +1029,7 @@ input[type=search] {
 }
 
 .atlas-sidebar>.eyebrow {
-  font-size:8px;
+  font-size:11px;
   color:var(--orange);
 }
 
@@ -1039,7 +1039,7 @@ input[type=search] {
 }
 
 .atlas-sidebar .muted {
-  font-size:11px;
+  font-size:12px;
 }
 
 .atlas-node-list {
@@ -1055,7 +1055,7 @@ input[type=search] {
   border:0;
   border-bottom:1px solid var(--line);
   min-height:44px;
-  font-size:11px;
+  font-size:12px;
   padding:10px 8px;
 }
 
@@ -1086,13 +1086,13 @@ input[type=search] {
 }
 
 .node-detail p {
-  font-size:10px;
+  font-size:12px;
   color:var(--muted);
   line-height:1.8;
 }
 
 .node-detail .text-link {
-  font-size:10px;
+  font-size:12px;
 }
 
 .atlas-legend {
@@ -1105,14 +1105,14 @@ input[type=search] {
 }
 
 .atlas-legend>.eyebrow {
-  font-size:8px;
+  font-size:11px;
 }
 
 .atlas-legend>span:not(.eyebrow) {
   display:flex;
   gap:9px;
   align-items:center;
-  font-size:9px;
+  font-size:11px;
   color:var(--muted);
 }
 
@@ -1137,7 +1137,7 @@ input[type=search] {
 
 .atlas-legend p {
   width:100%;
-  font-size:9px;
+  font-size:11px;
   color:var(--muted);
 }
 
@@ -1145,7 +1145,7 @@ input[type=search] {
   display:flex;
   align-items:center;
   gap:12px;
-  font-size:10px;
+  font-size:12px;
   color:var(--muted);
   padding-top:28px;
 }
@@ -1180,7 +1180,7 @@ input[type=search] {
 }
 
 .lesson-nav a {
-  font-size:11px;
+  font-size:12px;
   min-height:35px;
 }
 
@@ -1221,7 +1221,7 @@ input[type=search] {
 
 .panel-heading .eyebrow {
   color:var(--orange);
-  font-size:9px;
+  font-size:11px;
 }
 
 .panel-heading h2 {
@@ -1235,7 +1235,7 @@ input[type=search] {
 }
 
 .panel-heading .text-link {
-  font-size:10px;
+  font-size:12px;
   flex-shrink:0;
 }
 
@@ -1256,7 +1256,7 @@ input[type=search] {
   position:absolute;
   left:17px;
   top:14px;
-  font-size:8px;
+  font-size:11px;
   letter-spacing:.12em;
   color:var(--muted);
 }
@@ -1276,7 +1276,7 @@ input[type=search] {
 }
 
 .angle-display span {
-  font-size:8px;
+  font-size:11px;
   color:var(--muted);
   letter-spacing:.05em;
 }
@@ -1300,7 +1300,7 @@ input[type=search] {
   gap:9px;
   border:1px solid var(--line);
   border-radius:3px;
-  font-size:11px;
+  font-size:12px;
   padding:10px 6px;
   min-height:44px;
 }
@@ -1322,7 +1322,7 @@ input[type=search] {
 }
 
 .rotation-history>.eyebrow {
-  font-size:8px;
+  font-size:11px;
   color:var(--muted);
 }
 
@@ -1337,7 +1337,7 @@ input[type=search] {
 }
 
 .rotation-history li {
-  font-size:10px;
+  font-size:12px;
   background:var(--green-soft);
   padding:3px 8px;
   border-radius:2px;
@@ -1346,7 +1346,7 @@ input[type=search] {
 
 .lesson-content>.eyebrow {
   color:var(--orange);
-  font-size:9px;
+  font-size:11px;
   margin-bottom:20px;
 }
 
@@ -1356,7 +1356,7 @@ input[type=search] {
 }
 
 .pending-content>.eyebrow {
-  font-size:8px;
+  font-size:11px;
   color:var(--muted);
 }
 
@@ -1383,7 +1383,7 @@ input[type=search] {
 }
 
 .proof-progress>.eyebrow {
-  font-size:8px;
+  font-size:11px;
   color:var(--muted);
   margin-bottom:12px;
 }
@@ -1412,7 +1412,7 @@ input[type=search] {
 }
 
 .step-number {
-  font-size:9px;
+  font-size:11px;
   color:var(--orange);
 }
 
@@ -1435,7 +1435,7 @@ input[type=search] {
 
 .proof-progress .button {
   margin-top:20px;
-  font-size:10px;
+  font-size:12px;
   gap:20px;
 }
 
@@ -1447,7 +1447,7 @@ input[type=search] {
 }
 
 .full-proof>.eyebrow {
-  font-size:8px;
+  font-size:11px;
   color:var(--green);
 }
 
@@ -1457,7 +1457,7 @@ input[type=search] {
 }
 
 .full-proof .badge {
-  font-size:9px;
+  font-size:11px;
 }
 
 .full-proof p {
@@ -1497,14 +1497,19 @@ input[type=search] {
   white-space:nowrap;
 }
 
+.companion-heading>div {
+  flex:1 1 0;
+  min-width:0;
+}
+
 .companion-heading .eyebrow {
-  font-size:6px;
-  letter-spacing:.1em;
-  white-space:nowrap;
+  display:block;
+  font-size:11px;
+  letter-spacing:.06em;
 }
 
 .companion-heading>button {
-  font-size:9px;
+  font-size:11px;
   border:0;
   margin-left:auto;
   padding:8px 0;
@@ -1516,7 +1521,7 @@ input[type=search] {
 }
 
 .companion [data-companion-body]>.muted {
-  font-size:10px;
+  font-size:12px;
   margin-top:20px;
   line-height:1.8;
 }
@@ -1532,7 +1537,7 @@ input[type=search] {
 }
 
 .chat-message {
-  font-size:11px;
+  font-size:12px;
   line-height:1.85;
   border-radius:4px;
   padding:12px;
@@ -1561,7 +1566,7 @@ input[type=search] {
   border:1px solid var(--line);
   border-radius:30px;
   padding:7px 10px;
-  font-size:9px;
+  font-size:11px;
   min-height:36px;
 }
 
@@ -1582,7 +1587,7 @@ input[type=search] {
   background:none;
   min-width:0;
   width:100%;
-  font-size:10px;
+  font-size:12px;
   padding:9px 5px;
   min-height:36px;
 }
@@ -1599,7 +1604,7 @@ input[type=search] {
 }
 
 .companion .technical-note {
-  font-size:8px;
+  font-size:11px;
   margin-top:12px;
 }
 
@@ -1650,7 +1655,7 @@ input[type=search] {
     font-size:75px;
   }
   .hero-copy>.eyebrow {
-    font-size:8px;
+    font-size:11px;
   }
   .hero-actions {
     gap:17px;
@@ -1660,7 +1665,7 @@ input[type=search] {
     padding-inline:15px;
   }
   .hero-actions .text-link {
-    font-size:11px;
+    font-size:12px;
   }
   .lesson-card-body {
     padding:20px 18px 0;
@@ -1697,7 +1702,7 @@ input[type=search] {
     padding:6px;
   }
   .companion-heading .eyebrow {
-    font-size:5.8px;
+    font-size:11px;
   }
   .rotation-controls {
     grid-template-columns:repeat(3,1fr);
@@ -1735,7 +1740,7 @@ input[type=search] {
     gap:9px;
   }
   .brand-sub {
-    font-size:8px;
+    font-size:11px;
   }
   .main-nav {
     gap:22px;
@@ -1755,7 +1760,7 @@ input[type=search] {
     letter-spacing:-2.5px;
   }
   .hero-copy>.eyebrow {
-    font-size:7px;
+    font-size:11px;
     letter-spacing:.1em;
   }
   .small-rule {
@@ -1773,16 +1778,16 @@ input[type=search] {
     margin-bottom:15px;
   }
   .hero-note {
-    font-size:8px;
+    font-size:11px;
   }
   .visual-index {
-    font-size:7px;
+    font-size:11px;
   }
   .visual-index span {
-    font-size:6px;
+    font-size:11px;
   }
   .visual-caption {
-    font-size:8px;
+    font-size:11px;
   }
   .caption-line {
     width:15px;
@@ -1793,7 +1798,7 @@ input[type=search] {
   }
   .principles-bar>span {
     gap:9px;
-    font-size:9px;
+    font-size:11px;
   }
   .section {
     padding-top:55px;
@@ -1813,32 +1818,32 @@ input[type=search] {
     padding:17px 14px 0;
   }
   .lesson-card-body>.eyebrow {
-    font-size:7px;
+    font-size:11px;
   }
   .lesson-card h3 {
     font-size:20px;
     min-height:50px;
   }
   .lesson-card p {
-    font-size:9px;
+    font-size:11px;
     min-height:45px;
   }
   .card-link,.planned-label {
-    font-size:9px;
+    font-size:11px;
     margin-top:12px;
   }
   .card-link svg {
     width:16px;
   }
   .lesson-domain {
-    font-size:8px;
+    font-size:11px;
     left:14px;
     bottom:10px;
   }
   .lesson-number {
     left:14px;
     top:12px;
-    font-size:9px;
+    font-size:11px;
   }
   .atlas-teaser {
     padding:30px;
@@ -1848,13 +1853,13 @@ input[type=search] {
     font-size:32px;
   }
   .atlas-teaser p {
-    font-size:11px;
+    font-size:12px;
   }
   .teaser-note {
-    font-size:8px;
+    font-size:11px;
   }
   .atlas-illustration>span {
-    font-size:7px;
+    font-size:11px;
   }
   .closing-note {
     padding-block:55px;
@@ -1917,7 +1922,7 @@ input[type=search] {
     position:static;
   }
   .companion-heading .eyebrow {
-    font-size:8px;
+    font-size:11px;
   }
   .companion-heading h2 {
     font-size:25px;
@@ -1926,7 +1931,7 @@ input[type=search] {
     gap:12px;
   }
   .companion-heading>button {
-    font-size:11px;
+    font-size:12px;
   }
   .companion [data-companion-body]>.muted {
     font-size:12px;
@@ -1935,7 +1940,7 @@ input[type=search] {
     font-size:12px;
   }
   .quick-prompts button {
-    font-size:11px;
+    font-size:12px;
     min-height:44px;
   }
   .chat-input input {
@@ -1947,7 +1952,7 @@ input[type=search] {
     min-width:44px;
   }
   .companion .technical-note {
-    font-size:10px;
+    font-size:12px;
   }
   .lesson-nav {
     gap:18px;
@@ -1986,7 +1991,7 @@ input[type=search] {
     font-size:20px;
   }
   .brand-sub {
-    font-size:7px;
+    font-size:11px;
   }
   .brand-mark svg {
     width:25px;
@@ -1995,7 +2000,7 @@ input[type=search] {
     gap:17px;
   }
   .main-nav a {
-    font-size:10px;
+    font-size:12px;
   }
   .hero {
     /* minmax(0,…): a long word must never widen the column past the viewport. */
@@ -2011,7 +2016,7 @@ input[type=search] {
     letter-spacing:-3px;
   }
   .hero-copy>.eyebrow {
-    font-size:8px;
+    font-size:11px;
     letter-spacing:.11em;
   }
   .hero-description {
@@ -2026,15 +2031,15 @@ input[type=search] {
     margin-bottom:23px;
   }
   .hero-actions .button {
-    font-size:11px;
+    font-size:12px;
     padding:13px 17px;
   }
   .hero-actions .text-link {
-    font-size:10px;
+    font-size:12px;
     gap:9px;
   }
   .hero-note {
-    font-size:9px;
+    font-size:11px;
   }
   .hero-visual {
     max-width:390px;
@@ -2045,15 +2050,15 @@ input[type=search] {
     height:300px;
   }
   .visual-index {
-    font-size:8px;
+    font-size:11px;
     padding:0 15px;
   }
   .visual-index span {
-    font-size:7px;
+    font-size:11px;
   }
   .visual-caption {
     margin-inline:25px;
-    font-size:9px;
+    font-size:11px;
   }
   .caption-line {
     width:30px;
@@ -2066,10 +2071,10 @@ input[type=search] {
     flex-direction:column;
     gap:4px;
     align-items:flex-start;
-    font-size:9px;
+    font-size:11px;
   }
   .tiny-index {
-    font-size:8px;
+    font-size:11px;
   }
   .section {
     padding-block:45px;
@@ -2079,14 +2084,14 @@ input[type=search] {
     gap:13px;
   }
   .section-heading .eyebrow {
-    font-size:9px;
+    font-size:11px;
   }
   .section h2 {
     font-size:31px;
     letter-spacing:-.8px;
   }
   .section-heading .text-link {
-    font-size:9px;
+    font-size:11px;
     gap:7px;
     white-space:nowrap;
     padding-top:22px;
@@ -2106,7 +2111,7 @@ input[type=search] {
     padding:22px 23px 0;
   }
   .lesson-card-body>.eyebrow {
-    font-size:8px;
+    font-size:11px;
   }
   .lesson-card h3 {
     font-size:27px;
@@ -2114,22 +2119,22 @@ input[type=search] {
     margin-bottom:12px;
   }
   .lesson-card p {
-    font-size:11px;
+    font-size:12px;
     min-height:0;
   }
   .card-link,.planned-label {
-    font-size:11px;
+    font-size:12px;
     margin-top:20px;
   }
   .lesson-domain {
     left:23px;
     bottom:17px;
-    font-size:9px;
+    font-size:11px;
   }
   .lesson-number {
     left:23px;
     top:17px;
-    font-size:10px;
+    font-size:12px;
   }
   .atlas-teaser {
     grid-template-columns:1fr;
@@ -2147,7 +2152,7 @@ input[type=search] {
     height:240px;
   }
   .atlas-illustration>span {
-    font-size:7px;
+    font-size:11px;
   }
   .closing-note {
     padding:49px 0 45px;
@@ -2156,7 +2161,7 @@ input[type=search] {
     font-size:28px;
   }
   .closing-note>span:last-child {
-    font-size:9px;
+    font-size:11px;
     line-height:1.8;
     display:block;
     padding:0 18px;
@@ -2170,16 +2175,16 @@ input[type=search] {
     font-size:19px;
   }
   .footer-brand span {
-    font-size:9px;
+    font-size:11px;
   }
   .site-footer>div {
     margin-top:2px;
   }
   .site-footer p {
-    font-size:8px;
+    font-size:11px;
   }
   .site-footer .eyebrow {
-    font-size:7px;
+    font-size:11px;
   }
   .page-heading {
     padding-top:38px;
@@ -2205,18 +2210,18 @@ input[type=search] {
     padding-bottom:20px;
   }
   .page-endnote p {
-    font-size:10px;
+    font-size:12px;
   }
   .atlas-toolbar {
     padding:13px;
     gap:10px;
   }
   .atlas-toolbar>.eyebrow {
-    font-size:7px;
+    font-size:11px;
     letter-spacing:.08em;
   }
   .segmented button {
-    font-size:10px;
+    font-size:12px;
     padding:6px 11px;
   }
   .atlas-stage {
@@ -2225,10 +2230,10 @@ input[type=search] {
   .atlas-coordinates {
     left:17px;
     top:18px;
-    font-size:8px;
+    font-size:11px;
   }
   .atlas-hud {
-    font-size:8px;
+    font-size:11px;
     left:10px;
     bottom:10px;
     max-width:calc(100% - 72px);
@@ -2263,7 +2268,7 @@ input[type=search] {
     padding-top:23px;
   }
   .node-detail p {
-    font-size:11px;
+    font-size:12px;
   }
   .atlas-legend {
     padding:20px;
@@ -2274,18 +2279,18 @@ input[type=search] {
   }
   .atlas-legend>span:not(.eyebrow) {
     width:100%;
-    font-size:10px;
+    font-size:12px;
   }
   .atlas-legend p {
-    font-size:9px;
+    font-size:11px;
     margin-top:4px;
   }
   .atlas-3d-label {
-    font-size:9px;
+    font-size:11px;
     padding:5px 7px;
   }
   .map-node {
-    font-size:10px;
+    font-size:12px;
     padding:10px 6px;
   }
   .map-node-0 {
@@ -2305,7 +2310,7 @@ input[type=search] {
     top:72%;
   }
   .lesson-breadcrumb {
-    font-size:9px;
+    font-size:11px;
     padding-top:23px;
   }
   .lesson-heading {
@@ -2320,7 +2325,7 @@ input[type=search] {
     padding-top:19px;
   }
   .lesson-nav a {
-    font-size:10px;
+    font-size:12px;
     min-height:30px;
   }
   .lesson-workspace {
@@ -2341,10 +2346,10 @@ input[type=search] {
     font-size:27px;
   }
   .panel-heading .badge {
-    font-size:8px;
+    font-size:11px;
   }
   .panel>.muted {
-    font-size:11px;
+    font-size:12px;
   }
   .square-stage {
     margin-top:19px;
@@ -2353,7 +2358,7 @@ input[type=search] {
     height:285px;
   }
   .stage-label {
-    font-size:7px;
+    font-size:11px;
     left:12px;
     top:11px;
   }
@@ -2369,10 +2374,10 @@ input[type=search] {
     grid-column:1/-1;
   }
   .rotation-controls button {
-    font-size:11px;
+    font-size:12px;
   }
   .technical-note {
-    font-size:10px;
+    font-size:12px;
   }
   .pending-content {
     padding-left:16px;
@@ -2381,7 +2386,7 @@ input[type=search] {
     font-size:26px;
   }
   .pending-content p {
-    font-size:11px;
+    font-size:12px;
   }
   .proof-layout {
     grid-template-columns:1fr;
@@ -2389,16 +2394,16 @@ input[type=search] {
   }
   .proof-progress .button {
     width:100%;
-    font-size:10px;
+    font-size:12px;
   }
   .full-proof {
     padding:20px;
   }
   .full-proof p {
-    font-size:11px;
+    font-size:12px;
   }
   .proof .panel-heading .text-link {
-    font-size:10px;
+    font-size:12px;
   }
   .companion {
     padding:23px;

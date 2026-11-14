@@ -1,0 +1,6 @@
+---
+import MathBlock from './MathBlock.astro';
+interface Props { name?: string; number?: string; id?: string }
+const { name, number, id } = Astro.props;
+---
+<MathBlock variant="definition" label={number ? `Définition ${number}` : 'Définition'} name={name} id={id}><slot /></MathBlock>

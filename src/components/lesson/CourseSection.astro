@@ -1,0 +1,11 @@
+---
+/** A top-level panel of the lesson, reachable from the section navigation by its id. */
+interface Props { id: string; eyebrow?: string; title?: string; label?: string }
+const { id, eyebrow, title, label } = Astro.props;
+const headingId = title ? `${id}-title` : undefined;
+---
+<section id={id} class="panel lesson-content" aria-labelledby={headingId} aria-label={headingId ? undefined : (label ?? eyebrow)}>
+  {eyebrow && <p class="eyebrow">{eyebrow}</p>}
+  {title && <h2 id={headingId} class="lesson-section-title">{title}</h2>}
+  <slot />
+</section>

@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
-import { existsSync, readFileSync } from 'node:fs';
+import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { JSDOM } from 'jsdom';
 
@@ -15,6 +15,8 @@ for (const page of pages) {
   assert.equal(doc.querySelectorAll('main').length, 1, `${page}: région principale unique`);
   assert.ok(doc.querySelector('title')?.textContent.trim(), `${page}: titre présent`);
   assert.ok(doc.querySelector('a.skip-link[href="#main"]'), `${page}: lien d’évitement`);
+  // p5.js would otherwise fetch translations from a CDN (docs/P5.md).
+  assert.equal(doc.querySelector('meta[http-equiv="Content-Security-Policy"]')?.content, "connect-src 'self'", `${page}: connexions limitées au site`);
   const ids = [...doc.querySelectorAll('[id]')].map(element => element.id);
   assert.equal(new Set(ids).size, ids.length, `${page}: identifiants uniques`);
 
@@ -72,4 +74,21 @@ assert.ok(existsSync(p5File), `p5.js absent de la compilation : ${p5Url}`);
 assert.equal('sha384-' + createHash('sha384').update(readFileSync(p5File)).digest('base64'), p5Integrity, 'Empreinte de p5.js compilé différente de la valeur SRI');
 assert.ok(existsSync(resolve(p5File, '../LICENSE.txt')), 'Licence LGPL de p5.js absente');
 console.log(`OK ${p5Url} (empreinte SRI vérifiée, licence présente)`);
+// Lessons: every built HTML page, including lessons added later from src/content/lessons.
+const htmlFiles = readdirSync(output, { recursive: true }).filter(file => file.endsWith('.html'));
+const lessonSources = readdirSync(resolve('src/content/lessons')).filter(file => file.endsWith('.mdx'));
+for (const file of lessonSources) {
+  const slug = file.replace(/\.mdx$/, '');
+  const status = readFileSync(resolve('src/content/lessons', file), 'utf8').match(/^status:\s*"?([a-z]+)"?\s*$/m)?.[1];
+  const built = existsSync(resolve(output, 'cours', slug, 'index.html'));
+  if (status === 'draft') assert.ok(!built, `Brouillon « ${slug} » présent dans la compilation de production`);
+  else assert.ok(built, `Cours « ${slug} » (${status}) absent de la compilation`);
+}
+for (const file of htmlFiles) {
+  const html = readFileSync(resolve(output, file), 'utf8');
+  assert.ok(!html.includes('data-lesson-status="draft"'), `${file}: page de brouillon en production`);
+  assert.ok(!/class="[^"]*language-math/.test(html), `${file}: formule non rendue par KaTeX`);
+  assert.ok(!/(^|[^\\])\$\$/.test(html.replace(/<(script|style)[\s\S]*?<\/\1>/g, '')), `${file}: délimiteur $$ non interprété`);
+}
+console.log(`OK ${lessonSources.length} source(s) de cours, ${htmlFiles.length} pages HTML sans brouillon ni formule brute`);
 console.log(`${pages.length} pages compilées vérifiées ; ${references} références locales résolues. Aucun navigateur ni serveur HTTP utilisé.`);

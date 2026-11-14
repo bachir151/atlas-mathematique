@@ -1,0 +1,6 @@
+---
+/** Collapsible correction: closed by default so readers can try first. */
+interface Props { label?: string }
+const { label = 'Correction' } = Astro.props;
+---
+<details class="math-reveal math-solution"><summary>{label}</summary><div><slot /></div></details>

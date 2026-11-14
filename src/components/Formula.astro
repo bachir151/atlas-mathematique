@@ -1,9 +1,10 @@
 ---
 import katex from 'katex';
 import 'katex/dist/katex.min.css';
+import { katexOptions } from '../lib/math-plugin.mjs';
 interface Props { tex: string; display?: boolean; }
 const { tex, display = false } = Astro.props;
 // Only render supplied, validated source. Never allow KaTeX HTML commands.
-const html = katex.renderToString(tex, { displayMode: display, throwOnError: true, trust: false, output: 'htmlAndMathml' });
+const html = katex.renderToString(tex, { ...katexOptions, displayMode: display });
 ---
 <span class:list={['formula', { 'formula-block': display }]} set:html={html} />

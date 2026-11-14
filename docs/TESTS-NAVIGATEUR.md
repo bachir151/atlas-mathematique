@@ -1,5 +1,9 @@
 # Vérifications p5 dans Firefox réel
 
+## Relance du 14 novembre 2026, 18:30 — gabarit de leçon et petits textes
+
+`npm run test:browser` : p5 14/14 et site 21/21, sur deux passages. Le scénario `real-canvas` a révélé que p5.js 2.4.0 tente de télécharger ses traductions sur jsDelivr au chargement ; la politique `connect-src 'self'` de production bloque désormais cet appel (voir `docs/P5.md`). Reflow à 320 px, zoom 200 %, taille des cibles et contrastes restent conformes après le relèvement des tailles de texte (minimum 11 px).
+
 ## Seconde suite : Atlas et accessibilité du site — 14 novembre 2026, 17:50
 
 `tests/browser_site.py` (lancé par `npm run test:browser` après la suite p5) réutilise le même pilote WebDriver. Rapport : `test-results/browser-site/report.json`. **21/21 sur deux passages consécutifs** (15 scénarios à 17:50, 6 ajoutés à 18:10).

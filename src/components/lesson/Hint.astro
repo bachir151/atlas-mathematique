@@ -1,0 +1,5 @@
+---
+interface Props { label?: string }
+const { label = 'Indice' } = Astro.props;
+---
+<details class="math-reveal math-hint"><summary>{label}</summary><div><slot /></div></details>

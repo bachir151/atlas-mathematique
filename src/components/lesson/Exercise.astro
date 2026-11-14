@@ -1,0 +1,7 @@
+---
+import MathBlock from './MathBlock.astro';
+/** An exercise; put <Hint> and <Solution> inside it. */
+interface Props { number?: string; name?: string; level?: string; id?: string }
+const { number, name, level, id } = Astro.props;
+---
+<MathBlock variant="exercise" label={number ? `Exercice ${number}` : 'Exercice'} name={name} meta={level} id={id}><slot /></MathBlock>

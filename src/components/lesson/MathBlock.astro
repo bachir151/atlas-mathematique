@@ -1,0 +1,15 @@
+---
+/** Shared frame for labelled mathematical blocks (definition, theorem, example…). */
+interface Props {
+  variant: 'definition' | 'theorem' | 'example' | 'remark' | 'historical' | 'exercise';
+  label: string;
+  name?: string;
+  id?: string;
+  meta?: string;
+}
+const { variant, label, name, id, meta } = Astro.props;
+---
+<div class:list={['math-block', `math-${variant}`]} id={id}>
+  <p class="math-label"><span class="math-kind">{label}</span>{name && <span class="math-name">({name})</span>}{meta && <span class="math-meta">{meta}</span>}</p>
+  <div class="math-body"><slot /></div>
+</div>
