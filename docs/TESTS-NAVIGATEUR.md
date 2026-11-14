@@ -1,5 +1,9 @@
 # Vérifications p5 dans Firefox réel
 
+## Figures de la leçon 02 et mode brouillon — 14 novembre 2026, 22:30
+
+`npm run test:browser` enchaîne maintenant trois suites : p5 (14), site (22) et `browser_site.py --drafts` (11), qui sert `test-results/dist-drafts` (brouillons compris). Le mode brouillon applique lien d’évitement, focus, reflow 320 px, zoom 200 %, cibles 24 px et contrastes à **toutes les leçons**, puis teste les figures : rendu sans JavaScript, champs numériques au clavier (flèches, valeur bornée), boutons « Réfléchir » et « Appliquer la réflexion suivante » avec focus conservé, groupe radio aux flèches, glisser-déposer de P à la souris. Résultat : 47/47.
+
 ## Relance du 14 novembre 2026, 19:45 — en-têtes Netlify
 
 Le serveur local des deux suites envoie désormais les en-têtes de `netlify.toml`. Nouveau scénario `security-policy` (page p5) : en-têtes reçus, balise CSP générée par Astro sans `unsafe-inline` pour les scripts, connexion vers jsDelivr bloquée avec violation `connect-src`. Résultat : p5 14/14, site 22/22.

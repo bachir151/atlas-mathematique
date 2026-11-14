@@ -24,7 +24,7 @@ export const linkKinds: Record<LinkKind, string> = {
 export const atlasNodes: readonly AtlasNode[] = [
   { id: 'groupes', label: 'Groupes', position: [-1.65, 0.55, 0.3], color: '#33594b', href: '/cours/groupes-rotations/' },
   { id: 'rotations', label: 'Rotations du carré', position: [0.15, 1.4, 0], color: '#a65b36', href: '/cours/groupes-rotations/' },
-  { id: 'geometrie', label: 'Géométrie', position: [1.7, 0.3, -0.4], color: '#33594b' },
+  { id: 'geometrie', label: 'Géométrie', position: [1.7, 0.3, -0.4], color: '#33594b', href: '/cours/mediatrices-reflexions/' },
   { id: 'analyse', label: 'Analyse', position: [0.8, -1.3, 0.6], color: '#77634b' },
   { id: 'topologie', label: 'Topologie', position: [-1.1, -1.25, -0.5], color: '#586879' },
 ];

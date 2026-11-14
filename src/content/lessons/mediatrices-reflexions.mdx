@@ -1,0 +1,429 @@
+---
+title: "Médiatrices & réflexions du plan"
+heading:
+  lead: "Médiatrices & réflexions"
+  emphasis: "du plan."
+summary: "Chercher les points à égale distance de deux points, construire une réflexion, puis retrouver les rotations du carré en composant des symétries."
+domain: "Géométrie"
+number: "02"
+breadcrumb: "Médiatrices & réflexions"
+status: "validated"
+validation: "Décision de la direction du projet, 14 novembre 2026 (niveau lycée, preuve par coordonnées et exercice 5 conservés)"
+companion: false
+sections:
+  - { id: "exploration", label: "Exploration" }
+  - { id: "cours", label: "Le cours" }
+  - { id: "demonstration", label: "Démonstration" }
+  - { id: "preuve-integrale", label: "Preuve intégrale" }
+  - { id: "connexions", label: "Connexions" }
+  - { id: "exercices", label: "Exercices" }
+  - { id: "reconstruction", label: "À reconstruire" }
+---
+
+<CourseSection id="exploration" eyebrow="01 / Exploration" title="Où placer un point pour ne favoriser aucun côté ?">
+
+**Pour commencer :** connaître les longueurs, le milieu d’un segment, les droites perpendiculaires et les coordonnées dans un repère orthonormé. La preuve utilise le théorème de Pythagore, le développement d’un carré et le fait que deux longueurs positives ou nulles sont égales si et seulement si leurs carrés le sont. La leçon 01 prépare à la composition des transformations ; nous en rappelons la convention. Les connexions et l’exercice 5 proposent un approfondissement facultatif vers le début de licence, sans trigonométrie ni matrices.
+
+Placez mentalement deux points distincts $A$ et $B$. Leur milieu est à égale distance de chacun. Est-ce le seul point qui possède cette propriété ? Et peut-on échanger $A$ et $B$ en laissant ces points équidistants immobiles ?
+
+### Manipuler sur une feuille, ou calculer sans dessin
+
+Dans un repère orthonormé, prenons $A=(-2,0)$ et $B=(2,0)$. L’axe horizontal est dirigé vers la droite, l’axe vertical vers le haut. Chaque unité représente la même longueur sur les deux axes.
+
+1. Testez les points $(0,0)$, $(0,3)$ et $(0,-1)$. Comparez leurs distances à $A$ et à $B$.
+2. Testez ensuite $P=(1,3)$. Est-il plus près de $A$ ou de $B$ ?
+3. Pour ce dernier point, cherchez un point $P'$ tel que le milieu de $[PP']$ soit sur l’axe vertical et que $[PP']$ soit horizontal.
+
+Vous pouvez plier une feuille suivant l’axe vertical et comparer les positions des points. Il n’est pas nécessaire de réaliser ce pliage pour suivre le calcul. En notant $U=(0,3)$, on obtient :
+
+$$
+UA^2=2^2+3^2=13=UB^2.
+$$
+
+Pour $P=(1,3)$, on obtient $PA^2=3^2+3^2=18$ et $PB^2=1^2+3^2=10$. Il est donc plus près de $B$. Le point recherché à la troisième question est $P'=(-1,3)$.
+
+Ces essais suggèrent que les points équidistants forment l’axe vertical et que l’échange $A\leftrightarrow B$ se prolonge en la transformation $(x,y)\mapsto(-x,y)$. Les mesures et le pliage font naître cette conjecture. Pour la prouver, nous devons traiter **tous** les points du plan et les deux sens de l’équivalence.
+
+<PlaneFigure kind="mediatrice" number="1" />
+
+</CourseSection>
+
+<CourseSection id="cours" eyebrow="02 / Le cours" title="Un lieu de points devient l’axe d’une transformation">
+
+Nous travaillons exclusivement dans le **plan euclidien**, avec ses distances usuelles. Pour deux points $P$ et $Q$, $PQ$ désigne leur distance. Les segments considérés ci-dessous ont des extrémités distinctes.
+
+<Definition number="1" name="Médiatrice d’un segment" id="definition-mediatrice">
+
+Soient $A\ne B$ et $M$ le milieu de $[AB]$. La **médiatrice** de $[AB]$ est la droite $d$ passant par $M$ et perpendiculaire à la droite $(AB)$.
+
+Cette définition construit une droite. L’affirmation selon laquelle elle est exactement l’ensemble des points équidistants de $A$ et de $B$ est un résultat à démontrer.
+
+</Definition>
+
+<Definition number="2" name="Réflexion d’axe donné" id="definition-reflexion">
+
+Soit $d$ une droite. Pour un point $P$, notons $H$ son **projeté orthogonal** sur $d$ : si $P$ est hors de $d$, $H$ est l’unique intersection de $d$ avec la perpendiculaire à $d$ passant par $P$ ; si $P\in d$, on prend $H=P$.
+
+La **réflexion d’axe $d$**, ou **symétrie axiale**, est la transformation $s_d$ qui associe à $P$ le point $P'$ tel que $H$ soit le milieu de $[PP']$. Si $P=H$, cela signifie $P'=P$ ; sinon $P'$ est situé de l’autre côté de $d$, sur la même perpendiculaire, avec $HP'=HP$.
+
+Cette construction détermine un unique point $P'$ pour tout point $P$ du plan. La réflexion agit donc sur le plan entier.
+
+</Definition>
+
+<PlaneFigure kind="reflexion" number="2" />
+
+<Example name="Une formule dans un repère adapté">
+
+Choisissons une origine sur $d$, un axe horizontal perpendiculaire à $d$ et un axe vertical porté par $d$, avec la même unité sur les deux axes. Alors $d$ a pour équation $x=0$. Pour $P=(x,y)$, son projeté est $H=(0,y)$ et
+
+$$
+s_d(x,y)=(-x,y).
+$$
+
+La première coordonnée change de signe, la seconde reste la même. Cette formule dépend du repère choisi ; la construction par le milieu et la perpendiculaire définit la même transformation quel que soit ce repère.
+
+</Example>
+
+<Definition number="3" name="Isométrie et points fixes" id="definition-isometrie">
+
+Une **isométrie du plan** est ici une bijection $f$ du plan sur lui-même qui conserve toutes les distances : pour tous points $P,Q$, $f(P)f(Q)=PQ$.
+
+Un **point fixe** de $f$ est un point $P$ tel que $f(P)=P$. L’**identité**, notée $e$, fixe chaque point du plan.
+
+</Definition>
+
+<Theorem kind="Théorème" number="1" name="Équidistance et réflexion" id="theoreme-mediatrice">
+
+Soient $A\ne B$, $M$ leur milieu et $d$ la médiatrice de $[AB]$.
+
+1. Pour tout point $P$ du plan, $PA=PB$ **si et seulement si** $P\in d$.
+2. La réflexion $s_d$ échange $A$ et $B$. C’est l’unique **réflexion axiale** qui échange ces deux points.
+3. La transformation $s_d$ est une isométrie, ses points fixes sont exactement les points de $d$ et $s_d\circ s_d=e$.
+
+Plus précisément, dans un repère orthonormé où $A=(-a,0)$, $B=(a,0)$ et $a=AB/2>0$, tout point $P=(x,y)$ vérifie
+
+$$
+PA^2-PB^2=4ax.
+$$
+
+Ainsi, dans le demi-plan $x>0$, $P$ est plus près de $B$ ; dans le demi-plan $x<0$, il est plus près de $A$ ; sur $d$, les distances sont égales.
+
+</Theorem>
+
+La notation $f\circ g$ signifie « appliquer d’abord $g$, puis $f$ » : $(f\circ g)(P)=f(g(P))$. Dire que $s_d\circ s_d=e$ signifie que réfléchir deux fois dans **le même axe** ramène chaque point à son point de départ. Une telle transformation, distincte de l’identité, est appelée une **involution**.
+
+La démonstration par étapes et la preuve intégrale qui suivent établissent toutes les affirmations du théorème. La preuve intégrale est visible en permanence et directement accessible dans la navigation.
+
+<Remark name="Quel objet est conservé ?">
+
+Une réflexion conserve chaque distance, mais ne fixe pas chaque point. Elle conserve son axe **point par point**. Elle conserve le segment $[AB]$ **comme ensemble**, en échangeant ses extrémités : un point de ce segment a pour coordonnées $(t,0)$ avec $-a\leq t\leq a$, et son image $(-t,0)$ appartient encore au segment ; la seconde réflexion assure l’égalité des ensembles.
+
+De même, une symétrie du carré conserve le carré sans immobiliser nécessairement ses sommets, comme dans la leçon 01.
+
+</Remark>
+
+<Remark name="Pourquoi exiger deux points distincts ?">
+
+Si $A=B$, tout point du plan vérifie $PA=PB$. Le lieu d’équidistance est alors le plan entier ; la droite $(AB)$ et la médiatrice du segment ne sont pas définies par notre construction. L’hypothèse $A\ne B$ est donc essentielle.
+
+</Remark>
+
+</CourseSection>
+
+<Proof eyebrow="03 / Démonstration" title="Pourquoi une égalité de distances décrit-elle une droite ?" intro="Nous démontrons le théorème 1. Un repère adapté rend visibles les deux sens de l’équivalence, puis permet de vérifier les propriétés de la réflexion.">
+
+  <ProofStep title="Placer l’origine au milieu" open>
+
+Puisque $A\ne B$, le réel $a=AB/2$ est strictement positif. Prenons pour origine $M$, pour axe horizontal la droite $(AB)$ dirigée de $A$ vers $B$, et pour axe vertical la perpendiculaire en $M$. Avec la même unité sur les deux axes, nous obtenons un repère orthonormé où $A=(-a,0)$ et $B=(a,0)$.
+
+La médiatrice $d$ a pour équation $x=0$. Tout point $P$ du plan s’écrit $(x,y)$, et Pythagore donne $PA^2=(x+a)^2+y^2$ et $PB^2=(x-a)^2+y^2$.
+
+  </ProofStep>
+
+  <ProofStep title="Soustraire les carrés des distances">
+
+Les termes $y^2$ disparaissent, puis les termes $x^2$ et $a^2$ aussi :
+
+$$
+PA^2-PB^2=(x+a)^2-(x-a)^2=4ax.
+$$
+
+Les distances étant positives ou nulles et $a>0$, nous avons
+
+$$
+PA=PB\quad\Longleftrightarrow\quad 4ax=0
+\quad\Longleftrightarrow\quad x=0
+\quad\Longleftrightarrow\quad P\in d.
+$$
+
+Le signe de $4ax$ est celui de $x$. Si $x>0$, $PA^2>PB^2$, donc $PA>PB$ ; si $x<0$, $PA<PB$. Cela prouve aussi les assertions sur les deux demi-plans.
+
+  </ProofStep>
+
+  <ProofStep title="Vérifier la réflexion sur tous les points">
+
+Le projeté de $(x,y)$ sur $d$ est $(0,y)$, donc $s_d(x,y)=(-x,y)$. Cette formule donne $s_d(A)=B$ et $s_d(B)=A$. Elle donne aussi $s_d(s_d(x,y))=(x,y)$ : $s_d$ est sa propre inverse, donc une bijection. L’égalité $(-x,y)=(x,y)$ équivaut à $x=0$ : l’ensemble des points fixes est exactement $d$.
+
+Pour deux points quelconques $P=(x,y)$ et $Q=(u,v)$, Pythagore donne
+
+$$
+s_d(P)s_d(Q)^2=(-x+u)^2+(y-v)^2
+=(x-u)^2+(y-v)^2=PQ^2.
+$$
+
+Les distances étant positives ou nulles, $s_d(P)s_d(Q)=PQ$. La réflexion est donc une isométrie. Elle diffère de l’identité, puisqu’elle échange deux points distincts.
+
+  </ProofStep>
+
+  <ProofStep title="L’échange de deux points impose l’axe">
+
+Soit $t$ une réflexion d’axe $\ell$ telle que $t(A)=B$. Comme $A\ne B$, $A$ est hors de $\ell$. Par la définition d’une réflexion, le projeté de $A$ sur $\ell$ est le milieu de $[AB]$, donc $M$, et $(AB)$ est perpendiculaire à $\ell$.
+
+L’axe $\ell$ passe donc par $M$ et est perpendiculaire à $(AB)$ : c’est nécessairement la médiatrice $d$. Ainsi $t=s_d$. L’unicité porte sur les réflexions axiales ; elle ne prétend pas englober toutes les isométries qui échangent $A$ et $B$.
+
+  </ProofStep>
+
+  <FullProof slot="full">
+
+**Preuve intégrale du théorème 1.** Soient $A\ne B$, $M$ le milieu de $[AB]$ et $a=AB/2>0$. Choisissons un repère orthonormé d’origine $M$, d’axe horizontal $(AB)$ dirigé de $A$ vers $B$ et d’axe vertical perpendiculaire à $(AB)$. Alors $A=(-a,0)$, $B=(a,0)$ et leur médiatrice $d$ est la droite $x=0$.
+
+Pour tout point $P=(x,y)$ du plan, le théorème de Pythagore donne $PA^2=(x+a)^2+y^2$ et $PB^2=(x-a)^2+y^2$. Par soustraction,
+
+$$
+PA^2-PB^2=(x+a)^2-(x-a)^2=4ax.
+$$
+
+Les distances sont positives ou nulles, donc $PA=PB$ équivaut à $PA^2=PB^2$. Puisque $a>0$, cette égalité équivaut à $x=0$, c’est-à-dire $P\in d$. Nous avons prouvé les deux sens de la caractérisation. Si $x>0$, la différence des carrés est positive et $PA>PB$ ; si $x<0$, elle est négative et $PA<PB$. Cela établit la répartition des points plus proches de l’une ou de l’autre extrémité.
+
+Par définition de la réflexion, le projeté $H=(0,y)$ de $P$ sur $d$ est le milieu de $[P s_d(P)]$. Ainsi $s_d(x,y)=(-x,y)$. En particulier, $s_d(A)=B$ et $s_d(B)=A$. Appliquer cette formule deux fois redonne $(x,y)$ : $s_d\circ s_d=e$, ce qui fournit un inverse et prouve que $s_d$ est bijective. L’égalité $s_d(P)=P$ équivaut à $-x=x$, donc à $x=0$. Ses points fixes sont exactement ceux de $d$.
+
+Pour tous points $P=(x,y)$ et $Q=(u,v)$, on a
+
+$$
+s_d(P)s_d(Q)^2=(-x+u)^2+(y-v)^2
+=(x-u)^2+(y-v)^2=PQ^2.
+$$
+
+L’égalité des carrés entraîne celle des distances, qui sont positives ou nulles. La bijection $s_d$ conserve donc toutes les distances : c’est une isométrie. Elle n’est pas l’identité, car $A\ne B$ et $s_d(A)=B$.
+
+Enfin, si une réflexion $t$ d’axe $\ell$ envoie $A$ sur $B$, alors $A$ est hors de $\ell$ puisque $A\ne B$. Sa construction impose que $\ell$ passe par le milieu $M$ de $[AB]$ et soit perpendiculaire à $(AB)$. Il existe une unique telle droite, la médiatrice $d$. Par conséquent $\ell=d$ et $t=s_d$. Cela achève la preuve de toutes les affirmations.
+
+  </FullProof>
+
+</Proof>
+
+<CourseSection id="connexions" eyebrow="04 / Connexions" title="Deux réflexions peuvent produire une rotation">
+
+Cette section facultative prolonge la leçon 01. Les liens présentés sont des **liens mathématiques démontrés**. Nous ne proposons ici ni modèle scientifique ni analogie interdisciplinaire.
+
+### Retrouver le quart de tour du carré
+
+Reprenons le carré plein $Q=[-a,a]\times[-a,a]$, avec $a>0$, de centre $O=(0,0)$, et les positions initiales de ses sommets :
+
+$$
+A=(-a,a),\quad B=(a,a),\quad C=(a,-a),\quad D=(-a,-a).
+$$
+
+Les lettres désignent ici ces positions fixes dans le repère. On retrouve le quart de tour positif $r(x,y)=(-y,x)$ de la leçon 01, dans le sens antihoraire. Notons $s$ la réflexion d’axe vertical et $t$ celle d’axe diagonal $y=x$.
+
+Nous savons que $s(x,y)=(-x,y)$. Pour $P=(x,y)$, le point $(y,x)$ a avec $P$ un milieu $((x+y)/2,(x+y)/2)$ sur $y=x$ ; si $x\ne y$, le vecteur reliant ces points est $(y-x,x-y)$, de direction $(1,-1)$, perpendiculaire à cette diagonale. Si $x=y$, le point est déjà sur l’axe. La définition géométrique donne donc $t(x,y)=(y,x)$.
+
+<Theorem kind="Proposition" number="2" name="L’ordre des réflexions change la rotation" id="composition-reflexions">
+
+Pour les réflexions $s$ et $t$ qui viennent d’être définies,
+
+$$
+(s\circ t)(x,y)=(-y,x)=r(x,y),
+$$
+
+alors que
+
+$$
+(t\circ s)(x,y)=(y,-x)=r^{-1}(x,y).
+$$
+
+Ainsi $s\circ t=r$ et $t\circ s=r^{-1}=r^3$. Ces deux compositions diffèrent.
+
+</Theorem>
+
+**Preuve.** Pour la première composition, on applique $t$ puis $s$ : $s(t(x,y))=s(y,x)=(-y,x)$. Pour la seconde, $t(s(x,y))=t(-x,y)=(y,-x)$. La seconde formule est celle du quart de tour négatif, inverse de $r$, puisqu’une composition avec $r$ redonne $(x,y)$ dans les deux ordres. Les images de $(1,0)$ sont respectivement $(0,1)$ et $(0,-1)$ : les deux transformations ne sont donc pas égales.
+
+Une réflexion est sa propre inverse, mais deux réflexions d’axes différents ne s’annulent pas nécessairement. Ici leur composition est une rotation. Ce calcul établit le résultat pour ces axes précis ; nous n’en déduisons pas une classification générale de toutes les compositions de réflexions du plan.
+
+<PlaneFigure kind="deux-reflexions" number="3" />
+
+### Élargir le groupe des symétries
+
+Notons $\operatorname{Isom}(Q)$ l’ensemble des isométries du plan qui envoient le carré $Q$ exactement sur lui-même. C’est un groupe pour la composition : l’identité en fait partie ; une composée de bijections conservant les distances et $Q$ conserve encore ces propriétés ; l’inverse d’une telle bijection conserve les distances et $Q$ ; enfin la composition est associative, car, sur tout point $P$, les deux parenthésages donnent $f(g(h(P)))$.
+
+Les quatre rotations $e,r,r^2,r^3$ appartiennent à ce groupe, ainsi que $s$ : la formule $(-x,y)$ conserve $[-a,a]\times[-a,a]$ et son application deux fois donne l’identité. Les quatre transformations $r^k\circ s$, pour $k=0,1,2,3$, y appartiennent donc aussi. Leurs formules sont
+
+| Transformation | Image de $(x,y)$ | Axe de réflexion |
+| --- | --- | --- |
+| $s$ | $(-x,y)$ | $x=0$ |
+| $r\circ s$ | $(-y,-x)$ | $y=-x$ |
+| $r^2\circ s$ | $(x,-y)$ | $y=0$ |
+| $r^3\circ s$ | $(y,x)$ | $y=x$ |
+
+Pour l’axe horizontal, la construction de la définition 2 change $y$ en $-y$. Pour l’axe $y=x$, nous venons de justifier la formule. Pour l’axe $y=-x$, le milieu de $(x,y)$ et $(-y,-x)$ appartient à cette droite, et leur segment, lorsqu’il n’est pas réduit à un point, a la direction perpendiculaire $(1,1)$. Ces formules décrivent donc bien les quatre réflexions annoncées.
+
+L’exercice 5 démontre qu’il n’existe aucune autre isométrie conservant $Q$. Ce groupe de huit éléments est appelé le **groupe diédral du carré**, noté ici $D_4$ ; la notation $D_8$ se rencontre également selon les conventions. L’indice de notre notation compte les sommets, et le groupe a bien huit éléments. Il n’est pas commutatif : $s$ et $t=r^3\circ s$ en sont deux éléments, et la proposition 2 montre que $s\circ t\ne t\circ s$.
+
+Cette extension précise le passage de la leçon 01 à la présente leçon : les rotations forment un sous-groupe commutatif à quatre éléments, contenu dans un groupe de symétries plus grand où l’ordre des actions peut compter.
+
+</CourseSection>
+
+<CourseSection id="exercices" eyebrow="05 / Exercices" title="Reconnaître un lieu, construire une image, prouver une liste">
+
+Les exercices 1 à 3 portent sur le parcours principal. L’exercice 4 utilise les compositions de la section « Connexions ». L’exercice 5 est un approfondissement facultatif vers le début de licence. Chaque indice et chaque correction peut être ouvert directement.
+
+<Exercise number="1" name="Équidistance ou proximité ?" level="Découverte" id="exercice-distances">
+
+Dans un repère orthonormé, soient $A=(-3,0)$ et $B=(3,0)$. Décrivez tous les points équidistants de $A$ et $B$. Calculez les distances à ces deux points pour $U=(0,4)$ et $V=(1,4)$. Quelle extrémité est la plus proche de $V$ ?
+
+<Hint>
+
+La médiatrice a pour équation $x=0$. Pour les distances, utilisez Pythagore ou la différence $PA^2-PB^2=4ax$, avec $a=3$.
+
+</Hint>
+
+<Solution>
+
+Le milieu de $[AB]$ est $(0,0)$ et $(AB)$ est horizontale. Sa médiatrice est donc l’axe vertical, d’équation $x=0$. D’après le théorème 1, c’est exactement l’ensemble des points équidistants de $A$ et de $B$.
+
+On obtient $UA^2=3^2+4^2=25=UB^2$, donc $UA=UB=5$. Pour $V$, $VA^2=4^2+4^2=32$ et $VB^2=2^2+4^2=20$. Ainsi $VA=4\sqrt{2}$ et $VB=2\sqrt{5}$. Puisque $20<32$, $V$ est plus près de $B$, conformément au signe positif de sa première coordonnée.
+
+</Solution>
+
+</Exercise>
+
+<Exercise number="2" name="Un axe qui ne passe pas par l’origine" level="Application" id="exercice-axe-decale">
+
+Soit $d$ la droite $x=2$. Construisez le projeté de $P=(5,-1)$ sur $d$ et son image par $s_d$. Donnez ensuite la formule de $s_d(x,y)$ pour tout point du plan, puis justifiez que cette transformation conserve les distances et que son carré est l’identité.
+
+<Hint>
+
+Le projeté de $(x,y)$ est $(2,y)$. Si son image est $(x',y)$, la condition sur le milieu donne $(x+x')/2=2$.
+
+</Hint>
+
+<Solution>
+
+Le projeté de $P$ est $H=(2,-1)$. Le point situé de l’autre côté de $d$ à la même distance de $H$ est $P'=(-1,-1)$.
+
+Pour un point quelconque, la condition $(x+x')/2=2$ donne $x'=4-x$. Ainsi $s_d(x,y)=(4-x,y)$ et $s_d(s_d(x,y))=(4-(4-x),y)=(x,y)$. La transformation est donc bijective, d’inverse elle-même.
+
+Pour $P=(x,y)$ et $Q=(u,v)$, le carré de la distance entre leurs images est $((4-x)-(4-u))^2+(y-v)^2=(u-x)^2+(y-v)^2=PQ^2$. Les distances sont donc conservées. Les points fixes vérifient $4-x=x$, soit $x=2$, ce qui retrouve exactement l’axe donné.
+
+</Solution>
+
+</Exercise>
+
+<Exercise number="3" name="Être à égale distance de trois points" level="Raisonnement" id="exercice-trois-distances">
+
+Soient $A=(0,0)$, $B=(4,0)$ et $C=(0,2)$. Cherchez tous les points $P$ tels que $PA=PB=PC$, puis donnez le rayon du cercle centré en $P$ passant par ces trois points.
+
+La même recherche a-t-elle toujours une solution si les trois points sont distincts mais alignés ? Pour tester cette affirmation, prenez $A=(-2,0)$, $B=(0,0)$ et $C=(2,0)$.
+
+<Hint>
+
+Les conditions $PA=PB$ et $PA=PC$ placent $P$ à l’intersection de deux médiatrices. Dans l’exemple aligné, comparez plutôt les médiatrices de $[AB]$ et de $[BC]$.
+
+</Hint>
+
+<Solution>
+
+Pour le premier triplet, la médiatrice de $[AB]$ est $x=2$, et celle de $[AC]$ est $y=1$. Les deux conditions imposent donc l’unique point $P=(2,1)$. Réciproquement, ce point appartient aux deux médiatrices, donc vérifie bien $PA=PB=PC$. Le rayon cherché est $PA=\sqrt{2^2+1^2}=\sqrt{5}$.
+
+Pour le triplet aligné, $PA=PB$ impose $x=-1$, tandis que $PB=PC$ impose $x=1$. Aucun point ne satisfait simultanément ces deux équations. Cet exemple réfute l’affirmation selon laquelle trois points distincts admettraient toujours un point équidistant ; l’hypothèse de non-alignement ne peut pas être omise dans un théorème général sur le cercle passant par trois points. Nous n’utilisons pas ici ce théorème général sans preuve : les deux configurations sont résolues directement.
+
+</Solution>
+
+</Exercise>
+
+<Exercise number="4" name="Échanger deux points ne détermine pas une isométrie" level="Approfondissement — lycée" id="exercice-compositions">
+
+Avec $s(x,y)=(-x,y)$ et $t(x,y)=(y,x)$, calculez $(s\circ t)^2$ et $(t\circ s)^2$. Comparez ces résultats à $s^2$ et $t^2$.
+
+Soient maintenant $A=(-a,0)$ et $B=(a,0)$, avec $a>0$. Trouvez deux isométries distinctes qui échangent $A$ et $B$. Pourquoi cela ne contredit-il pas le théorème 1 ?
+
+<Hint>
+
+Le carré d’une transformation signifie sa composée avec elle-même. Pour la seconde question, comparez une réflexion et un demi-tour autour de l’origine, en regardant leur action sur $(0,1)$.
+
+</Hint>
+
+<Solution>
+
+La proposition 2 donne $s\circ t=r$ et $t\circ s=r^{-1}$. Leurs carrés sont donc $r^2$ et $r^{-2}=r^2$, puisque $r^4=e$. On le vérifie sur tout point : $r^2(x,y)=(-x,-y)$ et appliquer deux fois $(x,y)\mapsto(y,-x)$ donne aussi $(-x,-y)$. Ces deux carrés valent le demi-tour, qui n’est pas l’identité, par exemple sur $(1,0)$. En revanche $s^2=t^2=e$, car réfléchir deux fois dans le même axe annule la transformation.
+
+La réflexion $s$ et le demi-tour $h(x,y)=(-x,-y)$ échangent chacun $A$ et $B$. Le demi-tour est une bijection, d’inverse lui-même, et conserve les distances car changer les signes des deux différences de coordonnées ne change pas la somme de leurs carrés : c’est bien une isométrie. Pourtant $s(0,1)=(0,1)$ et $h(0,1)=(0,-1)$, donc $s\ne h$.
+
+Le théorème 1 affirme l’unicité parmi les **réflexions axiales**, et non parmi toutes les isométries. Le demi-tour n’est pas une réflexion axiale : son seul point fixe est l’origine, alors qu’une réflexion fixe toute une droite.
+
+</Solution>
+
+</Exercise>
+
+<Exercise number="5" name="Pourquoi exactement huit symétries du carré ?" level="Approfondissement — début de licence" id="exercice-huit-symetries">
+
+Reprenons $Q=[-a,a]\times[-a,a]$, $a>0$, et les sommets $A,B,C,D$ de la section « Connexions ».
+
+1. Montrez qu’un point du plan est déterminé par ses trois distances à $A$, $B$ et $D$. Déduisez-en que deux isométries ayant les mêmes images de ces trois points sont égales sur tout le plan.
+2. Montrez qu’une isométrie $f$ telle que $f(Q)=Q$ permute les sommets. Vous pouvez utiliser la distance maximale entre deux points du carré.
+3. Montrez qu’il y a au plus huit possibilités pour les images ordonnées de $A,B,D$, puis concluez que les isométries conservant $Q$ sont exactement les huit transformations $r^k$ et $r^k\circ s$, pour $k=0,1,2,3$.
+
+<Hint>
+
+Pour la première question, si $P=(x,y)$, calculez $PA^2-PB^2$ et $PA^2-PD^2$. Pour la deuxième, cherchez les cas d’égalité dans $PQ^2\leq(2a)^2+(2a)^2$. Pour la dernière, une fois l’image de $A$ fixée, l’image de $B$ est l’un de ses deux sommets adjacents, et les distances imposent alors l’image de $D$.
+
+</Hint>
+
+<Solution>
+
+**1. Trois distances déterminent un point.** Avec $A=(-a,a)$, $B=(a,a)$ et $D=(-a,-a)$, le calcul donne, pour $P=(x,y)$,
+
+$$
+PA^2-PB^2=4ax,\qquad PA^2-PD^2=-4ay.
+$$
+
+Comme $a>0$, ces trois distances déterminent $x$ et $y$. Deux points ayant les mêmes distances à $A,B,D$ sont donc égaux.
+
+Soient maintenant deux isométries $f,g$ ayant les mêmes images de $A,B,D$. La composée $u=g^{-1}\circ f$ est une isométrie et fixe ces trois points. Pour tout $P$, la conservation des distances donne $u(P)A=PA$, $u(P)B=PB$ et $u(P)D=PD$. D’après le calcul précédent, $u(P)=P$. Ainsi $u=e$ et $f=g$. Cet argument n’exige pas de supposer que les isométries sont des applications affines.
+
+**2. Les sommets sont caractérisés par une distance.** Si $P=(x,y)$ et $T=(u,v)$ appartiennent à $Q$, alors $|x-u|\leq 2a$ et $|y-v|\leq 2a$. Par conséquent $PT^2\leq 8a^2$. L’égalité impose simultanément $|x-u|=2a$ et $|y-v|=2a$. Chaque coordonnée est alors à une extrémité de $[-a,a]$ : $P$ et $T$ sont deux sommets opposés. Réciproquement, deux sommets opposés sont à la distance $2a\sqrt{2}$.
+
+Les sommets sont donc exactement les points de $Q$ ayant un autre point de $Q$ à la distance $2a\sqrt{2}$. Une isométrie envoyant $Q$ sur $Q$ préserve cette propriété. Elle envoie les sommets sur des sommets et, puisqu’elle est injective, les permute.
+
+**3. Compter les possibilités et les réaliser.** L’image de $A$ a quatre possibilités. Puisque $AB=2a$, l’image de $B$ doit être l’un des deux sommets adjacents à $f(A)$. Puisque $AD=2a$ et $BD=2a\sqrt{2}$, l’image de $D$ doit être l’autre sommet adjacent à $f(A)$, celui qui est opposé à $f(B)$. Il y a donc au plus $4\times 2=8$ triplets possibles. D’après la première question, un tel triplet détermine au plus une isométrie du plan : il y en a au plus huit qui conservent $Q$.
+
+Les quatre rotations $r^k$ et les quatre composées $r^k\circ s$ conservent $Q$, comme justifié dans la section « Connexions ». Il reste à vérifier qu’elles sont toutes distinctes. Les quatre rotations ont des images distinctes de $A$. Les quatre composées sont distinctes aussi, car $r^i\circ s=r^j\circ s$ entraînerait $r^i=r^j$ en composant à droite par $s$.
+
+Enfin, $s$ n’est aucune des quatre rotations : $s(A)=B$ impose comme seule rotation candidate $r^3$, mais $s(B)=A$ tandis que $r^3(B)=C$. Si une composée $r^i\circ s$ était égale à une rotation $r^j$, composer à gauche par l’inverse de $r^i$ ferait de $s$ une rotation, contradiction. Les deux listes sont donc disjointes. Nous disposons de huit isométries distinctes ; la borne supérieure montre qu’il n’en existe aucune autre. Ainsi
+
+$$
+\operatorname{Isom}(Q)
+=\{e,r,r^2,r^3,s,r\circ s,r^2\circ s,r^3\circ s\}.
+$$
+
+La démonstration vaut pour des isométries du **plan entier** qui conservent le carré plein, et ne se limite pas à compter des permutations de ses sommets. C’est précisément le rôle de la première question.
+
+</Solution>
+
+</Exercise>
+
+</CourseSection>
+
+<CourseSection id="reconstruction" eyebrow="06 / Reconstruction" title="Passer du calcul à l’objet géométrique">
+
+Fermez les corrections, puis reconstruisez le parcours avec ces questions.
+
+1. Quelles hypothèses rendent la médiatrice de $[AB]$ bien définie ?
+2. Pourquoi l’égalité $PA^2-PB^2=4ax$ décrit-elle à la fois la médiatrice et les deux régions de proximité ?
+3. Comment construire l’image d’un point par réflexion, et pourquoi cette construction conserve-t-elle toutes les distances ?
+4. Que fixe une réflexion ? Que conserve-t-elle sans le fixer point par point ?
+5. Si vous avez suivi l’approfondissement : pourquoi deux réflexions peuvent-elles donner un quart de tour, et quelle étape empêche de confondre « huit transformations connues » avec « toutes les transformations possibles » ?
+
+Nous sommes partis d’une égalité de longueurs. Elle a caractérisé une droite, puis cette droite a servi à définir une transformation du plan. La composition a enfin relié cette construction géométrique aux groupes rencontrés dans la première leçon. À chaque passage, une formule ou un argument d’exhaustivité a donné une raison valable pour tous les points, au-delà des essais effectués.
+
+</CourseSection>

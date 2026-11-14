@@ -51,7 +51,7 @@ la page du cours ; activer HTTPS forcé (par défaut sur Netlify) ; ajouter
 - En-têtes reçus conformes à `netlify.toml` ; Netlify ajoute `Strict-Transport-Security` ; fichiers `/_astro/*` et `/vendor/*` immuables.
 - p5.js en ligne : empreinte SHA-384 identique à la valeur SRI ; l’appel de p5.js vers jsDelivr est bloqué par `connect-src`.
 - HTML en ligne identique au build local, à deux ajouts près de Netlify (offre gratuite) : un commentaire publicitaire et le script du badge « Powered by Netlify » (`/.netlify/scripts/hud`, servi par le site, sans connexion tierce, mémorise son masquage dans `localStorage`). Il peut être désactivé dans *Project configuration → General → Powered by Netlify badge*.
-- Firefox sur le site en ligne : Atlas 3D (WebGL) fonctionnel. Défaut trouvé : sur une connexion lente, p5.js (296 Ko compressés) dépassait le délai de 15 s du chargeur ; corrigé localement (voir `JURNAL.md`), en attente de publication.
+- Firefox sur le site en ligne : Atlas 3D (WebGL) fonctionnel. Défaut trouvé : sur une connexion lente, p5.js (296 Ko compressés) dépassait le délai de 15 s du chargeur ; corrigé et publié (`769fbfa`) ; revérifié en ligne : p5 chargé et animé, aucune requête tierce.
 
 ## Limites
 

@@ -14,11 +14,14 @@
     "verify:build": "node scripts/check-build.mjs",
     "preview": "astro preview --host 127.0.0.1",
     "check": "astro check",
-    "test": "npm run test:core && npm run test:dom && npm run test:p5",
+    "test": "npm run test:core && npm run test:dom && npm run test:p5 && npm run test:figures",
     "test:core": "node --experimental-strip-types tests/core.test.mjs",
     "test:dom": "node --experimental-strip-types tests/dom.test.mjs",
     "test:p5": "node --experimental-strip-types tests/p5.test.mjs",
-    "test:browser": "npm run build && python3 tests/browser_p5.py && python3 tests/browser_site.py"
+    "test:browser": "npm run build && python3 tests/browser_p5.py && python3 tests/browser_site.py && npm run test:drafts",
+    "build:drafts": "ATELIER_DRAFTS=1 astro build --outDir test-results/dist-drafts",
+    "test:drafts": "npm run build:drafts && python3 tests/browser_site.py --drafts",
+    "test:figures": "node --experimental-strip-types tests/figures.test.mjs"
   },
   "dependencies": {
     "@astrojs/markdown-satteri": "^0.4.10",

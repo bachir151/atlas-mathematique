@@ -1,0 +1,104 @@
+---
+/**
+ * Interactive plane figures of the lesson « Médiatrices & réflexions du plan ».
+ * The figure and its text reading are rendered at build time (usable without
+ * JavaScript); src/scripts/plane-figures.ts makes the controls live.
+ * Usage in MDX: <PlaneFigure kind="mediatrice" number="1" />
+ */
+import {
+  MEDIATRIX_LIMITS, MEDIATRIX_PRESET, REFLECTION_LIMITS, REFLECTION_PRESET,
+  TWO_REFLECTIONS_LIMITS, TWO_REFLECTIONS_PRESET,
+} from '../../figures/plane';
+import { VIEW, mediatrixSvg, reflectionSvg, twoReflectionsSvg } from '../../figures/plane-svg';
+import { mediatrixText, reflectionText, twoReflectionsText } from '../../figures/plane-text';
+import '../../styles/figures.css';
+
+interface Props { kind: 'mediatrice' | 'reflexion' | 'deux-reflexions'; number?: string }
+const { kind, number } = Astro.props;
+const id = `figure-${kind}`;
+
+const titles = {
+  'mediatrice': 'Médiatrice, distances et proximité',
+  'reflexion': 'Construction de la réflexion',
+  'deux-reflexions': 'Deux réflexions et un quart de tour',
+} as const;
+
+type Field = { name: string; label: string; min: number; max: number; value: number };
+let fields: Field[];
+let svg: string;
+let text: { rows: [string, string][]; status: string };
+let state: Record<string, unknown>;
+
+if (kind === 'mediatrice') {
+  state = { ...MEDIATRIX_PRESET };
+  fields = [
+    { name: 'a', label: 'a (A = (−a, 0), B = (a, 0))', min: MEDIATRIX_LIMITS.a[0], max: MEDIATRIX_LIMITS.a[1], value: MEDIATRIX_PRESET.a },
+    { name: 'x', label: 'x de P', min: MEDIATRIX_LIMITS.x[0], max: MEDIATRIX_LIMITS.x[1], value: MEDIATRIX_PRESET.x },
+    { name: 'y', label: 'y de P', min: MEDIATRIX_LIMITS.y[0], max: MEDIATRIX_LIMITS.y[1], value: MEDIATRIX_PRESET.y },
+  ];
+  svg = mediatrixSvg(MEDIATRIX_PRESET, id);
+  text = mediatrixText(MEDIATRIX_PRESET);
+} else if (kind === 'reflexion') {
+  state = { ...REFLECTION_PRESET, count: 0 };
+  fields = [
+    { name: 'c', label: 'c (axe d : x = c)', min: REFLECTION_LIMITS.c[0], max: REFLECTION_LIMITS.c[1], value: REFLECTION_PRESET.c },
+    { name: 'x', label: 'x de P', min: REFLECTION_LIMITS.x[0], max: REFLECTION_LIMITS.x[1], value: REFLECTION_PRESET.x },
+    { name: 'y', label: 'y de P', min: REFLECTION_LIMITS.y[0], max: REFLECTION_LIMITS.y[1], value: REFLECTION_PRESET.y },
+  ];
+  svg = reflectionSvg({ ...REFLECTION_PRESET, count: 0 }, id);
+  text = reflectionText({ ...REFLECTION_PRESET, count: 0 });
+} else {
+  state = { ...TWO_REFLECTIONS_PRESET, step: 0 };
+  fields = [
+    { name: 'x', label: 'x de P', min: TWO_REFLECTIONS_LIMITS.x[0], max: TWO_REFLECTIONS_LIMITS.x[1], value: TWO_REFLECTIONS_PRESET.x },
+    { name: 'y', label: 'y de P', min: TWO_REFLECTIONS_LIMITS.y[0], max: TWO_REFLECTIONS_LIMITS.y[1], value: TWO_REFLECTIONS_PRESET.y },
+  ];
+  svg = twoReflectionsSvg({ ...TWO_REFLECTIONS_PRESET, step: 0 }, id);
+  text = twoReflectionsText({ ...TWO_REFLECTIONS_PRESET, step: 0 });
+}
+---
+<figure class="plane-figure" id={id} data-plane-figure={kind} data-state={JSON.stringify(state)} aria-labelledby={`${id}-title`}>
+  <figcaption class="plane-figure-caption">
+    <span class="eyebrow">Figure{number && ` ${number}`} · interactive</span>
+    <span class="plane-figure-title" id={`${id}-title`}>{titles[kind]}</span>
+  </figcaption>
+  <div class="plane-figure-layout">
+    <div class="plane-figure-stage">
+      <svg viewBox={`0 0 ${VIEW} ${VIEW}`} role="img" aria-labelledby={`${id}-title ${id}-status`} data-plane-svg set:html={svg} />
+      <p class="plane-figure-hint" data-plane-hint hidden>Déplacez P sur la figure ou modifiez les valeurs.</p>
+    </div>
+    <div class="plane-figure-side">
+      <div class="plane-controls" role="group" aria-label="Paramètres de la figure">
+        {fields.map(field => (
+          <label class="plane-field">
+            <span>{field.label}</span>
+            <input type="number" inputmode="numeric" step="1" min={field.min} max={field.max} value={field.value} data-param={field.name} disabled />
+          </label>
+        ))}
+        {kind === 'deux-reflexions' && (
+          <fieldset class="plane-order">
+            <legend>Ordre des réflexions</legend>
+            <label><input type="radio" name={`${id}-order`} value="diagonal-first" checked disabled data-order /> Diagonale, puis verticale</label>
+            <label><input type="radio" name={`${id}-order`} value="vertical-first" disabled data-order /> Verticale, puis diagonale</label>
+          </fieldset>
+        )}
+      </div>
+      <div class="plane-actions">
+        {kind === 'mediatrice' && <button type="button" class="button secondary" data-action="on-bisector" disabled>Placer P sur d (x = 0)</button>}
+        {kind === 'reflexion' && <button type="button" class="button primary" data-action="reflect" disabled>Réfléchir</button>}
+        {kind === 'deux-reflexions' && <button type="button" class="button primary" data-action="next" disabled>Appliquer la réflexion suivante</button>}
+        <button type="button" class="button secondary" data-action="reset" disabled>{kind === 'mediatrice' ? 'Réinitialiser' : 'Recommencer'}</button>
+      </div>
+      <dl class="plane-reading" data-plane-rows>
+        {text.rows.map(([term, value]) => <div><dt>{term}</dt><dd>{value}</dd></div>)}
+      </dl>
+      <p class="plane-status" id={`${id}-status`} role="status" aria-live="polite" data-plane-status>{text.status}</p>
+    </div>
+  </div>
+  <p class="technical-note">Les valeurs affichées sont des observations numériques sur des coordonnées entières ; elles ne remplacent pas les démonstrations de la leçon.</p>
+  <noscript><p class="technical-note">Activez JavaScript pour modifier la figure. La figure et ses valeurs initiales restent lisibles.</p></noscript>
+</figure>
+<script>
+  import { initPlaneFigure } from '../../scripts/plane-figures';
+  document.querySelectorAll<HTMLElement>('[data-plane-figure]').forEach(initPlaneFigure);
+</script>

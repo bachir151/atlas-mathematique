@@ -122,6 +122,8 @@ La migration proposée prévoyait un fichier `.nvmrc` dans le projet, **sans mod
 | `src/content.config.ts` | Collection MDX explicite et schéma de métadonnées |
 | `src/content/lessons/groupes-rotations.mdx` | Premier cours, rédigé par Codex et validé par la direction le 14 novembre 2026 ; note `docs/demandes/codex-groupes-rotations-reponse.md` |
 | `netlify.toml`, `docs/DEPLOIEMENT.md` | Configuration Netlify et procédure de mise en ligne (aucun déploiement) |
+| `src/content/lessons/mediatrices-reflexions.mdx` | Leçon 02, rédigée par Codex, validée le 14 novembre 2026, avec trois figures `<PlaneFigure>` |
+| `src/figures/`, `src/components/figures/PlaneFigure.astro`, `src/scripts/plane-figures.ts` | Figures planes interactives (SVG) |
 | `src/content/lessons/exemple-gabarit.mdx` | Brouillon technique montrant chaque composant, sans contenu mathématique |
 | `src/components/lesson/`, `src/styles/lesson.css` | Gabarit de leçon (blocs mathématiques, exercices, démonstration progressive) ; guide `docs/GABARIT-LECON.md` |
 | `src/pages/cours/[slug].astro` | Page générique d’une leçon ; brouillons exclus de la production |
@@ -416,7 +418,7 @@ Commit `ca5af52` (parent `472bc46`) poussé sans forçage sur `bachir151/atlas-m
 
 - **Décision de la direction :** « je valide le cours » (rédaction de Codex, y compris ses propositions : preuve par coordonnées dans le parcours principal, approfondissements facultatifs conservés).
 - **Intégration fidèle :** le contenu de `groupes-rotations-redaction.mdx` remplace `groupes-rotations.mdx` (fichier brouillon supprimé). Seules modifications : `status: "validated"` avec référence de validation, fil d’Ariane sans « — brouillon », suppression de la phrase « Brouillon soumis à la direction du projet… », devenue inexacte (la page affiche désormais « Contenu validé par la direction du projet »). Copie d’avant intégration conservée hors projet.
-- **Interface :** catalogue `status: 'validated'` ; carte de bibliothèque « Cours disponible · Cours validé · manipulation interactive · Ouvrir le cours » ; pied de page « Premier cours validé ; les autres contenus scientifiques attendent leur validation. » ; mise en valeur de « Preuve intégrale » dans la navigation quelle que soit sa position.
+- **Interface :** catalogue `status: 'validated'` ; carte de bibliothèque « Cours disponible · Cours validé · manipulation interactive · Ouvrir le cours » ; pied de page « Premier cours validé ; les autres contenus scientifiques attendent leur validation. » (puis « Deux cours validés ; … » avec la leçon 02) ; mise en valeur de « Preuve intégrale » dans la navigation quelle que soit sa position.
 - **Tests adaptés :** test unitaire de la leçon validée ; `verify:build` contrôle statut, mention de validation, formules KaTeX et preuve intégrale.
 - **Vérifications :** typage 0/0 ; 29/29 ; Firefox p5 14/14 et site 22/22 (reflow 320 px, zoom 200 %, contrastes et cibles sur la leçon complète) ; `verify:build` OK.
 
@@ -437,3 +439,32 @@ Commit `9bf2b37` poussé sur `main` (106 fichiers distants identiques aux fichie
 **En attente :** autorisation de commit/push sur `main` (qui redéploie automatiquement le site) pour publier la correction.
 
 La direction autorise le push du correctif p5 sur `main` (« oui pousse le correctif sur main »), ce qui redéploie le site public.
+
+### 14 novembre 2026 — Correctif p5 en ligne (`769fbfa`)
+
+Commit `769fbfa` poussé sur `main` ; Netlify a redéployé en ~20 s. Vérification Firefox sur le site public : Atlas 3D (WebGL) OK ; expérience p5 chargée en 9,2 s puis « Animation en cours. », script local avec SRI, aucune requête vers un autre domaine ; cours : 312 formules, 0 erreur KaTeX, polices KaTeX chargées, mention de validation, 5 étapes, rotation du carré fonctionnelle. Cette entrée reste locale jusqu’à la prochaine sauvegarde.
+
+### 14 novembre 2026 — Leçon 02 rédigée par Codex (brouillon)
+
+- Demande `docs/demandes/codex-lecon-02-geometrie.md` transmise par `codex exec`. Livrables : `src/content/lessons/mediatrices-reflexions.mdx` (« Médiatrices & réflexions du plan », brouillon, 4 étapes, preuve intégrale, connexions, exercices) et `docs/demandes/codex-lecon-02-geometrie-reponse.md` (niveau lycée, approfondissements facultatifs, trois figures proposées). Comparaison d’empreintes : Codex n’a créé que ces deux fichiers.
+- Intégration technique vérifiée sans modifier le texte : 500 formules, aucune erreur KaTeX. Défauts de mise en page trouvés à 320 px et corrigés : grille de démonstration élargie par une formule (`minmax(0,1fr)` dans `.proof-layout`) ; tableaux Markdown désormais enveloppés à la compilation dans un cadre défilant focalisable (`scrollableTables`, `src/lib/math-plugin.mjs`), ce qui profite aussi à la table de la leçon 01. Aucun débordement à 320 px.
+- Vérifications : typage 0/0 ; 31 tests ; Firefox 14/14 et 22/22 ; `verify:build` OK ; brouillon absent de la production.
+
+**En attente :** validation de la direction (4 points de la note de Codex) ; aucune modification poussée depuis `769fbfa`.
+
+### 14 novembre 2026 — Trois figures interactives de la leçon 02 (Claude)
+
+- **Décision de la direction :** « je valide le sujet ; pour la figure je suis d’accord pour les trois ». La rédaction de la leçon 02 et les points 2 (niveau) et 3 (approfondissements) de la note de Codex restent à valider : la leçon reste en brouillon.
+- **Choix technique :** figures en SVG + TypeScript (comme le carré de la leçon 01) plutôt que p5.js : coordonnées exactes, rendu à la compilation lisible sans JavaScript, aucun téléchargement de bibliothèque, accessibilité native. Modèles purs `src/figures/plane.ts`, dessin `src/figures/plane-svg.ts`, alternative textuelle `src/figures/plane-text.ts`, composant `src/components/figures/PlaneFigure.astro`, contrôleur `src/scripts/plane-figures.ts`, styles `src/styles/figures.css`.
+- **Figures** (spécifications de Codex) : 1. médiatrice, distances et proximité (a, x, y ; PA², PB², 4ax ; « Placer P sur d ») ; 2. construction de la réflexion d’axe x = c (préréglage c = 2, P = (5, −1) ; H, angle droit, HP = HP′ ; « Réfléchir » / « Réfléchir à nouveau » ; position initiale distinguée ; « Le point est sur l’axe et reste fixe ») ; 3. deux réflexions et un quart de tour (ordre au choix, étapes séparées, carré de la leçon 01, cas de l’origine). Coordonnées entières, champs numériques bornés, glisser-déposer de P, note « observations numériques ».
+- **Placement dans la leçon** (trois balises ajoutées, texte de Codex inchangé) : figure 1 à la fin de l’exploration, figure 2 après la définition 2, figure 3 après la preuve de la proposition 2.
+- **Tests :** `tests/figures.test.mjs` (5 tests, dont vérifications exhaustives sur la grille) ; mode `--drafts` de `tests/browser_site.py` (11 scénarios) ; scripts `build:drafts`, `test:drafts`, `test:figures`. Résultats : typage 0/0 ; 36 tests unitaires ; Firefox 47/47 ; `verify:build` OK.
+
+### 14 novembre 2026 — Leçon 02 validée et intégrée (Claude)
+
+- **Décisions de la direction :** niveau lycée et preuve par coordonnées conservés ; approfondissement de l’exercice 5 conservé ; « je valide le reste » : rédaction validée et push sur `bachir151/atlas-mathematique`, branche `main`, autorisé (point 4 de la demande).
+- **Intégration fidèle :** `status: "validated"` avec référence de validation ; fil d’Ariane sans « — brouillon » ; suppression de la phrase « Brouillon soumis à la direction du projet… », devenue inexacte. Aucun autre changement du texte de Codex (hors les trois balises de figures déjà signalées).
+- **Navigation :** l’entrée de catalogue « Géométrie » (« À venir ») devient « Médiatrices & réflexions du plan », validée, `/cours/mediatrices-reflexions/` ; le thème Géométrie de l’Atlas renvoie vers cette leçon (lien de navigation, pas un lien scientifique).
+- **Tests adaptés :** recherche de bibliothèque (« reflexions »), `verify:build` sur 7 pages (trois figures et lecture textuelle sans JavaScript), scénarios des figures ajoutés à la suite principale. Résultats : typage 0/0 ; 36 tests unitaires ; Firefox 51/51 (p5 14, site 26, brouillons 11) ; `verify:build` OK, 97 références.
+
+La direction a autorisé le push de la leçon 02 sur `main` (« je valide le reste », point 4).

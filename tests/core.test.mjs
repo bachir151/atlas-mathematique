@@ -16,7 +16,7 @@ test('rotation state supports wraparound, negative input, and rejects invalid an
 });
 
 test('library search tolerates accents, case and whitespace; filters combine', () => {
-  assert.deepEqual(filterLessons('  GEOMETRIE ', 'all').map(item => item.id), ['geometrie']);
+  assert.deepEqual(filterLessons('  REFLEXIONS ', 'all').map(item => item.id), ['mediatrices-reflexions']);
   assert.deepEqual(filterLessons('carré', 'Algèbre').map(item => item.id), ['groupes-rotations']);
   assert.deepEqual(filterLessons('carré', 'Analyse'), []);
   assert.equal(filterLessons('', 'all').length, lessons.length);

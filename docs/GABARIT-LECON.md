@@ -84,6 +84,7 @@ balise ouvrante et avant la balise fermante pour que le Markdown intérieur
 | `<FullProof slot="full">` | — | preuve intégrale, toujours visible, jamais verrouillée |
 | `<Formula>` | `tex`, `display` | formule passée en attribut (cas particuliers) |
 | `<SquareExperiment>`, `<P5Experience>` | voir `docs/P5.md` | expériences interactives |
+| `<PlaneFigure>` | `kind` (`mediatrice`, `reflexion`, `deux-reflexions`), `number` | figures planes interactives de la leçon 02 (SVG, clavier, alternative textuelle) |
 
 Exemple de structure :
 
@@ -122,11 +123,16 @@ Texte de la preuve intégrale.
 3. La direction du projet valide ; le statut passe à `validated` avec la
    référence de validation, et l’entrée du catalogue est ajoutée.
 
-## 7. Vérifications
+## 7. Tableaux
+
+Les tableaux Markdown sont placés automatiquement dans un cadre qui défile horizontalement sur petit écran ; la première ligne et la première colonne sont présentées comme des en-têtes.
+
+## 8. Vérifications
 
 ```sh
 npm run check          # types et schéma des leçons
 npm run build          # échoue sur une formule invalide ou un cours sans entrée de catalogue
 npm run verify:build   # ancres, brouillons absents, aucune formule brute
-ATELIER_DRAFTS=1 npx astro build --outDir /chemin/temporaire   # compiler aussi les brouillons
+npm run build:drafts   # compiler aussi les brouillons dans test-results/dist-drafts
+npm run test:drafts    # accessibilité Firefox de toutes les leçons, brouillons compris
 ```

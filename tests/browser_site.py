@@ -25,12 +25,21 @@ from browser_p5 import (  # noqa: E402
     ROOT, CheckSkipped, Driver, EnvironmentBlocked, QuietHandler, WebDriverError, free_port, wait_for,
 )
 
-PAGES = ['/', '/atlas/', '/bibliotheque/', '/cours/groupes-rotations/', '/experiences/p5/', '/404.html']
+PAGES = ['/', '/atlas/', '/bibliotheque/', '/cours/groupes-rotations/', '/cours/mediatrices-reflexions/', '/experiences/p5/', '/404.html']
+# --drafts: serve the build that includes draft lessons (ATELIER_DRAFTS=1) and
+# run the site-wide accessibility checks on every lesson, plus the figures.
+DRAFTS = '--drafts' in sys.argv
+DRAFTS_DIST = ROOT / 'test-results' / 'dist-drafts'
 PLAN = [
     'atlas-3d-load', 'atlas-selection-sync', 'atlas-camera', 'atlas-modes-keyboard', 'atlas-context-loss',
     'atlas-cleanup', 'three-not-loaded-elsewhere', 'skip-link', 'keyboard-focus', 'reflow-320',
     'text-zoom-200', 'target-size', 'contrast', 'square-rotation', 'square-reset-history', 'proof-progressive',
-    'companion', 'library-filters', 'security-policy', 'atlas-reduced-motion', 'square-reduced-motion', 'page-errors',
+    'companion', 'library-filters', 'security-policy', 'figures-static', 'figures-keyboard', 'figures-buttons', 'figures-drag',
+    'atlas-reduced-motion', 'square-reduced-motion', 'page-errors',
+]
+DRAFT_PLAN = [
+    'skip-link', 'keyboard-focus', 'reflow-320', 'text-zoom-200', 'target-size', 'contrast',
+    'figures-static', 'figures-keyboard', 'figures-buttons', 'figures-drag', 'page-errors',
 ]
 
 # Screen position of vertex A (the orange marker) relative to the rotation centre, in SVG units.
@@ -433,7 +442,7 @@ class SiteChecks:
                 return d.js("return {visible:[...document.querySelectorAll('[data-lesson-id]')].filter(c=>!c.hidden).length,status:document.querySelector('[data-result-count]').textContent,empty:!document.querySelector('[data-empty]').hidden};")
             total = count()['visible']
             d.js("document.querySelector('[data-search]').focus();")
-            for ch in 'geometrie':
+            for ch in 'reflexions':
                 d.key(ch)
             accent = count()
             assert accent['visible'] == 1 and not accent['empty'] and accent['status'] == '1 résultat', f'Recherche sans accents : {accent}'
@@ -469,6 +478,99 @@ class SiteChecks:
             return {'headers': headers, 'externalFetch': state['external'], 'violation': state['violations'][0]}
         self.case('security-policy', security)
 
+    # ---------- Plane figures (lesson « Médiatrices & réflexions », draft) ----------
+    def figures(self):
+        d = self.d
+        page = '/cours/mediatrices-reflexions/'
+        status = lambda kind: d.js(f"return document.querySelector('#figure-{kind} [data-plane-status]').textContent;")
+        rows = lambda kind: d.js(f"return Object.fromEntries([...document.querySelectorAll('#figure-{kind} [data-plane-rows] > div')].map(r=>[r.children[0].textContent,r.children[1].textContent]));")
+
+        def static():
+            html = (self.root / page.strip('/') / 'index.html').read_text(encoding='utf-8')
+            # Rendered at build time: readable without JavaScript.
+            for expected in ('P est plus près de B.', 'Point courant : P = (5, −1), avant réflexion.', 'Étape 0 sur 2.'):
+                assert expected in html, f'Texte initial absent du HTML compilé : {expected}'
+            assert html.count('data-plane-svg') == 3 and html.count('<circle') >= 7  # 3 + 3 + 1 points initially
+            self.open(page)
+            state = d.js('''return [...document.querySelectorAll('[data-plane-figure]')].map(f=>({id:f.id,
+              enabled:[...f.querySelectorAll('input,button')].every(e=>!e.disabled),
+              label:f.querySelector('svg').getAttribute('aria-labelledby'),hint:!f.querySelector('[data-plane-hint]').hidden}));''')
+            assert len(state) == 3 and all(f['enabled'] and f['hint'] for f in state), state
+            for f in state:
+                assert all(d.js('return !!document.getElementById(arguments[0]);', ref) for ref in f['label'].split()), f
+            return {'figures': [f['id'] for f in state]}
+        self.case('figures-static', static)
+
+        def keyboard():
+            self.open(page)
+            d.js("document.querySelector('#figure-mediatrice [data-param=x]').focus();")
+            d.key('\ue015')  # Arrow down on a number field: 1 → 0
+            time.sleep(0.1)
+            on = status('mediatrice')
+            assert on == 'P est sur la médiatrice d : PA = PB.', on
+            d.key('\ue015'); time.sleep(0.1)
+            assert status('mediatrice') == 'P est plus près de A.', status('mediatrice')
+            assert rows('mediatrice')['PA² − PB²'] == '4ax = 4 × 2 × (−1) = −8', rows('mediatrice')
+            # Typed values are clamped to the allowed range when the field is left.
+            d.js("const f=document.querySelector('#figure-mediatrice [data-param=y]');f.focus();f.select();")
+            for ch in '99':
+                d.key(ch)
+            d.key('\ue004')  # Tab
+            time.sleep(0.1)
+            y = d.js("return document.querySelector('#figure-mediatrice [data-param=y]').value;")
+            assert y == '5' and rows('mediatrice')['P'] == '(−1, 5)', (y, rows('mediatrice'))
+            # Radio group of figure 3 with the arrow keys.
+            d.js("document.querySelector('#figure-deux-reflexions [data-order][value=diagonal-first]').focus();")
+            d.key('\ue015'); time.sleep(0.1)  # Arrow down selects the next radio
+            order = rows('deux-reflexions')['Ordre appliqué']
+            assert order.startswith('d’abord s'), order
+            return {'arrowKeys': True, 'clamped': y, 'radio': order}
+        self.case('figures-keyboard', keyboard)
+
+        def buttons():
+            self.open(page)
+            reflect = "document.querySelector('#figure-reflexion [data-action=reflect]')"
+            d.js(reflect + ".focus();"); d.key('\ue007'); time.sleep(0.1)
+            first = (status('reflexion'), d.js('return ' + reflect + '.textContent;'))
+            assert first == ('Point courant : P′ = (−1, −1). Position initiale : P = (5, −1).', 'Réfléchir à nouveau'), first
+            assert d.js('return document.activeElement===' + reflect + ';'), 'Focus perdu après « Réfléchir »'
+            d.key('\ue007'); time.sleep(0.1)
+            assert status('reflexion').startswith('Point courant : (5, −1), la position initiale P'), status('reflexion')
+            d.js("const c=document.querySelector('#figure-reflexion [data-param=x]');c.value='2';c.dispatchEvent(new Event('input'));")
+            assert status('reflexion') == 'Le point est sur l’axe et reste fixe.', status('reflexion')
+            nxt = "document.querySelector('#figure-deux-reflexions [data-action=next]')"
+            d.js(nxt + ".click();" + nxt + ".click();")
+            final = (status('deux-reflexions'), d.js('return ' + nxt + ".getAttribute('aria-disabled');"))
+            assert final == ('P₂ = (−y, x) : s ∘ t est le quart de tour positif r.', 'true'), final
+            d.js("document.querySelector('#figure-deux-reflexions [data-order][value=vertical-first]').click();")
+            d.js(nxt + ".click();" + nxt + ".click();")
+            assert rows('deux-reflexions')['P₂ = t(P₁)'] == '(y, −x) = (0, −1)', rows('deux-reflexions')
+            d.js("for(const f of ['x','y']){const e=document.querySelector('#figure-deux-reflexions [data-param='+f+']');e.value='0';e.dispatchEvent(new Event('input'));}")
+            assert status('deux-reflexions').startswith('Pour l’origine, les images coïncident'), status('deux-reflexions')
+            return {'reflect': first[0], 'quarterTurn': final[0]}
+        self.case('figures-buttons', buttons)
+
+        def drag():
+            self.open(page)
+            d.js("document.querySelector('#figure-mediatrice').scrollIntoView({block:'center',behavior:'instant'});")
+            time.sleep(0.3)
+            # Screen position of P and of the world point (−3, −2), from the SVG transform.
+            pos = d.js('''const svg=document.querySelector('#figure-mediatrice svg');const m=svg.getScreenCTM();
+              const c=svg.querySelector('[data-drag-handle] circle');const at=(x,y)=>{const p=new DOMPoint(x,y).matrixTransform(m);return [Math.round(p.x),Math.round(p.y)];};
+              const u=(400-60)/12;return {from:at(+c.getAttribute('cx'),+c.getAttribute('cy')),to:at(200-3*u,200+2*u)};''')
+            d.command('POST', '/actions', {'actions': [{'type': 'pointer', 'id': 'mouse', 'parameters': {'pointerType': 'mouse'}, 'actions': [
+                {'type': 'pointerMove', 'x': pos['from'][0], 'y': pos['from'][1], 'origin': 'viewport'},
+                {'type': 'pointerDown', 'button': 0},
+                {'type': 'pointerMove', 'x': pos['to'][0], 'y': pos['to'][1], 'origin': 'viewport', 'duration': 250},
+                {'type': 'pointerUp', 'button': 0}]}]})
+            d.command('DELETE', '/actions')
+            time.sleep(0.2)
+            state = (rows('mediatrice')['P'], d.js("return ['x','y'].map(n=>document.querySelector('#figure-mediatrice [data-param='+n+']').value);"))
+            assert state == ('(−3, −2)', ['-3', '-2']), f'Glisser-déposer de P : {state} ({pos})'
+            assert status('mediatrice') == 'P est plus près de A.', status('mediatrice')
+            return {'draggedTo': state[0]}
+        self.case('figures-drag', drag)
+
     def reduced(self):
         d = self.d
         self.open('/atlas/')
@@ -500,11 +602,16 @@ def assert_no_errors(errors):
 
 
 def main():
-    output = ROOT / 'test-results' / 'browser-site'
+    global PAGES
+    output = ROOT / 'test-results' / ('browser-site-drafts' if DRAFTS else 'browser-site')
+    served = DRAFTS_DIST if DRAFTS else ROOT / 'dist'
+    plan = DRAFT_PLAN if DRAFTS else PLAN
+    if DRAFTS and (served / 'cours').exists():
+        PAGES = sorted(f'/cours/{entry.name}/' for entry in (served / 'cours').iterdir() if (entry / 'index.html').exists())
     output.mkdir(parents=True, exist_ok=True)
     (output / 'profiles').mkdir(exist_ok=True)
     report = {'startedUTC': datetime.now(timezone.utc).isoformat(), 'status': 'blocked',
-              'engine': 'Firefox réel via WebDriver W3C', 'results': [], 'notRun': PLAN.copy(),
+              'engine': 'Firefox réel via WebDriver W3C', 'results': [], 'notRun': plan.copy(),
               'limitations': ['WebGL logiciel de Firefox headless : pas de validation GPU matérielle',
                               'Zoom texte simulé par la taille de police racine',
                               'Contraste calculé sur les couleurs CSS ; fonds en image ou dégradé non évalués',
@@ -514,10 +621,10 @@ def main():
     try:
         if not __debug__:
             raise EnvironmentBlocked('Assertions désactivées : ne pas lancer Python avec -O')
-        if not (ROOT / 'dist/atlas/index.html').exists():
-            raise EnvironmentBlocked('Compilation absente : exécuter npm run build')
+        if not (served / 'atlas/index.html').exists():
+            raise EnvironmentBlocked('Compilation absente : exécuter ' + ('npm run build:drafts' if DRAFTS else 'npm run build'))
         try:
-            server = ThreadingHTTPServer(('127.0.0.1', 0), partial(QuietHandler, directory=str(ROOT / 'dist')))
+            server = ThreadingHTTPServer(('127.0.0.1', 0), partial(QuietHandler, directory=str(served)))
         except OSError as error:
             raise EnvironmentBlocked('Serveur local refusé : ' + str(error)) from error
         threading.Thread(target=server.serve_forever, daemon=True).start()
@@ -544,14 +651,21 @@ def main():
         except (OSError, AssertionError, WebDriverError) as error:
             raise EnvironmentBlocked('Session Firefox impossible : ' + str(error)) from error
         checks = SiteChecks(driver, base, output, report['results'])
-        checks.atlas()
-        checks.site()
-        checks.interactions()
-        checks.collect_errors()
-        driver.close()
-        driver.start(True)
-        checks.reduced()
-        checks.collect_errors()
+        checks.root = served
+        if DRAFTS:
+            checks.site()
+            checks.figures()
+            checks.collect_errors()
+        else:
+            checks.atlas()
+            checks.site()
+            checks.interactions()
+            checks.figures()
+            checks.collect_errors()
+            driver.close()
+            driver.start(True)
+            checks.reduced()
+            checks.collect_errors()
         checks.case('page-errors', lambda: assert_no_errors(checks.page_errors))
         if checks.failed:
             report['status'], exit_code = 'failed', 1
@@ -585,7 +699,7 @@ def main():
             server.shutdown()
             server.server_close()
         executed = {item['name'] for item in report['results']}
-        report['notRun'] = [name for name in PLAN if name not in executed]
+        report['notRun'] = [name for name in plan if name not in executed]
         report['finishedUTC'] = datetime.now(timezone.utc).isoformat()
         (output / 'report.json').write_text(json.dumps(report, indent=2, ensure_ascii=False) + '\n')
         print('Rapport : ' + str(output / 'report.json'), flush=True)

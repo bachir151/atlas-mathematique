@@ -71,8 +71,8 @@ test('library controller combines filters and restores all cards when cleared', 
   const search = doc.querySelector('[data-search]');
   const domain = doc.querySelector('[data-domain]');
   assert.equal(search.disabled, false);
-  search.value = 'GEOMETRIE'; search.dispatchEvent(new dom.window.Event('input'));
-  assert.equal(doc.querySelector('[data-lesson-id="geometrie"]').hidden, false);
+  search.value = 'REFLEXIONS'; search.dispatchEvent(new dom.window.Event('input'));
+  assert.equal(doc.querySelector('[data-lesson-id="mediatrices-reflexions"]').hidden, false);
   assert.equal(doc.querySelector('[data-lesson-id="groupes-rotations"]').hidden, true);
   domain.value = 'Algèbre'; domain.dispatchEvent(new dom.window.Event('change'));
   assert.equal(doc.querySelector('[data-empty]').hidden, false);

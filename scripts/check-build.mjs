@@ -5,7 +5,7 @@ import { resolve } from 'node:path';
 import { JSDOM } from 'jsdom';
 
 const output = resolve('dist');
-const pages = ['index.html', 'atlas/index.html', 'bibliotheque/index.html', 'cours/groupes-rotations/index.html', 'experiences/p5/index.html', '404.html'];
+const pages = ['index.html', 'atlas/index.html', 'bibliotheque/index.html', 'cours/groupes-rotations/index.html', 'cours/mediatrices-reflexions/index.html', 'experiences/p5/index.html', '404.html'];
 let references = 0;
 
 for (const page of pages) {
@@ -53,7 +53,11 @@ for (const page of pages) {
     assert.ok(doc.querySelector('.lesson-status-validated'), 'Mention de validation affichée');
     assert.ok(doc.querySelectorAll('.katex').length > 0 && !doc.querySelector('.katex-error'), 'Formules rendues par KaTeX');
     assert.ok(proof.textContent.trim().length > 100, 'Preuve intégrale non vide');
-    assert.equal(doc.querySelectorAll('[data-rotation]').length, 3);
+    if (page.includes('groupes-rotations')) assert.equal(doc.querySelectorAll('[data-rotation]').length, 3);
+    if (page.includes('mediatrices-reflexions')) {
+      assert.equal(doc.querySelectorAll('[data-plane-figure]').length, 3, 'Trois figures interactives');
+      assert.ok([...doc.querySelectorAll('[data-plane-status]')].every(status => status.textContent.trim()), 'Lecture textuelle des figures sans JavaScript');
+    }
   }
   if (page.startsWith('bibliotheque/')) {
     assert.equal(doc.querySelectorAll('[data-lesson-id]').length, 3);

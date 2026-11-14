@@ -31,3 +31,23 @@ export const katexMath = {
     return { raw: `<div class="math-display">${render(ctx, node.value, true)}</div>`, mdxExpressions: false };
   },
 };
+
+/**
+ * Markdown tables are wrapped in a horizontally scrollable region, so that a
+ * wide table never widens the page on a narrow screen (WCAG 1.4.10 reflow).
+ * The region is focusable so keyboard users can scroll it.
+ */
+export const scrollableTables = {
+  name: 'atelier-tables',
+  element: {
+    filter: ['table'],
+    visit(node, ctx) {
+      ctx.wrapNode(node, {
+        type: 'element',
+        tagName: 'div',
+        properties: { className: ['table-scroll'], tabIndex: 0, role: 'region', ariaLabel: 'Tableau défilant horizontalement' },
+        children: [],
+      });
+    },
+  },
+};

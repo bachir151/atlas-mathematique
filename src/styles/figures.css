@@ -1,0 +1,201 @@
+/* Interactive plane figures (src/components/figures/PlaneFigure.astro). */
+.plane-figure {
+  margin: 1.6em 0;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+  padding: 18px;
+}
+
+.plane-figure-caption {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 14px;
+}
+
+.plane-figure-title {
+  font: 21px/1.25 var(--serif);
+}
+
+.plane-figure-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 18px;
+}
+
+@media (min-width: 760px) {
+  .plane-figure-layout {
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+    align-items: start;
+  }
+}
+
+.plane-figure-stage svg {
+  display: block;
+  width: 100%;
+  max-width: 420px;
+  height: auto;
+  margin: 0 auto;
+  background: #f4f6f0;
+  border-radius: var(--radius);
+}
+
+.plane-figure-hint {
+  margin-top: 8px;
+  font-size: 13px;
+  color: var(--muted);
+  text-align: center;
+}
+
+.plane-controls {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 10px 14px;
+}
+
+.plane-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.plane-field input {
+  font: inherit;
+  font-size: 16px; /* no zoom on focus in mobile browsers */
+  color: var(--ink);
+  min-height: 44px;
+  padding: 6px 10px;
+  border: 1px solid #b9bcb0;
+  border-radius: 3px;
+  background: #fff;
+}
+
+.plane-field input:focus-visible,
+.plane-order input:focus-visible {
+  outline: 3px solid var(--orange);
+  outline-offset: 2px;
+}
+
+.plane-order {
+  grid-column: 1 / -1;
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  padding: 8px 12px 10px;
+  font-size: 14px;
+}
+
+.plane-order legend {
+  font-size: 13px;
+  color: var(--muted);
+  padding: 0 4px;
+}
+
+.plane-order label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 36px;
+}
+
+.plane-order input {
+  width: 24px;
+  height: 24px;
+  margin: 0;
+  accent-color: var(--green);
+}
+
+.plane-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.plane-actions .button {
+  min-height: 44px;
+  font-size: 14px;
+}
+
+.plane-actions .button[aria-disabled='true'] {
+  opacity: .55;
+  cursor: not-allowed;
+}
+
+.plane-reading {
+  margin-top: 16px;
+  display: grid;
+  gap: 6px;
+  font-size: 14px;
+}
+
+.plane-reading > div {
+  display: grid;
+  grid-template-columns: minmax(0, 9em) minmax(0, 1fr);
+  gap: 10px;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 5px;
+}
+
+.plane-reading dt {
+  color: var(--muted);
+}
+
+.plane-reading dd {
+  margin: 0;
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}
+
+.plane-status {
+  margin-top: 12px;
+  padding: 10px 12px;
+  background: var(--green-soft);
+  border-radius: 3px;
+  font-size: 14px;
+  color: var(--green);
+}
+
+/* SVG drawing */
+.fig-grid { stroke: #33594b; stroke-opacity: .1; stroke-width: 1; }
+.fig-axis { stroke: #33594b; stroke-opacity: .45; stroke-width: 1.2; }
+.fig-tick { font: 12px var(--sans); fill: #5c6158; }
+.fig-axis-line { stroke: var(--green); stroke-width: 2.2; stroke-dasharray: 7 5; }
+.fig-axis-t { stroke: #7a5a2f; }
+.fig-line-label { font: italic 14px var(--serif); fill: var(--green); }
+.fig-segment { stroke-width: 2.4; }
+.fig-segment-a { stroke: #8a4a29; }
+.fig-segment-b { stroke: #2f5f8a; }
+.fig-segment-construction { stroke: #4b5a52; stroke-dasharray: 4 4; }
+.fig-right-angle { fill: none; stroke: #4b5a52; stroke-width: 1.5; }
+.fig-tick-mark { stroke: #4b5a52; stroke-width: 2; }
+.fig-point { stroke: #fff; stroke-width: 2; }
+.fig-point-fixed { fill: var(--green); }
+.fig-point-current { fill: var(--orange); }
+.fig-point-image { fill: #2f5f8a; }
+.fig-point-construction { fill: #4b5a52; }
+.fig-ring { fill: none; stroke: var(--orange); stroke-width: 2.4; stroke-dasharray: 3 3; }
+.fig-label { font: italic 17px var(--serif); fill: var(--ink); paint-order: stroke; stroke: #f4f6f0; stroke-width: 4px; }
+.fig-square { fill: var(--green); fill-opacity: .07; stroke: var(--green); stroke-width: 1.6; }
+.fig-square-label { font: 15px var(--serif); fill: #213c32; }
+
+.is-interactive [data-drag-handle] { cursor: grab; }
+.is-interactive [data-drag-handle] circle { r: 12px; } /* 24 px target */
+.is-interactive [data-drag-handle]:active { cursor: grabbing; }
+
+@media (max-width: 560px) {
+  .plane-figure { padding: 12px; }
+  /* The drawing is about half its nominal size: larger text, one graduation in two. */
+  .fig-tick { font-size: 20px; }
+  .fig-tick-odd { display: none; }
+  .fig-label { font-size: 26px; }
+  .fig-line-label { font-size: 21px; }
+  .fig-square-label { font-size: 22px; }
+  .plane-reading > div { grid-template-columns: minmax(0, 1fr); gap: 2px; }
+}
+
+/* Only P can be dragged, even when another point is drawn on top of it. */
+[data-plane-svg] :is(circle, text, line, path) { pointer-events: none; }
+[data-plane-svg] [data-drag-handle] circle { pointer-events: all; touch-action: none; /* dragging P must not scroll the page */ }

@@ -35,10 +35,19 @@
 
 /* Markdown tables (e.g. composition tables): the header row and the first
    column read as labels. Tables stay real tables for assistive technologies. */
+.table-scroll {
+  max-width: 100%;
+  overflow-x: auto;
+  margin: 1.2em 0;
+}
+
+.table-scroll:focus-visible {
+  outline: 3px solid var(--orange);
+  outline-offset: 3px;
+}
+
 .lesson-content table {
   border-collapse: collapse;
-  margin: 1.2em 0;
-  max-width: 100%;
   font-variant-numeric: tabular-nums;
 }
 
@@ -55,10 +64,7 @@
   font-weight: 600;
 }
 
-.lesson-content > table + *,
-.lesson-content > * + table {
-  margin-top: 1em;
-}
+
 
 /* Display math scrolls inside its own box rather than widening the page. */
 .math-display {
