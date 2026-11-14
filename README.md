@@ -6,11 +6,13 @@ Répartition actuelle : **Claude développe le site ; Codex rédige les contenus
 
 Expériences 2D : [intégration p5.js](docs/P5.md), composant réutilisable Astro/MDX et banc technique local à `/experiences/p5/`. Three.js reste utilisé pour l’Atlas 3D.
 
+Mise en ligne : [configuration Netlify prête, aucun déploiement](docs/DEPLOIEMENT.md).
+
 Tests en vrai navigateur : [commande Firefox, scénarios et état réel](docs/TESTS-NAVIGATEUR.md). Cinq scénarios Firefox réels ont réussi ; la correction du défilement du sixième attend sa validation. Les relances dans le terminal Codex restent bloquées avant les scénarios.
 
 Première version locale des interfaces, réalisée dans le périmètre autorisé par la direction du projet. Aucun cours, énoncé ou démonstration validé n’a été fourni au démarrage : les emplacements scientifiques restent explicitement provisoires.
 
-**État actuel : six pages compilées, typage sans erreur ni avertissement, 29 tests réussis dont 19 pour p5.** Le contrôle du HTML compilé vérifie aussi 72 références locales. Versions : Astro 7.4.12, @astrojs/mdx 8.1.6, KaTeX 0.19.1, Three.js 0.180 ; `npm audit` en ligne : 0 vulnérabilité. Les suites Firefox réelles (`npm run test:browser`) réussissent : 14 scénarios p5 (rendu Canvas 2D, chargement après action de p5.js auto-hébergé et vérifié par SRI, clavier natif, pause hors écran, mouvement réduit) et 21 scénarios Atlas/site (WebGL et perte de contexte, clavier, reflow à 320 px, zoom texte 200 %, taille des cibles, contrastes, carré, preuve progressive, compagnon, bibliothèque). Voir `docs/TESTS-NAVIGATEUR.md`. Les vérifications visuelles et WebGL sur matériel réel restent à faire. Voir le [bilan de reprise et la proposition de migration de sécurité](docs/VERIFICATIONS.md).
+**État actuel : six pages compilées, typage sans erreur ni avertissement, 29 tests réussis dont 19 pour p5.** Le contrôle du HTML compilé vérifie aussi 72 références locales. Versions : Astro 7.4.12, @astrojs/mdx 8.1.6, KaTeX 0.19.1, Three.js 0.180 ; `npm audit` en ligne : 0 vulnérabilité. Les suites Firefox réelles (`npm run test:browser`) réussissent : 14 scénarios p5 (rendu Canvas 2D, chargement après action de p5.js auto-hébergé et vérifié par SRI, clavier natif, pause hors écran, mouvement réduit) et 22 scénarios Atlas/site (WebGL et perte de contexte, clavier, reflow à 320 px, zoom texte 200 %, taille des cibles, contrastes, carré, preuve progressive, compagnon, bibliothèque, politique de sécurité), servis avec les en-têtes de production de `netlify.toml`. Voir `docs/TESTS-NAVIGATEUR.md`. Les vérifications visuelles et WebGL sur matériel réel restent à faire. Voir le [bilan de reprise et la proposition de migration de sécurité](docs/VERIFICATIONS.md).
 
 ## Lancement local
 
@@ -115,6 +117,8 @@ docs/LIVRAISON.md
 docs/VERIFICATIONS.md
 docs/P5.md
 docs/GABARIT-LECON.md
+docs/DEPLOIEMENT.md
+netlify.toml
 audits/
   claude-1.md
   claude-1-sources.json

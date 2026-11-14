@@ -33,6 +33,33 @@
   margin-top: 1.6em;
 }
 
+/* Markdown tables (e.g. composition tables): the header row and the first
+   column read as labels. Tables stay real tables for assistive technologies. */
+.lesson-content table {
+  border-collapse: collapse;
+  margin: 1.2em 0;
+  max-width: 100%;
+  font-variant-numeric: tabular-nums;
+}
+
+.lesson-content :where(th, td) {
+  border: 1px solid var(--line);
+  padding: 6px 14px;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.lesson-content th,
+.lesson-content td:first-child {
+  background: var(--green-soft);
+  font-weight: 600;
+}
+
+.lesson-content > table + *,
+.lesson-content > * + table {
+  margin-top: 1em;
+}
+
 /* Display math scrolls inside its own box rather than widening the page. */
 .math-display {
   max-width: 100%;
@@ -200,6 +227,7 @@
   color: var(--ink);
 }
 
+.proof-steps details > div > * + *,
 .full-proof-body > * + * {
   margin-top: .8em;
 }

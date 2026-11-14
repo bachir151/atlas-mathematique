@@ -121,6 +121,8 @@ La migration proposée prévoyait un fichier `.nvmrc` dans le projet, **sans mod
 | `src/scripts/atlas.ts`, `square.ts`, `proof.ts`, `companion.ts` | Contrôleurs des interactions |
 | `src/content.config.ts` | Collection MDX explicite et schéma de métadonnées |
 | `src/content/lessons/groupes-rotations.mdx` | Leçon d’emplacements (cours, étapes et preuve intégrale) à remplacer après validation |
+| `src/content/lessons/groupes-rotations-redaction.mdx` | Rédaction de Codex en brouillon, à valider ; note `docs/demandes/codex-groupes-rotations-reponse.md` |
+| `netlify.toml`, `docs/DEPLOIEMENT.md` | Configuration Netlify et procédure de mise en ligne (aucun déploiement) |
 | `src/content/lessons/exemple-gabarit.mdx` | Brouillon technique montrant chaque composant, sans contenu mathématique |
 | `src/components/lesson/`, `src/styles/lesson.css` | Gabarit de leçon (blocs mathématiques, exercices, démonstration progressive) ; guide `docs/GABARIT-LECON.md` |
 | `src/pages/cours/[slug].astro` | Page générique d’une leçon ; brouillons exclus de la production |
@@ -391,4 +393,18 @@ Commit `df29d9bc9aa27a77389c424d960e22fb89a03b6e` (parent `3d9c9e1`) poussé san
 - **Confidentialité :** p5.js 2.4.0 tente à son chargement de récupérer ses traductions sur jsDelivr. Une politique `connect-src 'self'` (balise meta, production) bloque ces connexions ; `verify:build` la contrôle. À reprendre dans l’en-tête HTTP lors du déploiement.
 - **Vérifications :** typage 0 erreur/0 avertissement ; tests unitaires 29/29 (réécrits sans `src/data/proof.ts`) ; compilation 6 pages ; `verify:build` étendu (brouillons absents, aucune formule brute, politique de connexion) ; Firefox p5 14/14 et site 21/21 sur deux passages ; comparaison visuelle : seules les zones attendues changent.
 
-**Reste à faire :** valider le changement de mention ci-dessus ; vérifications sur téléphone et lecteur d’écran ; contenus de Codex. Aucun commit, push ou déploiement depuis `df29d9b`.
+**Reste à faire :** vérifications sur téléphone et lecteur d’écran ; contenus de Codex. Aucun commit, push ou déploiement depuis `df29d9b`.
+
+### 14 novembre 2026 — Sauvegarde GitHub `472bc46`
+
+Commit `472bc46` (parent `df29d9b`) poussé sans forçage sur `bachir151/atlas-mathematique`, branche `main`, avec l’autorisation de la direction : 36 fichiers (gabarit de leçon, petits textes, politique `connect-src 'self'`, guide `docs/GABARIT-LECON.md`). Contrôle de motifs sensibles : aucun. 102 fichiers distants identiques aux fichiers locaux. Cette entrée reste locale jusqu’à la prochaine sauvegarde. Aucun déploiement.
+
+**Décision de la direction (14 novembre 2026) :** la mention « validation par la direction du projet » est validée dans `groupes-rotations.mdx`.
+
+### 14 novembre 2026 — Préparation Netlify et première rédaction de Codex
+
+- **Netlify (aucun déploiement) :** `netlify.toml` (compilation `npm run build && npm run verify:build`, Node 22.23.4, brouillons interdits, en-têtes de sécurité, cache des fichiers versionnés). Politique de sécurité générée par Astro (`security.csp` dans `astro.config.mjs`) : scripts limités au site et à leurs empreintes SHA-256, `connect-src 'self'`, `object-src 'none'` ; la balise faite à la main dans `Layout.astro` est retirée ; coloration Shiki désactivée (incompatible avec la politique). `verify:build` contrôle l’empreinte de chaque script en ligne. Le serveur des tests Firefox envoie les en-têtes de `netlify.toml` ; nouveau scénario `security-policy` (connexion vers jsDelivr effectivement bloquée). `@astrojs/markdown-satteri` déclaré explicitement. Procédure : `docs/DEPLOIEMENT.md`.
+- **Demande à Codex :** `docs/demandes/codex-groupes-rotations.md`, transmise par `codex exec` (bac à sable `workspace-write`). Livrables : `src/content/lessons/groupes-rotations-redaction.mdx` (brouillon, 5 étapes, preuve intégrale, connexions, 5 exercices) et `docs/demandes/codex-groupes-rotations-reponse.md` (niveau, plan, décisions attendues). Comparaison d’empreintes avant/après : Codex n’a créé que ces deux fichiers. Intégration technique vérifiée sans modifier le texte : compilation en mode brouillon, 312 formules rendues, aucun défilement horizontal à 1280 et 320 px. Styles ajoutés pour les tableaux Markdown et l’espacement des paragraphes dans les étapes.
+- **Vérifications :** typage 0/0 ; tests unitaires 29/29 ; Firefox p5 14/14 et site 22/22 ; `verify:build` OK, brouillon absent de la compilation de production.
+
+**Décisions attendues de la direction :** validation du brouillon de Codex et des trois points de sa note ; autorisation de commit/push ; autorisation de déploiement Netlify (création du site par la direction). Aucun commit, push ou déploiement depuis `472bc46`.

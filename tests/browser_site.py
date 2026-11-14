@@ -30,7 +30,7 @@ PLAN = [
     'atlas-3d-load', 'atlas-selection-sync', 'atlas-camera', 'atlas-modes-keyboard', 'atlas-context-loss',
     'atlas-cleanup', 'three-not-loaded-elsewhere', 'skip-link', 'keyboard-focus', 'reflow-320',
     'text-zoom-200', 'target-size', 'contrast', 'square-rotation', 'square-reset-history', 'proof-progressive',
-    'companion', 'library-filters', 'atlas-reduced-motion', 'square-reduced-motion', 'page-errors',
+    'companion', 'library-filters', 'security-policy', 'atlas-reduced-motion', 'square-reduced-motion', 'page-errors',
 ]
 
 # Screen position of vertex A (the orange marker) relative to the rotation centre, in SVG units.
@@ -449,6 +449,25 @@ class SiteChecks:
             assert d.js("return document.activeElement===document.querySelector('[data-search]');"), 'Le focus ne revient pas sur la recherche'
             return {'total': total, 'accentInsensitive': True, 'domain': True, 'emptyState': True, 'clearFocus': True}
         self.case('library-filters', library)
+
+        def security():
+            # The local server sends the netlify.toml headers; Astro writes the page policy.
+            self.open('/experiences/p5/')
+            d.js("""window.__csp={violations:[],headers:null,external:null};
+              document.addEventListener('securitypolicyviolation',e=>window.__csp.violations.push({directive:e.effectiveDirective,blocked:e.blockedURI}));
+              fetch(location.href).then(r=>{window.__csp.headers=Object.fromEntries(['content-security-policy','x-frame-options','x-content-type-options','referrer-policy','permissions-policy'].map(n=>[n,r.headers.get(n)]));});
+              fetch('https://cdn.jsdelivr.net/npm/p5@2.4.0/translations/en-US/extracted.json').then(()=>{window.__csp.external='allowed';},()=>{window.__csp.external='blocked';});""")
+            wait_for(lambda: d.js("return !!(window.__csp.headers&&window.__csp.external&&window.__csp.violations.length);"), 'Politique de sécurité non observée')
+            state = d.js("return window.__csp;")
+            headers = state['headers']
+            assert "frame-ancestors 'self'" in (headers['content-security-policy'] or ''), headers
+            assert headers['x-content-type-options'] == 'nosniff' and headers['x-frame-options'] == 'SAMEORIGIN', headers
+            assert state['external'] == 'blocked', f'Connexion tierce non bloquée : {state}'
+            assert any(v['directive'] == 'connect-src' and 'jsdelivr' in v['blocked'] for v in state['violations']), state
+            meta = d.js("return document.querySelector('meta[http-equiv=\"content-security-policy\" i]')?.content||'';")
+            assert "script-src 'self'" in meta and 'unsafe-inline' not in meta.split('script-src')[1].split(';')[0], meta
+            return {'headers': headers, 'externalFetch': state['external'], 'violation': state['violations'][0]}
+        self.case('security-policy', security)
 
     def reduced(self):
         d = self.d

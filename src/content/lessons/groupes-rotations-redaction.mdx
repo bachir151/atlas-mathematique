@@ -1,0 +1,382 @@
+---
+title: "Groupes & rotations du carré"
+heading:
+  lead: "Groupes & rotations"
+  emphasis: "du carré."
+summary: "Tourner un carré, composer des gestes, puis comprendre pourquoi quatre transformations forment un groupe. Une première rencontre avec l’algèbre des symétries."
+domain: "Algèbre"
+number: "01"
+breadcrumb: "Première exploration — brouillon"
+status: "draft"
+companion: true
+sections:
+  - { id: "manipulation", label: "Manipulation" }
+  - { id: "cours", label: "Le cours" }
+  - { id: "demonstration", label: "Démonstration" }
+  - { id: "preuve-integrale", label: "Preuve intégrale" }
+  - { id: "connexions", label: "Connexions" }
+  - { id: "exercices", label: "Exercices" }
+  - { id: "reconstruction", label: "À reconstruire" }
+---
+
+<div id="manipulation"><SquareExperiment /></div>
+
+<CourseSection id="cours" eyebrow="02 / Le cours" title="Quatre transformations, une structure">
+
+**Brouillon soumis à la direction du projet.** Les contenus mathématiques de cette page attendent sa validation.
+
+**Pour commencer :** connaître les sommets et le centre d’un carré, les angles et les quarts de tour suffit pour explorer. Pour lire la preuve intégrale, il faut aussi savoir utiliser un repère orthonormé, le théorème de Pythagore et des inégalités sur des carrés. Les connexions et les deux derniers exercices proposent un approfondissement facultatif.
+
+### S’étonner : le même contour, des sommets déplacés
+
+Partez de la position initiale. Un quart de tour ramène le contour du carré sur lui-même ; pourtant le sommet marqué A a changé de place. Que signifie alors « retrouver le même carré » ?
+
+Nous allons conserver le carré comme figure géométrique, tout en suivant ses points. Les lettres sont des repères pour observer leur déplacement : nous n’exigeons pas que chaque lettre revienne à sa place après chaque rotation.
+
+**Avant de lire la suite**, essayez les actions suivantes dans la manipulation placée en tête de page.
+
+1. Réinitialisez, puis appliquez quatre fois +90°. Comparez les positions initiale et finale de A.
+2. Comparez +90° suivi de +270° avec +180° suivi de +180°.
+3. Cherchez une action qui annule l’effet d’un quart de tour. Une seule pression peut-elle suffire ?
+
+L’historique distingue les gestes effectués ; la position finale peut être la même pour des historiques différents. L’affichage de l’angle ramène les tours complets à 0°. La réinitialisation remet aussi l’historique à zéro : c’est une commande de l’interface, pas une rotation supplémentaire.
+
+<Remark name="Le sens et les repères">
+
+Les angles positifs sont mesurés dans le sens antihoraire, comme dans l’animation. Au départ, A est en haut à gauche, B en haut à droite, C en bas à droite et D en bas à gauche. Un quart de tour positif conduit donc A à l’emplacement initial de D, puis D à celui de C, C à celui de B et B à celui de A. Lorsque nous écrivons $r(A)=D$, nous parlons de ces **positions initiales** ; la lettre mobile A reste attachée au point que l’on suit.
+
+</Remark>
+
+Ces essais suggèrent que quatre transformations suffisent pour décrire toutes les rotations qui superposent le carré à lui-même. La manipulation donne une conjecture ; la preuve devra aussi expliquer pourquoi aucune autre rotation ne convient.
+
+### Nommer les transformations
+
+Nous travaillons dans le plan euclidien. Soit $Q$ un carré plein, de centre $O$ et de côté strictement positif. Une rotation agit sur tous les points du plan, pas seulement sur les sommets.
+
+<Definition number="1" name="Rotation qui conserve le carré" id="definition-rotation">
+
+Une rotation de centre $O$ et d’angle $\theta$ fixe $O$ et fait tourner chaque autre point autour de $O$ de l’angle $\theta$, en conservant sa distance à $O$. Les angles qui diffèrent d’un nombre entier de tours complets décrivent la même transformation.
+
+Nous notons $\operatorname{Rot}(Q)$ l’ensemble des rotations de centre $O$ qui envoient $Q$ exactement sur $Q$. Elles peuvent permuter les sommets. On étudie ici ces rotations, sans inclure les réflexions.
+
+</Definition>
+
+La rotation d’angle 0° est l’**identité**, notée $e$ : elle laisse chaque point à sa place. Notons $r$ le quart de tour positif. La notation $r^2$ signifie « appliquer $r$ deux fois », $r^3$ « trois fois » et $r^0=e$.
+
+<Definition number="2" name="Composition" id="definition-composition">
+
+Pour deux transformations $f$ et $g$, leur composée $f\circ g$ est définie par
+
+$$
+(f\circ g)(P)=f\bigl(g(P)\bigr).
+$$
+
+On applique donc **d’abord $g$, puis $f$**. Les puissances de $r$ sont définies par $r^0=e$ et $r^{k+1}=r\circ r^k$ pour tout entier $k\geq 0$.
+
+</Definition>
+
+<Example name="Additionner les quarts de tour">
+
+Deux quarts de tour successifs donnent un demi-tour : $r\circ r=r^2$. Un quart de tour suivi d’un demi-tour donne trois quarts de tour : $r^2\circ r=r^3$. Quatre quarts de tour laissent **chaque point du plan** à sa place : $r^4=e$.
+
+Ainsi, $r^2\circ r^3=r^5=r$ : cinq quarts de tour ont le même effet final qu’un seul. On compare ici des transformations finales, sans tenir compte du trajet de l’animation ni du nombre de pressions.
+
+</Example>
+
+### La table des compositions
+
+La ligne indique la transformation $f$, la colonne indique $g$ ; la case donne $f\circ g$. On lit donc la colonne en premier.
+
+| $f\circ g$ | $e$ | $r$ | $r^2$ | $r^3$ |
+| --- | --- | --- | --- | --- |
+| $e$ | $e$ | $r$ | $r^2$ | $r^3$ |
+| $r$ | $r$ | $r^2$ | $r^3$ | $e$ |
+| $r^2$ | $r^2$ | $r^3$ | $e$ | $r$ |
+| $r^3$ | $r^3$ | $e$ | $r$ | $r^2$ |
+
+Chaque résultat appartient encore à la liste. L’identité ne change rien ; chaque rotation peut être annulée par une autre de la liste. Ces observations conduisent à la définition suivante.
+
+<Definition number="3" name="Groupe" id="definition-groupe">
+
+Un **groupe** est un ensemble non vide $G$ muni d’une opération $\star$ qui associe à deux éléments de $G$ un élément de $G$ — c’est la **stabilité** — et vérifie :
+
+1. **Associativité.** Pour tous $a,b,c\in G$, $(a\star b)\star c=a\star(b\star c)$.
+2. **Élément neutre.** Il existe $e\in G$ tel que, pour tout $a\in G$, $e\star a=a\star e=a$.
+3. **Inverses.** Pour chaque $a\in G$, il existe $b\in G$ tel que $a\star b=b\star a=e$. Cet élément est appelé l’inverse de $a$ et se note $a^{-1}$.
+
+Le groupe est **commutatif**, ou **abélien**, si $a\star b=b\star a$ pour tous ses éléments. La commutativité n’est pas exigée dans la définition d’un groupe.
+
+</Definition>
+
+L’inverse est bien unique : si $b$ et $c$ sont deux inverses de $a$, alors $b=b\star e=b\star(a\star c)=(b\star a)\star c=e\star c=c$. Dans notre exemple, l’opération $\star$ est la composition $\circ$.
+
+<Theorem kind="Théorème" number="1" name="Le groupe des rotations du carré" id="theoreme-rotations">
+
+Pour un carré $Q$ de centre $O$ et de côté strictement positif, les rotations de centre $O$ qui conservent $Q$ sont exactement
+
+$$
+\operatorname{Rot}(Q)=\{e,r,r^2,r^3\}.
+$$
+
+Ces quatre transformations sont distinctes. Munies de la composition, elles forment un groupe commutatif, **cyclique** : tous ses éléments sont obtenus en répétant une même transformation, ici $r$. Ce groupe est noté $C_4$.
+
+Pour tous entiers $i,j\geq 0$, $r^i\circ r^j=r^{i+j}$ ; on réduit l’exposant au reste de sa division par 4. Les inverses sont
+
+$$
+e^{-1}=e,\qquad r^{-1}=r^3,\qquad (r^2)^{-1}=r^2,\qquad (r^3)^{-1}=r.
+$$
+
+</Theorem>
+
+La démonstration progressive et sa version intégrale figurent juste après cette section. La preuve intégrale est accessible immédiatement par la navigation et reste visible, quel que soit le nombre d’étapes ouvertes.
+
+<Remark name="Associativité et commutativité répondent à deux questions différentes">
+
+L’associativité permet de déplacer les parenthèses dans une suite de compositions, sans changer l’ordre des transformations. La commutativité permet d’échanger deux transformations. Les rotations étudiées ici possèdent les deux propriétés ; d’autres groupes ne possèdent que la première.
+
+</Remark>
+
+<Example name="Les quarts de tour seuls ne suffisent pas">
+
+L’ensemble $\{r,r^3\}$ ne forme pas un groupe pour la composition : $r\circ r=r^2$ n’y appartient pas. Une collection de mouvements ne devient pas un groupe simplement parce que ses éléments sont des rotations.
+
+À l’inverse, $\{e,r^2\}$ forme un groupe : le demi-tour composé avec lui-même vaut $e$, et l’identité ne change aucun élément. L’associativité est celle de la composition. C’est un **sous-groupe**, c’est-à-dire une partie du groupe qui forme elle-même un groupe pour la même opération.
+
+</Example>
+
+</CourseSection>
+
+<Proof eyebrow="03 / Démonstration" title="Pourquoi exactement quatre rotations forment-elles un groupe ?" intro="Nous prouvons le théorème 1 : identifier toutes les rotations possibles, puis vérifier la structure de groupe. Les coordonnées servent uniquement à justifier qu’il n’en manque aucune.">
+
+  <ProofStep title="Un quart de tour conserve bien le carré" open>
+
+Plaçons l’origine en $O$, avec l’axe horizontal vers la droite et l’axe vertical vers le haut. Pour un réel $a>0$, notre carré s’écrit $Q=[-a,a]\times[-a,a]$, avec $A=(-a,a)$, $B=(a,a)$, $C=(a,-a)$ et $D=(-a,-a)$.
+
+Le quart de tour positif est $r(x,y)=(-y,x)$. Il envoie tout point de $Q$ dans $Q$. Son inverse géométrique, le quart de tour négatif $(x,y)\mapsto(y,-x)$, fait de même ; l’image est donc exactement $Q$. L’identité et les répétitions $r^2,r^3$ conservent aussi $Q$, et $r^4=e$.
+
+  </ProofStep>
+
+  <ProofStep title="Aucune cinquième rotation ne convient">
+
+Si une rotation $R$ de centre $O$ conserve $Q$, le point $R(A)$ appartient à $Q$ et vérifie $OR(A)=OA=a\sqrt{2}$. Or, pour $(x,y)\in Q$, on a $x^2+y^2\leq 2a^2$, avec égalité seulement si $|x|=|y|=a$. Les seuls points du carré à cette distance de $O$ sont donc les quatre sommets.
+
+L’image de $A$ est nécessairement $A$, $D$, $C$ ou $B$. Puisque $A\ne O$, son image détermine l’angle de la rotation à un tour complet près. Les quatre possibilités sont respectivement $e,r,r^2,r^3$. Elles sont distinctes, car leurs images de $A$ sont distinctes.
+
+  </ProofStep>
+
+  <ProofStep title="Composer revient à additionner, puis à retirer les tours complets">
+
+Par définition des puissances, composer $i$ quarts de tour et $j$ quarts de tour revient à en effectuer $i+j$. Ainsi $r^i\circ r^j=r^{i+j}$. Si $i+j=4q+s$, avec $q\geq 0$ et $s\in\{0,1,2,3\}$, les $q$ tours complets ne changent aucun point et $r^{i+j}=r^s$.
+
+La composition reste donc dans $\{e,r,r^2,r^3\}$ : c’est la stabilité. Comme $i+j=j+i$, ces transformations commutent.
+
+  </ProofStep>
+
+  <ProofStep title="L’associativité vient de la composition des transformations">
+
+Pour toutes transformations $f,g,h$ et tout point $P$,
+
+$$
+\bigl((f\circ g)\circ h\bigr)(P)=f\bigl(g(h(P))\bigr)=\bigl(f\circ(g\circ h)\bigr)(P).
+$$
+
+Les deux transformations sont égales puisqu’elles ont la même valeur sur chaque point. Cette propriété vaut pour la composition de toutes les applications du plan dans lui-même, indépendamment du carré.
+
+  </ProofStep>
+
+  <ProofStep title="L’identité et les inverses achèvent la preuve">
+
+L’identité $e$ vérifie $e\circ f=f\circ e=f$. L’identité est son propre inverse ; $r$ et $r^3$ s’annulent dans les deux ordres car $r^4=e$ ; $r^2$ s’annule avec lui-même pour la même raison.
+
+L’ensemble est non vide, stable, la composition est associative, et il contient un neutre ainsi que l’inverse de chacun de ses éléments. C’est donc un groupe. Il est commutatif d’après l’étape 3 et cyclique puisque chaque élément est une puissance de $r$. Il contient exactement quatre éléments : c’est $C_4$.
+
+  </ProofStep>
+
+  <FullProof slot="full">
+
+**Preuve intégrale du théorème 1.** Choisissons un repère orthonormé d’origine $O$, avec l’axe horizontal vers la droite et l’axe vertical vers le haut. Il existe $a>0$ tel que $Q=[-a,a]\times[-a,a]$, avec $A=(-a,a)$, $B=(a,a)$, $C=(a,-a)$ et $D=(-a,-a)$.
+
+Le quart de tour positif $r(x,y)=(-y,x)$ envoie $Q$ dans $Q$ ; son inverse géométrique $(x,y)\mapsto(y,-x)$ envoie également $Q$ dans $Q$. Par conséquent $r(Q)=Q$. Les rotations $e,r^2,r^3$ conservent aussi $Q$ et quatre quarts de tour donnent $r^4=e$.
+
+Réciproquement, soit $R$ une rotation de centre $O$ telle que $R(Q)=Q$. Elle conserve les distances à $O$ ; ainsi $R(A)\in Q$ et $OR(A)=OA=a\sqrt{2}$. Tout $(x,y)\in Q$ vérifie $|x|\leq a$ et $|y|\leq a$. L’égalité $x^2+y^2=2a^2$ impose $|x|=|y|=a$ : les seuls points possibles sont les quatre sommets. Une rotation de centre fixé est déterminée par l’image d’un point distinct de ce centre, car l’angle orienté entre le rayon initial et son image détermine son angle modulo un tour complet. Les possibilités $R(A)=A,D,C,B$ donnent respectivement $R=e,r,r^2,r^3$. Ces rotations sont distinctes puisque leurs images de $A$ diffèrent. Nous avons établi $\operatorname{Rot}(Q)=\{e,r,r^2,r^3\}$.
+
+Composer $i$ quarts de tour et $j$ quarts de tour revient à en effectuer $i+j$ : pour tous entiers $i,j\geq 0$, $r^i\circ r^j=r^{i+j}$. En écrivant $i+j=4q+s$, où $s\in\{0,1,2,3\}$, puis en utilisant $r^4=e$, on obtient $r^{i+j}=r^s$. La composition est donc une opération sur cet ensemble non vide. Elle est commutative puisque l’addition des entiers l’est.
+
+Pour toutes transformations $f,g,h$ du plan et tout point $P$, $((f\circ g)\circ h)(P)=f(g(h(P)))=(f\circ(g\circ h))(P)$ ; la composition est associative. L’identité $e$ vérifie $e\circ f=f\circ e=f$. Enfin, $e^{-1}=e$, $r^{-1}=r^3$, $(r^2)^{-1}=r^2$ et $(r^3)^{-1}=r$, car les compositions correspondantes, dans les deux ordres, valent $e$. Tous les axiomes d’un groupe sont satisfaits. Chaque élément étant une puissance de $r$, ce groupe commutatif de quatre éléments est cyclique : c’est $C_4$.
+
+  </FullProof>
+
+</Proof>
+
+<CourseSection id="connexions" eyebrow="04 / Connexions" title="Des rotations au calcul modulo 4">
+
+Cette section est un approfondissement facultatif. Les liens qui suivent sont des **liens mathématiques démontrés**, entre différentes descriptions du même groupe.
+
+### Compter les quarts de tour
+
+Deux nombres entiers de quarts de tour ont le même effet lorsque leur différence est un multiple de 4. On écrit $m\equiv n\pmod 4$ pour signifier que $m-n$ est divisible par 4. Les nombres entiers se répartissent ainsi en quatre **classes**, notées $\overline{0},\overline{1},\overline{2},\overline{3}$. Par exemple, $\overline{5}=\overline{1}$ et $\overline{-1}=\overline{3}$.
+
+L’ensemble de ces classes s’appelle $\mathbb{Z}/4\mathbb{Z}$. On y définit $\overline{m}+\overline{n}=\overline{m+n}$. Cette définition ne dépend pas des représentants choisis : remplacer $m$ par $m+4u$ et $n$ par $n+4v$ change leur somme de $4(u+v)$, un multiple de 4. L’associativité est héritée de l’addition des entiers ; le neutre est $\overline{0}$ et l’inverse de $\overline{m}$ est $\overline{-m}$. C’est donc un groupe commutatif.
+
+<Theorem kind="Proposition" number="2" name="La même structure sous deux écritures" id="isomorphisme-modulo">
+
+L’application
+
+$$
+\varphi:\mathbb{Z}/4\mathbb{Z}\longrightarrow\operatorname{Rot}(Q),
+\qquad \overline{k}\longmapsto r^k\quad (k\in\{0,1,2,3\})
+$$
+
+est un **isomorphisme de groupes** : une correspondance bijective qui respecte les opérations, c’est-à-dire
+
+$$
+\varphi(\overline{i}+\overline{j})=\varphi(\overline{i})\circ\varphi(\overline{j}).
+$$
+
+</Theorem>
+
+**Preuve.** Chaque classe a un unique représentant parmi $0,1,2,3$, donc la définition est sans ambiguïté. Les quatre images sont exactement les quatre rotations distinctes du théorème 1 : $\varphi$ est bijective. Si $s$ est le reste de $i+j$ dans la division par 4, alors $\varphi(\overline{i}+\overline{j})=r^s=r^{i+j}=r^i\circ r^j$. C’est l’égalité annoncée.
+
+Ainsi, composer des rotations et additionner des classes modulo 4 décrivent la même structure algébrique. Il ne s’agit pas seulement d’une ressemblance visuelle avec une horloge.
+
+### Décrire le mouvement par une permutation
+
+Une **permutation** des quatre sommets est une bijection de l’ensemble $\{A,B,C,D\}$ sur lui-même. Le quart de tour agit par
+
+$$
+A\longmapsto D\longmapsto C\longmapsto B\longmapsto A.
+$$
+
+La notation cyclique $(A\ D\ C\ B)$ résume cette permutation. Restreindre chaque rotation aux sommets respecte la composition, car l’image successive de tout sommet est la même qu’on la calcule dans le plan ou dans cet ensemble de quatre points. Cette restriction est injective : les quatre rotations ont déjà des images différentes de A. Les rotations s’identifient donc au sous-groupe de permutations formé par les quatre puissances de ce cycle. Elles ne réalisent pas toutes les permutations : par exemple, échanger seulement A et B en fixant C et D est impossible par une rotation de centre $O$, car toute rotation non identique de notre liste déplace les quatre sommets.
+
+<Remark name="La portée du modèle">
+
+Le carré étudié est une figure euclidienne idéale. Un objet carré matériel peut suggérer cette symétrie ; ses inscriptions ou ses irrégularités peuvent empêcher une superposition exacte. Nous n’inférons ici aucune loi physique de la seule structure de groupe.
+
+</Remark>
+
+</CourseSection>
+
+<CourseSection id="exercices" eyebrow="05 / Exercices" title="Calculer, expliquer, distinguer">
+
+Les exercices 1 à 3 consolident le parcours principal. Les exercices 4 et 5 prolongent la leçon vers les ordres et les sous-groupes, puis vers un groupe non commutatif. Chaque correction peut être ouverte directement.
+
+<Exercise number="1" name="Un historique, une transformation" level="Découverte" id="exercice-historique">
+
+On applique successivement +90°, +180°, puis +270°. Quelle transformation finale obtient-on ? À quel emplacement initial se trouve A ? Donnez une autre suite d’actions qui réalise cette transformation.
+
+<Hint>
+
+Comptez les quarts de tour et retirez les tours complets. Deux quarts de tour conduisent A au sommet opposé.
+
+</Hint>
+
+<Solution>
+
+Les trois actions représentent $1+2+3=6$ quarts de tour. Leur composée, écrite dans l’ordre de composition, est $r^3\circ r^2\circ r=r^6=r^2$. Le sommet marqué A rejoint donc l’emplacement initial de C. Une seule pression sur +180°, ou deux pressions sur +90°, donne la même transformation finale, avec un historique différent.
+
+</Solution>
+
+</Exercise>
+
+<Exercise number="2" name="Annuler une rotation" level="Découverte" id="exercice-inverses">
+
+Pour chacune des transformations $r$, $r^2$ et $r^3$, trouvez celle qui l’annule. Résolvez ensuite $r^2\circ x=r$ parmi les éléments de $\operatorname{Rot}(Q)$.
+
+<Hint>
+
+Deux exposants dont la somme vaut 4 donnent l’identité. Pour l’équation, composez à gauche par l’inverse de $r^2$.
+
+</Hint>
+
+<Solution>
+
+Les inverses sont respectivement $r^3$, $r^2$ et $r$. Si $r^2\circ x=r$, alors, en composant à gauche par $r^2$, on obtient $x=r^2\circ r=r^3$. Réciproquement, $r^2\circ r^3=r^5=r$ : la solution existe. Toute solution devant être égale à $r^3$, elle est unique.
+
+</Solution>
+
+</Exercise>
+
+<Exercise number="3" name="Ce que la manipulation ne prouve pas" level="Raisonnement" id="exercice-exhaustivite">
+
+Une lectrice affirme : « Il y a trois boutons d’angles et la position initiale, donc il n’existe que quatre rotations qui conservent le carré. » Expliquez la lacune. Montrez géométriquement pourquoi une rotation de 45° de centre $O$ ne conserve pas $Q$.
+
+<Hint>
+
+Les commandes proposées ne donnent pas la liste de toutes les rotations possibles du plan. Suivez A en conservant sa distance à $O$.
+
+</Hint>
+
+<Solution>
+
+Le choix des boutons est une décision d’interface : il ne prouve pas qu’un autre angle serait impossible. Il faut démontrer que toute rotation conservant $Q$ envoie A sur l’un des quatre sommets, comme dans le théorème 1.
+
+Avec les coordonnées de la preuve, $A=(-a,a)$ est à la distance $a\sqrt{2}$ du centre. Après une rotation positive de 45°, le rayon $OA$ pointe horizontalement vers la gauche ; son extrémité est $(-a\sqrt{2},0)$. Puisque $\sqrt{2}>1$, ce point est extérieur à $[-a,a]\times[-a,a]$. L’image d’un point de $Q$ sort de $Q$ : cette rotation ne conserve pas le carré.
+
+</Solution>
+
+</Exercise>
+
+<Exercise number="4" name="Ordres, générateurs et sous-groupes" level="Approfondissement — début de licence" id="exercice-sous-groupes">
+
+L’**ordre** d’un élément $g$ est le plus petit entier $n\geq 1$ tel que $g^n=e$, lorsqu’un tel entier existe. Calculez les ordres de $e,r,r^2,r^3$. Quels éléments engendrent tout $\operatorname{Rot}(Q)$ par leurs puissances ? Déterminez ensuite tous ses sous-groupes.
+
+<Hint>
+
+Un sous-groupe contient l’identité et toutes les puissances de chacun de ses éléments. Séparez le cas où il contient $r$ ou $r^3$ de celui où il ne contient ni l’un ni l’autre.
+
+</Hint>
+
+<Solution>
+
+L’ordre de $e$ est 1. Les puissances $r,r^2,r^3$ diffèrent de $e$ et $r^4=e$ : l’ordre de $r$ est 4. Celui de $r^2$ est 2, puisque $r^2\ne e$ et $(r^2)^2=e$.
+
+Les premières puissances de $r^3$ sont $r^3,r^2,r,e$ : son ordre est 4. Les deux générateurs sont donc $r$ et $r^3$. Les puissances de $e$ donnent seulement $e$ ; celles de $r^2$ donnent seulement $e$ et $r^2$.
+
+Tout sous-groupe contient $e$. S’il contient $r$ ou $r^3$, il contient toutes leurs puissances, donc tout le groupe. Sinon, il est contenu dans $\{e,r^2\}$ et vaut $\{e\}$ ou $\{e,r^2\}$. Ces deux ensembles sont bien des sous-groupes : l’identité suffit pour le premier ; pour le second, le demi-tour est son propre inverse et sa composition avec lui-même vaut $e$. L’associativité est héritée de la composition. La liste complète est donc $\{e\}$, $\{e,r^2\}$ et $\operatorname{Rot}(Q)$.
+
+</Solution>
+
+</Exercise>
+
+<Exercise number="5" name="Quand l’ordre des gestes compte" level="Prolongement — géométrie" id="exercice-reflexion">
+
+Ajoutons la réflexion $s$ par rapport à l’axe vertical passant par $O$. Dans le repère de la preuve, $s(x,y)=(-x,y)$. Calculez $s\circ r$ et $r\circ s$. Sont-elles égales ? Que peut-on en déduire pour le groupe de toutes les isométries du plan qui conservent $Q$ ? Une isométrie est ici une bijection du plan qui conserve les distances.
+
+<Hint>
+
+Appliquez d’abord la transformation située à droite. Un seul point dont les deux images diffèrent suffit à distinguer deux transformations.
+
+</Hint>
+
+<Solution>
+
+Pour tout point $(x,y)$, on trouve
+
+$$
+(s\circ r)(x,y)=s(-y,x)=(y,x),\qquad
+(r\circ s)(x,y)=r(-x,y)=(-y,-x).
+$$
+
+Par exemple, $A=(-a,a)$ est envoyé sur $C=(a,-a)$ par $s\circ r$ et sur A par $r\circ s$. Ces deux compositions diffèrent car $a>0$.
+
+Les transformations $s$ et $r$ conservent les distances et le carré. L’ensemble de toutes les isométries qui conservent $Q$ est un groupe : les composées conservent encore distances et carré ; l’identité y appartient ; si $f(Q)=Q$, alors $f^{-1}(Q)=Q$, et son inverse conserve les distances ; enfin la composition est associative. Ce groupe n’est pas commutatif puisque $s\circ r\ne r\circ s$. Il contient des réflexions, qui sont absentes de $\operatorname{Rot}(Q)$. Cet exemple explique pourquoi la commutativité ne fait pas partie des axiomes d’un groupe.
+
+</Solution>
+
+</Exercise>
+
+</CourseSection>
+
+<CourseSection id="reconstruction" eyebrow="06 / Reconstruction" title="Rebâtir l’idée sans la figure">
+
+Fermez les corrections et tentez de reconstruire le raisonnement avec ces quatre questions.
+
+1. Quel ensemble étudions-nous, et quelle est son opération ?
+2. Pourquoi les quatre rotations proposées sont-elles toutes les possibilités ?
+3. Comment justifier la stabilité, l’associativité, le neutre et les inverses ?
+4. Pourquoi deux historiques différents peuvent-ils représenter le même élément du groupe ?
+
+Le fil de la leçon tient dans cette distinction : **un élément du groupe est une transformation ; une suite de gestes est une manière de la réaliser**. Le calcul des puissances décrit leurs compositions. La géométrie garantit que la liste est complète, puis les axiomes précisent la structure que l’on vient de rencontrer.
+
+</CourseSection>

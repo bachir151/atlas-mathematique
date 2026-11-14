@@ -427,9 +427,31 @@ class BrowserChecks:
         self.case('reduced-motion', check)
 
 
+def netlify_headers():
+    """Header rules of netlify.toml, so local tests run under the production headers."""
+    import tomllib
+    path = ROOT / 'netlify.toml'
+    if not path.exists():
+        return []
+    rules = tomllib.loads(path.read_text(encoding='utf-8')).get('headers', [])
+    return [(rule['for'], rule.get('values', {})) for rule in rules]
+
+
+NETLIFY_HEADERS = netlify_headers()
+
+
 class QuietHandler(SimpleHTTPRequestHandler):
     def log_message(self, *_args):
         pass
+
+    def end_headers(self):
+        import fnmatch
+        path = self.path.split('?', 1)[0]
+        for pattern, values in NETLIFY_HEADERS:
+            if fnmatch.fnmatchcase(path, pattern):
+                for name, value in values.items():
+                    self.send_header(name, value)
+        super().end_headers()
 
 
 def free_port():
