@@ -51,7 +51,30 @@ La faille critique d’Astro concerne le traitement d’une image AVIF non fiabl
 
 L’avis KaTeX suppose notamment une pollution préalable de prototype et des expressions contrôlées par un attaquant. Aucune formule non fiable n’est acceptée dans ce prototype ; une version corrigée reste à installer. [Avis officiel KaTeX](https://github.com/KaTeX/KaTeX/security/advisories/GHSA-238p-pmpm-9mq7).
 
-## Proposition de migration — autorisation reçue, installation bloquée
+## Migration réalisée — 14 novembre 2026 (Claude)
+
+**Astro 5.18.2 → 7.4.12, @astrojs/mdx 4.3.14 → 8.1.6, KaTeX 0.16.47 → 0.19.1, `@types/katex` retiré** (KaTeX fournit ses types). TypeScript reste en 5.9.3 (`@astrojs/check` 0.9.12 n’accepte que TypeScript 5 ou 6) ; Three.js reste en 0.180 (pas de migration demandée). Prérequis Node porté à 22.23.4 dans `package.json`.
+
+Méthode : installation et vérifications dans une copie isolée du projet (verrouillage entièrement résolu à neuf), puis bascule de `package.json`, `package-lock.json` et `src/content.config.ts`, et `npm ci` dans le projet. Ancien manifeste conservé : `docs/migration/package.astro5.json` ; ancien verrouillage disponible dans le commit GitHub du 13 novembre.
+
+Seule adaptation de code : `z` importé depuis `astro/zod` au lieu de `astro:content` (déprécié, retiré en Astro 8). Aucune modification de `Formula.astro`, des pages ou des contenus.
+
+| Vérification | Résultat (Node 22.23.4) |
+| --- | --- |
+| `npm audit` en ligne | **0 vulnérabilité** (7 auparavant, dont 1 critique) |
+| `npm run check` | 38 fichiers, 0 erreur, 0 avertissement, 0 indication |
+| `npm test` | 29 tests réussis (5 + 5 + 19) |
+| `npm run build` / `verify:build` | 6 pages, 72 références locales |
+| `npm run test:browser` | 14/14 scénarios Firefox |
+| Texte visible des 6 pages compilées | Identique caractère par caractère, hors blancs : le nouveau compilateur supprime des espaces entre éléments |
+| Captures Firefox avant/après (6 pages × 1280 et 390 px) | **Identiques au pixel près** ; les espaces supprimés n’ont aucun effet visuel |
+| KaTeX 0.19 vs 0.16 (expressions de test hors dépôt) | MathML et HTML produits, mode bloc, `\href` neutralisé avec `trust: false`, erreur levée sur syntaxe invalide : comportement identique |
+| Atlas Three.js dans Firefox | Chargement différé des modules Three.js, contexte WebGL réel, vue 3D affichée, aucune erreur |
+| `astro dev` | Pages servies (HTTP 200) ; refus explicite de démarrer avec Node 22.22.3 |
+
+Non vérifié : GPU matériel réel et mobile réel (Firefox headless utilise un rendu logiciel), lecteur d’écran.
+
+## Historique — proposition de migration (13 novembre 2026)
 
 Objectif : remplacer les versions concernées et refaire les contrôles sans changer les textes scientifiques. La direction a depuis autorisé cette migration et demandé de créer d’abord `JURNAL.md`. Ce journal a été créé, `.nvmrc` indique Node 22.23.4 et le runtime correspondant, déjà installé via nvm, a été vérifié. Le manifeste candidat figure dans `docs/migration/package.candidate.json`.
 

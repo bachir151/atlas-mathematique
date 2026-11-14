@@ -4,7 +4,7 @@ import { resolve } from 'node:path';
 import { JSDOM } from 'jsdom';
 
 const output = resolve('dist');
-const pages = ['index.html', 'atlas/index.html', 'bibliotheque/index.html', 'cours/groupes-rotations/index.html', '404.html'];
+const pages = ['index.html', 'atlas/index.html', 'bibliotheque/index.html', 'cours/groupes-rotations/index.html', 'experiences/p5/index.html', '404.html'];
 let references = 0;
 
 for (const page of pages) {
@@ -46,6 +46,18 @@ for (const page of pages) {
   if (page.startsWith('atlas/')) {
     assert.equal(doc.querySelectorAll('[data-map] [data-node]').length, 5);
     assert.equal(doc.querySelectorAll('.atlas-node-list [data-node]').length, 5);
+  }
+  if (page.startsWith('experiences/p5/')) {
+    assert.equal(doc.querySelectorAll('p5-experience').length, 2, 'Deux instances intégrées depuis MDX');
+    assert.equal(doc.querySelectorAll('[data-p5-play]').length, 2);
+    assert.equal(doc.querySelectorAll('.p5-fallback').length, 2);
+    assert.ok(doc.querySelector('.p5-fallback svg'), 'Alternative statique transmise par le slot MDX');
+    assert.match(doc.querySelectorAll('.p5-fallback')[1].textContent, /propre horloge/);
+    assert.ok([...doc.querySelectorAll('.p5-controls button')].every(button => button.disabled), 'Commandes désactivées avant initialisation JavaScript');
+    assert.equal(doc.querySelector('script[src*="cdn.jsdelivr.net"]'), null, 'Bibliothèque absente du chargement HTML initial');
+  } else {
+    assert.equal(doc.querySelector('p5-experience'), null);
+    assert.ok(![...doc.querySelectorAll('script[src]')].some(script => /P5Experience/i.test(script.src)), 'Contrôleur p5 absent des autres pages');
   }
   console.log(`OK ${page}`);
   dom.window.close();

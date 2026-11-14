@@ -1,0 +1,44 @@
+{
+  "date": "2026-11-14",
+  "scope": "p5",
+  "typecheck": {
+    "errors": 0,
+    "warnings": 0,
+    "hints": 0,
+    "files": 38
+  },
+  "tests": {
+    "existing": 10,
+    "p5": 17,
+    "total": 27
+  },
+  "build": {
+    "pages": 6,
+    "localReferences": 72
+  },
+  "runtime": {
+    "version": "2.4.0",
+    "delivery": "versioned CDN, explicit user action only",
+    "npmDependencyAdded": false,
+    "realCanvasTested": false,
+    "cdnBytesVerified": false
+  },
+  "pedagogicalContentChanged": false,
+  "atlasDataChanged": false,
+  "limitations": [
+    "Terminal npm access fails with EAI_AGAIN",
+    "Real-browser Canvas 2D and screen-reader checks not executed",
+    "CDN runtime has not been executed or checked against SRI in this environment"
+  ],
+  "claude": {
+    "attempts": 2,
+    "technicalReportReceived": false,
+    "lastError": "EAI_AGAIN",
+    "sourcesUnchangedDuringBothCalls": true
+  },
+  "clientBundlesKB": {
+    "controller": 6.45,
+    "technicalSketch": 0.34,
+    "externalRuntimeNotIncluded": true
+  }
+}

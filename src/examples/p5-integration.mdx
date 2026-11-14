@@ -1,0 +1,14 @@
+import P5Experience from '../components/experiences/P5Experience.astro';
+
+<P5Experience id="p5-sage" sketch="technical-bars" title="Instance A" description="Banc de contrôle du rendu : douze barres de couleur. Cette figure technique n’exprime aucun résultat mathématique validé.">
+  <div slot="fallback">
+    <p>Une image statique de douze barres remplace le canevas. Les commandes contrôlent uniquement cette instance.</p>
+    <svg viewBox="0 0 360 150" role="img" aria-label="Douze barres de hauteur variable, représentation statique du banc de rendu">
+      <g fill="#294c3d"><rect x="12" y="96" width="20" height="42"/><rect x="40" y="76" width="20" height="62"/><rect x="68" y="56" width="20" height="82"/><rect x="96" y="36" width="20" height="102"/><rect x="124" y="16" width="20" height="122"/><rect x="152" y="36" width="20" height="102"/><rect x="180" y="56" width="20" height="82"/><rect x="208" y="76" width="20" height="62"/><rect x="236" y="96" width="20" height="42"/><rect x="264" y="116" width="20" height="22"/><rect x="292" y="96" width="20" height="42"/><rect x="320" y="76" width="20" height="62"/></g>
+    </svg>
+  </div>
+</P5Experience>
+
+<P5Experience id="p5-clay" sketch="technical-bars" title="Instance B" tone="clay" description="Deuxième banc de rendu indépendant, avec une autre palette. Il sert à vérifier la coexistence et le nettoyage de plusieurs instances p5.js.">
+  <p slot="fallback">Cette instance possède sa propre horloge et ses propres commandes. Le texte reste disponible lorsque le canevas est arrêté ou inaccessible.</p>
+</P5Experience>

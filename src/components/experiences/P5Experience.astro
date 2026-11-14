@@ -1,0 +1,39 @@
+---
+import { getExperience, type ExperienceId } from '../../experiences/p5/registry';
+import { canEmbed } from '../../experiences/p5/model';
+import '../../styles/p5-experience.css';
+
+interface Props {
+  id: string;
+  sketch: ExperienceId;
+  title: string;
+  description: string;
+  tone?: 'sage' | 'clay';
+}
+const { id, sketch, title, description, tone = 'sage' } = Astro.props;
+if (!/^[a-zA-Z][\w-]*$/.test(id)) throw new Error('Identifiant d’expérience p5 invalide');
+if (!description?.trim()) throw new Error('Description textuelle de l’expérience obligatoire');
+const definition = getExperience(sketch);
+if (!definition) throw new Error(`Expérience p5 inconnue : ${sketch}`);
+const allowed = canEmbed(definition.approval, import.meta.env.DEV);
+---
+{allowed ? (
+  <p5-experience class="p5-experience panel" role="group" data-p5-sketch={sketch} data-p5-tone={tone} aria-labelledby={`${id}-title`} aria-describedby={`${id}-description`}>
+    <div class="panel-heading"><h2 id={`${id}-title`}>{title}</h2><span class="badge">{definition.approval.kind === 'technical' ? 'Prototype technique' : definition.approval.status === 'validated' ? 'Contenu validé' : 'Prévisualisation non validée'}</span></div>
+    <p id={`${id}-description`} class="p5-description">{description}</p>
+    <div class="p5-canvas-host" data-p5-canvas id={`${id}-canvas`}></div>
+    <div class="p5-controls" role="group" aria-label={`Commandes : ${title}`}>
+      <button type="button" class="button primary" data-p5-play aria-controls={`${id}-canvas`} aria-pressed="false" disabled>Charger l’expérience</button>
+      <button type="button" class="button secondary" data-p5-step aria-controls={`${id}-canvas`} disabled>Avancer d’une image</button>
+      <button type="button" class="button secondary" data-p5-stop aria-controls={`${id}-canvas`} disabled>Arrêter et libérer</button>
+    </div>
+    <p class="p5-status" data-p5-status role="status" aria-live="polite" aria-atomic="true">L’expérience nécessite JavaScript. Le contenu de remplacement reste disponible.</p>
+    <div class="p5-fallback"><slot name="fallback"><p>Consultez la description textuelle ci-dessus. Aucun canevas n’est nécessaire pour la lire.</p></slot></div>
+  </p5-experience>
+) : (
+  <section class="panel" aria-labelledby={`${id}-title`}><h2 id={`${id}-title`}>{title}</h2><p>Cette expérience attend sa validation pédagogique et n’est pas publiée.</p></section>
+)}
+<script>
+  import { registerP5Experiences } from '../../scripts/p5-experience';
+  registerP5Experiences();
+</script>

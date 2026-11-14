@@ -4,8 +4,7 @@ import mdx from '@astrojs/mdx';
 export default defineConfig({
   output: 'static',
   integrations: [mdx()],
-  // This prototype uses local SVG only. Disable Sharp image decoding while the
-  // dependency migration is pending; this does not remove npm advisories.
+  // This prototype uses local SVG only: no image transformation service is needed.
   image: { service: { entrypoint: 'astro/assets/services/noop' } },
   devToolbar: { enabled: false },
 });

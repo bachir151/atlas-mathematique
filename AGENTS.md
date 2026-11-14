@@ -10,29 +10,34 @@ Construire une plateforme pédagogique immersive autour des mathématiques : acc
 
 ## Gouvernance et rôles
 - **Utilisateur — direction du projet :** décide des orientations et autorise explicitement créations, modifications, commandes ayant un effet sur les fichiers, commits et publications.
-- **ChatGPT — responsabilité scientifique et pédagogique :** conçoit les leçons, définitions, théorèmes, démonstrations, exercices et connexions interdisciplinaires ; propose les textes à valider par l'utilisateur.
-- **Codex — développeur principal :** conçoit l'architecture technique et implémente le site, les composants et les expériences avec les contenus validés ; teste et documente les choix techniques.
-- **Claude — relecteur technique et design :** observe le dépôt et produit des audits et recommandations ; ne modifie aucun fichier, ne rédige ni ne réécrit les contenus des cours.
+- **Claude — développeur :** conçoit l'architecture technique, écrit et maintient le code, développe les interfaces et les expériences, intègre les contenus fournis par Codex, exécute les tests et corrige les bugs dans le périmètre autorisé.
+- **Codex — rédacteur des contenus mathématiques :** conçoit la progression pédagogique et rédige les leçons, définitions, énoncés, démonstrations, exercices, corrections et connexions interdisciplinaires à soumettre à l'utilisateur.
+
+Cette répartition remplace les rôles précédents. Aucun rôle de relecteur, aucun audit ni contre-audit entre agents n'est prévu. Claude développe ; Codex rédige les contenus mathématiques.
 
 ## Règle d'autorisation (prioritaire)
-1. **Avant toute création, modification, suppression ou renommage de fichier dans le projet, demander une autorisation explicite de l'utilisateur.** Une demande d'analyse, d'audit ou de proposition ne vaut pas autorisation de modifier.
+1. **Avant toute création, modification, suppression ou renommage de fichier dans le projet, disposer d'une autorisation explicite de l'utilisateur dans le périmètre concerné.** Une demande d'analyse ou de proposition ne vaut pas autorisation de modifier. Ne pas redemander un accord déjà donné pour ce périmètre.
 2. Avant un commit, push, ouverture de PR, déploiement ou publication, obtenir une autorisation explicite distincte précisant l'action et la cible.
 3. Ne pas modifier un autre dépôt, notamment Bash World ou Encyclop-dia, sans autorisation explicite.
 4. Tant qu'aucune autorisation d'écriture n'est donnée : privilégier lecture, inventaire, analyse, plan et propositions dans la conversation. Ne pas lancer d'outils qui génèrent ou formatent des fichiers.
 5. Une autorisation est limitée à son périmètre annoncé. En cas de doute, présenter le changement envisagé et demander une décision.
 
-## Frontière scientifique : contenu verrouillé
-Sont des **contenus pédagogiques réservés à ChatGPT et à la validation de l'utilisateur** : définitions, énoncés, démonstrations, exercices, corrections, interprétations historiques ou philosophiques, exemples mathématiques et textes explicatifs.
+## Contenus mathématiques et intégration
+La **rédaction des contenus mathématiques et pédagogiques appartient à Codex** : définitions, énoncés, démonstrations, exercices, corrections, interprétations historiques ou philosophiques, exemples mathématiques et textes explicatifs. L'utilisateur décide de leur validation.
 
 Codex doit :
-- intégrer fidèlement les contenus validés, sans les reformuler ni les compléter de son initiative ;
-- travailler librement sur la **présentation et le code** dans le périmètre autorisé ;
-- ne jamais inventer de preuve, de référence ou de lien scientifique ;
-- signaler les erreurs mathématiques ou contradictions apparentes avec la référence exacte, **sans les corriger silencieusement** ;
-- demander un arbitrage si une contrainte technique nécessite de toucher au sens d'un cours ;
-- séparer le contenu des leçons des composants de rendu afin de permettre un changement de thème ou de moteur graphique.
+- rédiger des contenus rigoureux, avec des hypothèses explicites, des démonstrations complètes et des références vérifiables lorsqu'elles sont nécessaires ;
+- distinguer les brouillons des contenus validés par l'utilisateur, sans présenter une rédaction nouvelle comme déjà validée ;
+- préparer les contenus et les objectifs des expériences pour leur intégration par Claude ;
+- signaler toute modification proposée d'un contenu déjà validé avant de la soumettre à l'utilisateur ;
+- se consacrer à la rédaction mathématique et pédagogique, sans prendre en charge le développement technique ni la relecture du code.
 
-Les libellés de navigation et les messages purement techniques d'interface peuvent être proposés par Codex ; tout texte explicatif de nature mathématique ou pédagogique doit être validé par ChatGPT et l'utilisateur.
+Claude doit :
+- intégrer fidèlement les contenus fournis par Codex et validés par l'utilisateur, sans en modifier le sens ni compléter les passages manquants ;
+- utiliser des emplacements provisoires explicites lorsque les contenus manquent ;
+- transmettre à Codex toute question mathématique qui bloque l'implémentation ;
+- séparer les contenus des composants de rendu ;
+- prendre en charge le code, la présentation, les libellés techniques, les tests et les corrections techniques autorisés.
 
 ## Principes pédagogiques et expérience utilisateur
 - Accès intuitif pour les curieux ; approfondissements progressifs jusqu'au niveau universitaire et au-delà.
@@ -46,6 +51,8 @@ Les libellés de navigation et les messages purement techniques d'interface peuv
 ## Architecture cible (à proposer, non imposée)
 - Astro + TypeScript, contenu MDX, KaTeX pour les formules.
 - Three.js pour Atlas 3D et expériences spatiales ; 2D lorsque plus lisible.
+- p5.js en mode instance pour les expériences 2D, pavages, fractales, systèmes dynamiques et art génératif ; calculs séparés du rendu, chargement à la demande, pause et destruction propres.
+- Expériences mathématiques p5.js soumises à validation pédagogique avant publication, comme les autres contenus scientifiques.
 - CSS avec tokens de design/thèmes interchangeables.
 - Données du graphe découplées du rendu Three.js.
 - Hébergement statique envisageable sur Cloudflare Pages, **sans déploiement automatique**.
@@ -58,16 +65,14 @@ Les libellés de navigation et les messages purement techniques d'interface peuv
 - Ne jamais exposer de clés API côté client ; tout appel futur à un modèle externe devra transiter par un mécanisme sécurisé et être autorisé.
 - Éviter les dépendances inutiles et les ajouts hors périmètre.
 
-## Collaboration avec Claude
-Quand un audit est fourni :
-1. Classer les remarques par gravité : critique, importante, mineure.
-2. Distinguer les corrections purement techniques des suggestions touchant au sens pédagogique.
-3. Proposer un plan de correction et demander l'autorisation de le mettre en œuvre.
-4. Codex est le seul agent de développement chargé de réaliser les corrections techniques autorisées.
-5. Une recommandation de Claude n'est pas automatiquement une instruction à exécuter.
+## Organisation du travail
+- L'utilisateur confie les tâches de développement à Claude et les tâches de rédaction mathématique à Codex.
+- Codex fournit les textes et les objectifs pédagogiques ; Claude les intègre après validation de l'utilisateur.
+- Les anciens cycles de relecture, d'audit et de contre-audit sont abandonnés. Ne pas lancer l'ancien script d'audit Claude dans ce fonctionnement.
+- Les tests techniques font partie du travail de développement de Claude.
 
 ## Format attendu avant implémentation
 Présenter : objectif, fichiers concernés, comportement attendu, risques, stratégie de tests et éventuelles questions nécessitant un arbitrage. Attendre le feu vert explicite avant toute écriture.
 
 ## Format attendu après implémentation autorisée
-Fournir : fichiers effectivement modifiés, décisions techniques, tests exécutés et résultats, limites connues, modifications éventuelles du contenu (normalement aucune), puis demander une validation séparée avant commit/publication.
+Claude indique les fichiers modifiés, les décisions techniques, les tests et leurs résultats, ainsi que les limites connues. Codex indique les contenus rédigés, leur statut de validation et les questions scientifiques à trancher par l'utilisateur. Toute opération de commit ou publication requiert un accord distinct.

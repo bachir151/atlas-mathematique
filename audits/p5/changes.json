@@ -1,0 +1,115 @@
+{
+  "comparison": "Snapshot sent to GitHub on 2026-11-13",
+  "files": [
+    {
+      "path": "AGENTS.md",
+      "kind": "modified",
+      "sha256": "8716184ecfc5905d35cfcc88ce9b237bf2a44a3feaba556a12ad3c309e90c3f2"
+    },
+    {
+      "path": "JURNAL.md",
+      "kind": "modified",
+      "sha256": "16850ec6958be3254b189b56af3325c614e830282925da4aca1dd292b2ab3677"
+    },
+    {
+      "path": "README.md",
+      "kind": "modified",
+      "sha256": "a9d0615c35b9dfb93a2740c60a96d11b2f5b1da19fc76266e8f5b558a8cfda50"
+    },
+    {
+      "path": "package.json",
+      "kind": "modified",
+      "sha256": "764b1940b8b40da9b746c240b32d5493ba4f987588f82320e1427f49cabc7dda"
+    },
+    {
+      "path": "src/scripts/p5-experience.ts",
+      "kind": "added",
+      "sha256": "1dfaf26d5b8c3a0106a44cea718a0d422c9ffb76d023d48f4e90df1ac3342fc1"
+    },
+    {
+      "path": "src/examples/p5-integration.mdx",
+      "kind": "added",
+      "sha256": "bb415e3ab4106407e784f57a0e2fdc37596459be8c0aa41a6876112917581c94"
+    },
+    {
+      "path": "src/styles/p5-experience.css",
+      "kind": "added",
+      "sha256": "a5f6a84ed6555757c488b464fa5179106fdfab4367bab6f564625617105573da"
+    },
+    {
+      "path": "src/experiences/p5/model.ts",
+      "kind": "added",
+      "sha256": "5d9a9c4183dc7610c026ca5c67d497d0cc1c0ebe17552858448a58d58125fe52"
+    },
+    {
+      "path": "src/experiences/p5/registry.ts",
+      "kind": "added",
+      "sha256": "5f36f69847c11955075d32dc1b5c8ee2ac66247e7c72d4cf497bac4d2ee31b49"
+    },
+    {
+      "path": "src/experiences/p5/types.ts",
+      "kind": "added",
+      "sha256": "e8de5f17f161c6836f4a32412820af2e4c3241267e1f2430da74f112318fda5f"
+    },
+    {
+      "path": "src/experiences/p5/instance.ts",
+      "kind": "added",
+      "sha256": "a5f25d2ce6e2df34e0f7cf3e18b575c9e1cf0e6bf50699a3842a44b7a364e3a1"
+    },
+    {
+      "path": "src/experiences/p5/runtime.ts",
+      "kind": "added",
+      "sha256": "47a8fff8f92c83ee2933365cf0039bcd589d22c2a6a2acdbe05340b90d84c1a6"
+    },
+    {
+      "path": "src/experiences/p5/sketches/technical-bars.ts",
+      "kind": "added",
+      "sha256": "ef8296eb9529074ff5444becc027d20b009125533cf52c7c3ae4527940c4b8ea"
+    },
+    {
+      "path": "src/pages/experiences/p5.astro",
+      "kind": "added",
+      "sha256": "5606fbfb070c95544876a4389e230a52e4d569104db32b9c8cddeb252bc8475b"
+    },
+    {
+      "path": "src/components/experiences/P5Experience.astro",
+      "kind": "added",
+      "sha256": "2f18438e5f15989845083e61292aaf82165323a2f52522f83727e72d09c58445"
+    },
+    {
+      "path": "tests/p5.test.mjs",
+      "kind": "added",
+      "sha256": "1fa086b76ec158d864d114cc61c4acafca00c745ccbb153a238a7110f9a17e0d"
+    },
+    {
+      "path": "scripts/check-build.mjs",
+      "kind": "modified",
+      "sha256": "3216f929db590641954105fcbd4d25ec795528ead6eb720839ebe5921e451795"
+    },
+    {
+      "path": "scripts/audit_claude.py",
+      "kind": "modified",
+      "sha256": "22d2616c590a8672d2b0ff17620f31dc2c0b446abdd80c8092ea65f907cc5186"
+    },
+    {
+      "path": "docs/P5.md",
+      "kind": "added",
+      "sha256": "8e57cba97a1a1ef00105c74acb27d5f31c95b0934fd45fa49c4d0a53868ba944"
+    }
+  ],
+  "unchangedProtectedOrEngineFiles": [
+    "src/scripts/atlas.ts",
+    "src/lib/three-primitives.ts",
+    "src/components/Atlas.astro",
+    "src/content/lessons/groupes-rotations.mdx",
+    "src/data/proof.ts",
+    "src/data/atlas.ts",
+    "src/data/catalog.ts",
+    "package-lock.json"
+  ],
+  "documentationUpdatedAfterLastAuditAttempt": [
+    "JURNAL.md",
+    "README.md",
+    "docs/P5.md"
+  ]
+}

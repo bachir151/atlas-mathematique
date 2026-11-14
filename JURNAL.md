@@ -1,8 +1,16 @@
 # JURNAL — mémoire de continuité du projet
 
-Dernière mise à jour : 13 novembre 2026, Europe/Paris.
+Dernière mise à jour : 14 novembre 2026, 17:25 Europe/Paris (Claude).
 
 Ce fichier conserve l’état opérationnel de **L’Atelier des abstractions** entre deux sessions. Il ne remplace ni les consignes de gouvernance ni les autorisations de la direction du projet. Distinguer les travaux terminés, les travaux en cours et les vérifications impossibles ; ne jamais transformer une intention en résultat acquis.
+
+## Répartition actuelle — décision du 14 novembre 2026
+
+- **Claude développe le site** : code, architecture, interfaces, intégration des contenus et tests techniques.
+- **Codex rédige les contenus mathématiques et pédagogiques** à soumettre à l’utilisateur.
+- **L’utilisateur dirige le projet**, autorise les actions et décide de la validation des contenus et des publications.
+
+**Aucune relecture ni aucun audit ou contre-audit entre agents.** Les anciennes obligations d’audit sont abandonnées. Les passages ci-dessous relatant Codex développeur, ChatGPT responsable scientifique ou Claude relecteur décrivent uniquement le fonctionnement antérieur. Les consignes actuelles sont dans `AGENTS.md` et `CLAUDE.md`. Le développement restant revient à Claude ; la présente mise à jour des instructions par Codex est explicitement demandée par l’utilisateur et n’engage aucune nouvelle modification de code ou de cours.
 
 ## Reprise rapide
 
@@ -12,9 +20,44 @@ Ce fichier conserve l’état opérationnel de **L’Atelier des abstractions** 
 4. Préserver les contenus pédagogiques et les rapports historiques. Ne pas écraser les deux rapports Claude existants.
 5. Mettre à jour ce journal après chaque étape significative et avant la fin de session : fichiers changés, commandes et résultats, blocages, prochaine action concrète.
 
-## Tâche en cours
+## Tests navigateur p5 — résolu le 14 novembre 2026, 17:15
 
-**SAUVEGARDE GITHUB EFFECTUÉE — Sources vérifiées sur `bachir151/atlas-mathematique`, branche `main`. EN COURS — Migration de sécurité autorisée, préparée mais bloquée par npm.**
+**14 scénarios sur 14 réussis dans Firefox 152.0.1 headless, deux passages consécutifs, code de sortie 0.** Exécution par Claude (terminal autorisant loopback, Firefox Snap et CDN). Rapport : `test-results/browser/report.json` ; captures `desktop.png`, `narrow.png`, `reduced.png`.
+
+- Passage intermédiaire de 16:57 : sept succès (dont `offscreen-pause`, correction de défilement validée), échec `keyboard` sans message. Archivé dans `test-results/browser/history/20261114T155702Z/`.
+- **Cause de l’échec clavier (diagnostiquée dans Firefox) :** le bouton principal recevait `disabled` pendant le chargement, ce qui renvoyait le focus à `<body>`. Le test refaisait alors le tour de la page par Tab, sortait vers l’interface du navigateur (`document.hasFocus() === false`) et Entrée n’activait plus le bouton. Même perte de focus après « Arrêter et libérer ». **Défaut réel d’accessibilité du composant**, pas seulement du test.
+- **Correction composant (`src/scripts/p5-experience.ts`) :** commandes indisponibles en `aria-disabled="true"`, toujours focalisables ; gestionnaires protégés. `disabled` reste dans le HTML initial (état sans JavaScript, vérifié par `verify:build`). Styles atténués et survol neutralisé dans `src/styles/global.css`.
+- **Second défaut révélé par `page-errors` :** `ResizeObserver loop completed with undelivered notifications`, car le canevas était redimensionné dans le callback observant son conteneur. Correction : seuls les changements de largeur, traités à la frame suivante, frame annulée au démontage.
+- **Runner (`tests/browser_p5.py`) :** disponibilité via `aria-disabled`, maintien du focus exigé, arrêt explicite si la tabulation quitte le document, messages sur les assertions muettes, stabilisation de 0,15 s après `noLoop()` dans `offscreen-pause` (mesure stricte ensuite ; 0 image observée pendant la stabilisation).
+- **Tests unitaires :** deux nouveaux tests p5 (focus/activation des commandes indisponibles ; hauteur seule ignorée et frame annulée), assertions adaptées. Aucun cours, moteur p5, Three.js ou contenu scientifique modifié.
+- **Reste hors de cette suite :** téléphone réel, lecteur d’écran, mesure mémoire.
+- **Note d’environnement :** geckodriver Snap ne peut pas écrire dans `/tmp` ; utiliser un dossier sous le projet (le runner utilise `test-results/browser/profiles`).
+
+## État technique à reprendre par Claude
+
+**Étape 1 terminée par Claude le 14 novembre à 17:15 : 14/14 scénarios Firefox réussis (voir section précédente). Migration Astro 7 / MDX 8 / KaTeX 0.19 également terminée à 17:25 (voir « Migration autorisée »). Le texte ci-dessous est l’historique de l’étape 1.**
+
+La direction autorise l’étape 1 (tests navigateur) et permet d’arrêter Claude sans attendre un rapport indéfiniment. Les nouveaux fichiers sont `tests/browser_p5.py` et `docs/TESTS-NAVIGATEUR.md`, avec la commande `npm run test:browser`. Elle compile puis utilise Firefox et geckodriver via WebDriver standard, sans Selenium supplémentaire et sans désactiver les protections du navigateur.
+
+Historique des tentatives dans le terminal Codex : serveur Astro sur `127.0.0.1:4325` refusé (`EPERM`), connexion au serveur utilisateur sur `4321` refusée, geckodriver refusé à l’ouverture de son port, Firefox headless avec profil temporaire arrêté avec code `-11` sans capture, CDN en échec DNS. Le diagnostic initial est conservé dans `audits/p5/browser-environment.json` et ne décrit pas le passage Firefox réussi partiellement à 16:50, désormais archivé. La relance Codex après correction renvoie encore `2` avant les scénarios ; distinguer ces exécutions.
+
+Après correction, la syntaxe Python et celle des 41 fragments JavaScript WebDriver ont été vérifiées. Cela ne vaut pas validation de la correction dans Firefox. La prochaine action reste une relance dans le terminal autorisant le navigateur et les ports locaux, puis l’analyse des résultats et captures.
+
+Ancienne politique d’audit, désormais abandonnée : délai de 60 secondes par défaut, arrêt de l’appel sans rapport à expiration. Les tentatives passées restent documentées ; cette politique ne s’applique pas au nouveau rôle de développeur de Claude.
+
+Demande suivante de la direction : « Demande à claude de chercher le bug ». Claude Code 2.1.322 est installé et son état d’authentification indique `loggedIn: true`. Un nouvel appel ciblé sur les blocages navigateur et les sources du runner/p5 a été lancé, tous outils désactivés, sans MCP, hooks ni persistance de session. Aucun rapport ni diagnostic API reçu en 60 secondes ; processus arrêté (code 143), empreintes des sources identiques avant/après. Diagnostic brut temporaire : `/tmp/atelier-claude-diagnostic-r6cgwibx.json` (à ne pas supposer conservé entre sessions). Un contrôle Python indépendant du projet échoue dès la création d’une socket TCP IPv4 et IPv6 avec `PermissionError`, errno 1 : le refus réseau existe sans Astro ni WebDriver. Cela explique le blocage du serveur local ; la cause précise du plantage Firefox reste indéterminée. Aucun défaut du code du site démontré et aucune correction appliquée dans cette recherche.
+
+La demande initiale du 14 novembre autorisait l’ajout technique de p5.js, des composants Astro/MDX réutilisables, du mode instance, du chargement différé et de la gestion complète des animations. Elle prévoyait alors un cycle d’audit Claude en lecture seule dans `audits/p5/`, désormais abandonné. Elle n’autorisait pas de publication d’expérience mathématique ni de nouvel envoi GitHub.
+
+Implémentation locale actuelle : `P5Experience.astro`, contrôleur `p5-experience.ts`, modules `src/experiences/p5/`, exemple MDX et page `/experiences/p5/`, tests `tests/p5.test.mjs` et documentation `docs/P5.md`. Three.js et les contenus des cours sont conservés. Le banc de rendu de barres colorées est purement technique, sans interprétation pédagogique validée. Les expériences mathématiques en attente ne peuvent pas être affichées comme widgets interactifs en compilation de production ; une référence de validation est requise pour les autoriser.
+
+L’accès npm reste bloqué (`EAI_AGAIN`). p5.js 2.4.0 est donc chargé par un script CDN versionné indiqué dans la documentation officielle, après action explicite, sans nouvelle dépendance npm ni verrouillage partiel. Le constructeur de bibliothèque est partagé, mais les sketches utilisent des instances et horloges séparées. La configuration `P5_RUNTIME.url` permet un futur auto-hébergement. Ce choix exige un accès réseau du navigateur et n’utilise pas d’empreinte SRI vérifiée ; sa maintenance relève désormais de Claude développeur. Le véritable moteur p5 n’a pas été exécuté dans un navigateur depuis ce terminal.
+
+Contrôles déjà obtenus à cette étape : 27 tests (5 données, 5 DOM antérieurs, 17 p5), typage sans erreur, six pages compilées et 72 références locales vérifiées. Le contrôle de build vérifie aussi les deux composants MDX, leurs slots de remplacement et l’absence de chargement initial de p5. Les tests p5 emploient un double de l’API pour le cycle de vie ; ils ne certifient pas la bibliothèque CDN. L’arrêt pendant le setup asynchrone a été renforcé après lecture du code officiel p5 2.4 ; attendre ce setup avant `remove()` évite le nettoyage prématuré de l’instance.
+
+Deux essais Claude ciblés p5 ont été effectués : premier délai atteint à 120 secondes, second essai avec sources ciblées renvoyant une erreur API `EAI_AGAIN`. Aucun rapport technique obtenu. Les sources avant/après sont identiques dans les deux appels. Diagnostics : `audits/p5/claude-1.md`, `claude-2.md` et empreintes associées. Les corrections de cycle de vie viennent de Codex sous l’ancienne répartition. Conserver ces traces historiques ; aucun nouvel audit n’est demandé.
+
+La sauvegarde GitHub vérifiée ci-dessous concerne l’état du **13 novembre**. Les nouvelles modifications p5 sont locales tant qu’un nouvel envoi n’est pas demandé. **Travail restant pour Claude : terminer les vérifications navigateur et le développement autorisé. Les futurs contenus mathématiques seront rédigés par Codex, puis soumis à l’utilisateur avant leur intégration.**
 
 La direction a autorisé explicitement le commit puis le push et fourni la destination `https://github.com/bachir151/atlas-mathematique.git`. Le dépôt distant, public et initialement vide, a été initialisé puis a reçu les sources sur `main` via les opérations Git du connecteur. Le commit de sources vérifié est `c355f625f1cd9ece6fc55993aff7ee7ab3b8a458` : les 60 fichiers transférés ont été comparés aux fichiers locaux par leurs empreintes Git, puis la référence distante `main` a été vérifiée. Le dossier `.git` exposé localement reste vide et ne représente pas cette sauvegarde distante ; utiliser le connecteur ou un clone autorisé pour vérifier l’historique. Aucun déploiement du site n’a été effectué.
 
@@ -24,16 +67,16 @@ Historique du blocage de création : le connecteur ne permettait pas de créer l
 
 Autorisation de migration reçue précédemment : création préalable de `JURNAL.md` pour conserver ce qui est fait et ce qui reste à faire entre les sessions, puis migration technique proposée.
 
-La création de ce journal a été la première modification de cette étape. **La migration n’est toujours pas appliquée** : le projet utilise encore Astro 5 et l’installation existante compile correctement. Node 22.23.4 a été trouvé dans `/home/elbash/.nvm/versions/node/v22.23.4/bin/node`, `.nvmrc` a été créé et le manifeste candidat est conservé dans `docs/migration/package.candidate.json`.
+La création de ce journal a été la première modification de cette étape. **Mise à jour du 14 novembre, 17:25 : la migration est appliquée par Claude** (Astro 7.4.12, MDX 8.1.6, KaTeX 0.19.1, 0 vulnérabilité). Le texte qui suit retrace les tentatives bloquées antérieures. Node 22.23.4 a été trouvé dans `/home/elbash/.nvm/versions/node/v22.23.4/bin/node`, `.nvmrc` a été créé et le manifeste candidat est conservé dans `docs/migration/package.candidate.json`.
 
 La préparation isolée dans `/tmp/atelier-migration-0bjT5p` échoue même avec les caches disponibles regroupés : `ENOTCACHED` pour `@astrojs/markdown-satteri`. L’accès npm en ligne échoue avec `EAI_AGAIN`. Le manifeste et le verrouillage du projet fonctionnel sont conservés. **Prochaine action : vérifier si l’accès npm a été rétabli, puis installer et valider le candidat dans un emplacement isolé avant de basculer le projet.** Le chemin temporaire doit être recréé s’il n’existe plus.
 
 ## Gouvernance et autorisations actives
 
 - **Direction du projet : utilisateur.** Valide les orientations et les changements importants ; décide des publications.
-- **ChatGPT : responsabilité scientifique et pédagogique.** Les définitions, énoncés, preuves, exemples, exercices et connexions scientifiques doivent être fournis et validés avant intégration.
-- **Codex : développement et coordination techniques.** Implémente et teste dans le périmètre autorisé, sans inventer ni réécrire les contenus mathématiques.
-- **Claude : relecture technique et design uniquement.** Aucun outil d’édition, d’exécution de commandes ou de publication ; aucune modification de fichier.
+- **Claude : développeur.** Implémente, maintient, intègre les contenus et teste dans le périmètre autorisé.
+- **Codex : rédacteur mathématique et pédagogique.** Rédige les cours et leurs contenus à soumettre à l’utilisateur, sans rôle de développeur ou de relecteur du code.
+- **Organisation :** aucun rôle de relecteur et aucun cycle d’audit ou de contre-audit entre agents.
 
 Autorisations reçues dans cette conversation :
 
@@ -42,12 +85,15 @@ Autorisations reçues dans cette conversation :
 | Créer et modifier les fichiers de la première version | Autorisé dans `/home/elbash/atlas-mathematique` uniquement |
 | Installer les dépendances, exécuter les tests et corriger les bugs techniques locaux | Autorisé pour cette mission |
 | Créer et tenir ce `JURNAL.md` | Explicitement demandé ; priorité avant migration |
-| Migration Astro 7 / MDX 8 / KaTeX récent, prérequis Node 22.23.4 minimum | Explicitement autorisée dans le dernier message |
+| Changer les instructions du projet | Explicitement demandé : Claude développeur, Codex rédacteur mathématique, suppression de la relecture et des audits entre agents |
+| Migration Astro 7 / MDX 8 / KaTeX récent, prérequis Node 22.23.4 minimum | Autorisée ; réalisée et vérifiée le 14 novembre (Claude) |
+| Intégration p5.js et tests locaux | Explicitement demandés le 14 novembre ; implémentation technique dans ce dossier |
+| Étape 1 : vérifications dans un vrai navigateur | Explicitement autorisée ; terminée le 14 novembre, 14/14 scénarios réussis après corrections du composant et du runner |
 | Modifier des textes mathématiques validés | Non autorisé ; signaler toute incohérence et demander validation scientifique |
 | Modifier d’autres dépôts, notamment Bash World ou Encyclop-dia | Non autorisé |
 | Commit puis push de la version actuelle du projet | Explicitement autorisés et réalisés vers `bachir151/atlas-mathematique`, branche `main` ; mise à jour documentaire de cette sauvegarde incluse |
 | Ouverture de PR, déploiement, publication du site | Non autorisés ; accord distinct nécessaire |
-| Audit Claude | Deux tentatives initiales maximum, déjà utilisées ; aucun nouveau cycle autorisé à ce stade |
+| Anciens audits Claude | Abandonnés par la nouvelle gouvernance ; conserver les rapports historiques sans relancer d’audit |
 
 La migration proposée prévoyait un fichier `.nvmrc` dans le projet, **sans modifier le Node système ni un autre dépôt**. Si un runtime de test plus récent est nécessaire, privilégier un emplacement local autorisé et consigner son chemin. Ne pas contourner les restrictions du sandbox.
 
@@ -68,7 +114,7 @@ La migration proposée prévoyait un fichier `.nvmrc` dans le projet, **sans mod
 
 | Fichier / dossier | Rôle |
 | --- | --- |
-| `AGENTS.md`, `CLAUDE.md` | Gouvernance ; une section de continuité pointant vers ce journal a été ajoutée à `AGENTS.md`, les rôles et autorisations restent inchangés ; `CLAUDE.md` reste inchangé |
+| `AGENTS.md`, `CLAUDE.md` | Gouvernance actuelle : Claude développeur et Codex rédacteur mathématique, sans rôle de relecteur ni audit entre agents |
 | `src/pages/`, `src/layouts/`, `src/components/` | Pages, structure et composants Astro |
 | `src/scripts/atlas.ts`, `square.ts`, `proof.ts`, `companion.ts` | Contrôleurs des interactions |
 | `src/content.config.ts` | Collection MDX explicite et schéma de métadonnées |
@@ -80,7 +126,7 @@ La migration proposée prévoyait un fichier `.nvmrc` dans le projet, **sans mod
 | `astro.config.mjs` | Site statique, MDX, service d’image sans transformation |
 | `tests/core.test.mjs`, `tests/dom.test.mjs` | Deux suites de cinq tests chacune |
 | `scripts/check-build.mjs` | Vérification du véritable HTML compilé et de ses références locales |
-| `scripts/audit_claude.py` | Lanceur d’audit sans outils Claude ; instantané fourni sur stdin |
+| `scripts/audit_claude.py` | Ancien lanceur d’audit conservé comme historique ; ne plus le lancer |
 | `docs/LIVRAISON.md` | Historique de la première remise avant installation des dépendances |
 | `docs/VERIFICATIONS.md` | Bilan de reprise et plan de migration détaillé, mis à jour avec l’autorisation reçue et le blocage d’installation |
 | `docs/migration/package.candidate.json` | Manifeste cible à installer et vérifier avant de remplacer le manifeste fonctionnel |
@@ -94,9 +140,9 @@ La migration proposée prévoyait un fichier `.nvmrc` dans le projet, **sans mod
 | --- | --- | --- |
 | Node | 22.22.3 par défaut ; 22.23.4 disponible via nvm et vérifié explicitement | 22.23.4 minimum |
 | npm | 10.9.8 par défaut ; 10.9.9 avec le runtime nvm | Conserver si compatible |
-| Astro installé | 5.18.2 | 7.4.12 identifiée dans le plan |
-| @astrojs/mdx installé | 4.3.14 | 8.1.6 identifiée dans le plan |
-| KaTeX installé | 0.16.47 | 0.19.1 identifiée dans le plan ; types fournis par le paquet |
+| Astro installé | 7.4.12 depuis le 14 novembre (5.18.2 auparavant) | 7.4.12 atteinte |
+| @astrojs/mdx installé | 8.1.6 depuis le 14 novembre (4.3.14 auparavant) | 8.1.6 atteinte |
+| KaTeX installé | 0.19.1 depuis le 14 novembre (0.16.47 auparavant) | atteinte ; `@types/katex` retiré |
 | Three.js | 0.180.0 | Pas de migration demandée |
 | TypeScript installé | 5.9.3 | Adapter seulement si nécessaire et justifié |
 | jsdom | 24.1.3 | Tests DOM existants |
@@ -129,11 +175,11 @@ Corrections techniques déjà réalisées : nettoyage WebGL dès l’initialisat
 - **Réseau du terminal Codex :** npm et l’API Anthropic échouaient avec `EAI_AGAIN`. Ne pas présumer que l’installation ou un audit en ligne est possible parce que l’utilisateur a réussi depuis son terminal.
 - **Serveur local depuis Codex :** tentative sur `127.0.0.1:4325` refusée (`listen EPERM`). Ne pas laisser croire qu’un serveur est lancé par Codex. L’utilisateur peut lancer `npm run dev` dans son terminal.
 - **Navigateur :** Firefox est un paquet Snap et échoue sur la création de `/run/user/1000/snap.firefox`. Contrôle visuel, lecteur d’écran, clavier dans un vrai navigateur et WebGL réel non réalisés.
-- **Sécurité :** les sept dépendances concernées restent présentes avant migration. Détails dans `audits/dependances-cache.json` et `docs/VERIFICATIONS.md`. Le service d’image sans transformation réduit l’exposition au décodage AVIF, sans corriger les paquets vulnérables.
+- **Sécurité :** résolu par la migration du 14 novembre — `npm audit` en ligne : 0 vulnérabilité. Historique : les sept dépendances concernées étaient présentes avant migration. Détails dans `audits/dependances-cache.json` et `docs/VERIFICATIONS.md`. Le service d’image sans transformation réduit l’exposition au décodage AVIF, sans corriger les paquets vulnérables.
 - **Audit npm hors ligne :** il a affiché zéro vulnérabilité malgré les avis en cache. Ce résultat ne constitue pas une validation de sécurité ; il faut un audit en ligne.
 - **Préserver la version fonctionnelle :** ne pas remplacer le manifeste et le verrouillage par une résolution partielle impossible à installer. Préparer et vérifier les dépendances dans un emplacement autorisé avant de basculer si le réseau bloque.
 
-## État des audits Claude
+## Historique des audits Claude — fonctionnement abandonné
 
 Claude Code 2.1.322 était installé et authentifié lors de la première mission. Deux appels complets ont été lancés automatiquement, puis interrompus après 120 secondes chacun sans rapport. La sonde préalable avait confirmé un échec de connexion à l’API. Aucun avis technique de Claude n’a été reçu.
 
@@ -143,9 +189,41 @@ Claude Code 2.1.322 était installé et authentifié lors de la première missio
 - Mode de protection : `--tools ""`, `--safe-mode`, `--restricted`, MCP vide et strict, aucun hook, aucune persistance, aucune permission interactive.
 - Les rapports sont écrits par le lanceur Python de Codex, pas par Claude.
 
-**Ne pas attribuer les corrections à Claude. Ne pas lancer un troisième audit sans autorisation de relever la limite initiale.** La présente autorisation de migration ne change pas explicitement cette limite.
+**Ne pas attribuer les corrections à Claude sans rapport reçu.** Les tentatives passées sont conservées sans écrasement. La dernière décision de la direction supprime tout nouvel audit ou contre-audit entre agents.
 
 ## Reste à faire
+
+### Étape 1 — navigateur réel
+
+- [x] Vérifier les programmes installés et tenter serveur, WebDriver et lancement headless dans un profil temporaire.
+- [x] Préparer `npm run test:browser` sans nouvelle dépendance npm ou Python.
+- [x] Vérifier les syntaxes Python et JavaScript du runner.
+- [x] Tenter la commande complète : compilation réussie, blocage environnemental avant les scénarios ; aucune validation navigateur annoncée.
+- [x] Ramener le délai Claude par défaut à 60 secondes et conserver le diagnostic des appels sans rapport.
+- [x] Examiner le rapport Firefox de 16:50 et ses captures : cinq succès, échec du scénario hors écran.
+- [x] Évaluer l’audit ciblé transmis par la direction et corriger la synchronisation des défilements dans le runner uniquement ; préserver les preuves avant relance.
+- [x] Exécuter les 14 scénarios dans un environnement autorisant Firefox et les ports loopback, avec accès à la distribution p5.
+- [x] Lire les résultats et captures ; corriger les bugs techniques observés (focus clavier, boucle ResizeObserver) puis relancer : 14/14, deux passages.
+- [ ] Effectuer les vérifications complémentaires sur téléphone réel et lecteur d’écran.
+
+### Intégration p5.js — priorité du 14 novembre
+
+- [x] Lire les consignes et le journal ; vérifier la documentation officielle p5.
+- [x] Créer le composant Astro/MDX, le registre, le chargeur et les adaptateurs en mode instance.
+- [x] Prévoir chargement après action, pauses, pas-à-pas, visibilité, mouvement réduit et nettoyage des imports et setups tardifs.
+- [x] Séparer calculs purs et rendu ; conserver Three.js pour l’Atlas.
+- [x] Créer un banc technique de deux instances et leurs alternatives accessibles.
+- [x] Contrôler les validations de publication côté serveur et documenter l’ajout de futurs contenus validés.
+- [x] Ajouter 17 tests p5 et le contrôle de la page MDX compilée.
+- [x] Vérifier le code final : 38 fichiers sans diagnostic, 27 tests réussis, 6 pages compilées et 72 références locales contrôlées.
+- [x] Lancer deux essais du nouvel audit Claude sans outils et consigner les erreurs d’accès et les empreintes inchangées.
+- [x] Recevoir via la direction un diagnostic Claude ciblé sur l’échec hors écran et l’évaluer ; correction du runner effectuée.
+- Anciennes tâches d’audit général et de contre-audit annulées par la nouvelle répartition. Claude reprend les corrections et tests techniques dans son rôle de développeur.
+- [x] Constater le vrai rendu Canvas 2D et le chargement p5 2.4.0 dans le rapport Firefox de 16:50.
+- [x] Compléter les scénarios navigateur (14/14).
+- [ ] Vérifications d’accessibilité sur lecteur d’écran et téléphone réel.
+- [ ] Décider ultérieurement d’un auto-hébergement de la distribution et d’un contrôle d’intégrité des octets servis.
+- [ ] Soumettre toute véritable expérience mathématique à validation scientifique et pédagogique avant publication.
 
 ### Sauvegarde GitHub autorisée — terminée
 
@@ -165,19 +243,19 @@ Claude Code 2.1.322 était installé et authentifié lors de la première missio
 - [x] Conserver le manifeste candidat dans `docs/migration/package.candidate.json` et préserver la version fonctionnelle.
 - [x] Créer `.nvmrc` pour le runtime attendu.
 - [x] Revérifier la version Astro 5 actuelle avec Node 22.23.4 : typage, dix tests, compilation et HTML généré réussis.
-- [ ] Installer complètement les dépendances cibles dans un emplacement isolé lorsque le réseau le permet.
-- [ ] Migrer `package.json` et `package-lock.json` vers Astro 7 / MDX 8 / KaTeX récent ; supprimer `@types/katex` si les types natifs le remplacent.
-- [ ] Adapter les API de configuration et de collection si nécessaire, sans modifier les textes pédagogiques.
-- [ ] Vérifier le changement de moteur Markdown, les espaces HTML et le rendu KaTeX/MathML ; aucune formule scientifique nouvelle à inventer pour les tests.
-- [ ] Exécuter typage, dix tests, compilation et vérification du build avec le runtime cible.
-- [ ] Exécuter un audit npm en ligne ; documenter les éventuelles vulnérabilités restantes et leur applicabilité.
-- [ ] Actualiser `README.md`, le bilan de migration et ce journal avec les versions réellement installées et les résultats.
+- [x] Installer complètement les dépendances cibles dans une copie isolée (scratchpad Claude), verrouillage résolu à neuf.
+- [x] Migrer `package.json` et `package-lock.json` : Astro 7.4.12, @astrojs/mdx 8.1.6, KaTeX 0.19.1, @astrojs/check 0.9.12 ; `@types/katex` supprimé ; TypeScript maintenu en 5.9.3 (contrainte de @astrojs/check). Ancien manifeste : `docs/migration/package.astro5.json`.
+- [x] Adapter les API : seul `z` passe de `astro:content` (déprécié) à `astro/zod` dans `src/content.config.ts`. Aucun texte pédagogique modifié.
+- [x] Vérifier moteur Markdown, espaces HTML et KaTeX/MathML : texte visible identique hors blancs ; captures Firefox des 6 pages en 1280 et 390 px identiques au pixel près ; KaTeX 0.19 se comporte comme 0.16 sur des expressions de test hors dépôt (MathML, bloc, `\href` neutralisé, erreurs levées).
+- [x] Typage 0/0/0, 29 tests, 6 pages, 72 références, 14/14 Firefox, Atlas Three.js WebGL chargé sans erreur, `astro dev` servant les pages.
+- [x] Audit npm en ligne : **0 vulnérabilité**.
+- [x] Actualiser `README.md`, `docs/VERIFICATIONS.md` et ce journal.
 
 ### Validations encore manquantes
 
 - [ ] Vérification visuelle responsive, zoom du texte et clavier dans un véritable navigateur.
 - [ ] Vérification WebGL réel, perte de contexte, nettoyage GPU et préférence de mouvement réduit.
-- [ ] Avis technique indépendant de Claude, uniquement si la direction autorise un nouveau cycle.
+- Ancienne demande d’avis technique indépendant de Claude annulée ; aucun rôle de relecteur ni cycle d’audit entre agents.
 - [ ] Réception et validation scientifique des cours, preuves, exercices et connexions de l’Atlas, puis intégration fidèle.
 - [x] Autorisation distincte pour le commit et le push de la version actuelle reçue ; destination `bachir151/atlas-mathematique`, branche `main`.
 - [ ] Autorisation distincte avant ouverture de PR, déploiement ou publication du site.
@@ -230,3 +308,39 @@ La direction fournit `https://github.com/bachir151/atlas-mathematique.git`. Vér
 ### 13 novembre 2026 — Sauvegarde GitHub vérifiée
 
 Dépôt : https://github.com/bachir151/atlas-mathematique ; branche : `main`. Initialisation par le commit `dde597fea65eb7641842429195fe085547b8ca4c`, puis ajout du projet par le commit `c355f625f1cd9ece6fc55993aff7ee7ab3b8a458`. Les empreintes Git des 60 fichiers de sources et documentation ont été comparées aux fichiers locaux ; aucune différence. Mise à jour de `main` effectuée sans forçage, avec contrôle du parent attendu, puis tête distante vérifiée. Le présent journal et le manifeste de sauvegarde sont actualisés après cette vérification. La migration de sécurité reste à réaliser lorsque la résolution npm redevient possible ; ses résultats futurs devront être vérifiés séparément.
+
+### 14 novembre 2026 — Intégration p5.js
+
+Nouvelle demande : moteur 2D complémentaire, composants Astro/MDX, mode instance, chargement différé, pause/destruction, calculs séparés et audit Claude sans modification de fichiers. Implémentation et banc technique ajoutés sans toucher au cours du carré, aux preuves ou aux données de l’Atlas. Distribution CDN 2.4.0 chargée uniquement après action, avec alternatives accessibles ; absence d’installation npm p5 liée au blocage réseau. Dix-sept tests ciblés ajoutés ; vérifications et audit du code final à consigner avant de clore cette étape.
+
+Résultat final de l’étape : typage, 27 tests, compilation de six pages et 72 références locales réussis. Le setup asynchrone p5 a été examiné dans les sources officielles et son nettoyage tardif couvert par un test. Deux appels Claude en lecture seule, sources inchangées, n’ont produit aucun audit : timeout puis erreur API `EAI_AGAIN`. Bilan détaillé dans `docs/P5.md`, résultats dans `audits/p5/`. Aucun contenu pédagogique existant modifié, aucun nouveau commit, push ou déploiement pour cette intégration. La page technique et le composant sont prêts localement ; l’audit indépendant, le rendu réel du CDN/Canvas 2D et la validation des futures expériences pédagogiques restent ouverts.
+
+### 14 novembre 2026 — Tentative des tests navigateur réels
+
+La direction demande l’étape 1 et autorise la poursuite sans audit Claude si celui-ci n’arrive pas dans un délai raisonnable. Serveur local et WebDriver refusés par le sandbox ; Firefox natif headless échoue aussi sans capture. Un runner WebDriver reproductible, avec profils isolés et captures conditionnelles, est créé. La commande complète recompile les six pages mais s’arrête avant les 14 scénarios : `status: blocked`, code de sortie `2`. Les scripts injectés ont seulement été analysés syntaxiquement, sans prétendre à un résultat de navigateur. Le délai par défaut du lanceur Claude est ramené à 60 secondes. Aucun cours, preuve, donnée scientifique ou code du moteur p5 n’a changé dans cette étape ; aucun commit, push ou déploiement. **Prochaine action : exécuter `npm run test:browser` dans un terminal autorisant les ports et Firefox, puis examiner les vrais résultats.**
+
+### 14 novembre 2026 — Recherche du blocage demandée à Claude
+
+Installation et authentification Claude vérifiées. Diagnostic ciblé demandé sur instantané numéroté, avec zéro outil disponible. Appel arrêté au délai de 60 secondes, sans aucune sortie ; aucun audit exploitable. Empreintes des sources avant/après identiques. Vérification indépendante : la création de sockets TCP IPv4 et IPv6 est refusée par l’environnement avant toute ouverture de port. Aucun fichier de code modifié, aucun commit, push ou déploiement ; seul ce journal est actualisé. La validation réelle du navigateur demeure à faire dans un environnement autorisant ces opérations, et le plantage Firefox reste à diagnostiquer séparément.
+
+### 14 novembre 2026 — Audit transmis par la direction et correction du runner
+
+La direction transmet le diagnostic Claude du passage Firefox de 16:50 : cinq scénarios réussis et échec de `offscreen-pause` après un défilement soumis au CSS fluide. Codex vérifie le rapport, le code, le journal du pilote et la capture : recommandation technique importante et justifiée ; aucune question pédagogique. Le rapport et les captures sont archivés avant la relance dans `test-results/browser/history/20261114T155034Z/`. Dans le périmètre des tests et corrections techniques déjà autorisés, `tests/browser_p5.py` est corrigé : défilement instantané, attente de position après redimensionnement et avant le clavier, mesures géométriques dans les erreurs. `JURNAL.md`, `README.md`, `docs/P5.md` et `docs/TESTS-NAVIGATEUR.md` sont actualisés pour distinguer les cinq succès réels des tentatives refusées dans le terminal Codex. Aucun changement au CSS, au moteur p5, à Three.js ou aux contenus scientifiques.
+
+Vérifications : syntaxe Python valide, 41 fragments JavaScript sans erreur de syntaxe, six pages compilées et 72 références locales vérifiées. La relance `npm run test:browser` depuis Codex reste refusée à l’ouverture du port (`EPERM`, sortie 2) avant les scénarios ; elle ne confirme pas la correction du test. Aucun nouveau Claude lancé, commit, push ou déploiement. **Prochaine action : relancer la commande dans le terminal qui a permis le passage Firefox de 16:50 ; vérifier `offscreenFramesStable: true`, puis examiner les huit scénarios suivants et tout nouveau diagnostic.**
+
+### 14 novembre 2026 — Nouvelle répartition décidée par la direction
+
+L’utilisateur demande explicitement de changer les instructions : **Claude développeur ; Codex rédacteur des contenus mathématiques ; aucune relecture ni audit entre agents.** `AGENTS.md` et `CLAUDE.md` sont mis à jour : Claude peut réaliser les modifications techniques et les tests dans le périmètre autorisé, Codex rédige les contenus à soumettre à l’utilisateur. Les règles d’autorisation des opérations Git et des publications restent applicables. Le journal, le README et les documentations p5/navigateur sont alignés ; les anciennes tâches d’audit sont annulées et leurs rapports conservés comme historique. Aucun appel Claude, aucune modification du code ou des cours, aucun commit, push ou déploiement. Les modifications de cette étape sont uniquement documentaires ; vérification de cohérence des consignes, sans exécution des tests du site.
+
+### 14 novembre 2026 — Étape 1 terminée par Claude (développeur)
+
+Reprise après la nouvelle répartition. Constat : un passage Firefox de 16:57, absent du journal, montrait sept succès et un échec `keyboard` sans message ; archivé sans écrasement. Diagnostic reproduit dans Firefox avec instrumentation : perte du focus sur un bouton désactivé pendant le chargement, puis tabulation hors du document. Correction du composant (`aria-disabled`, focus conservé) et de la boucle `ResizeObserver` révélée par `page-errors` ; runner rendu plus explicite. Fichiers modifiés : `src/scripts/p5-experience.ts`, `src/styles/global.css`, `tests/p5.test.mjs`, `tests/browser_p5.py`, `docs/TESTS-NAVIGATEUR.md`, `docs/P5.md`, `README.md`, ce journal.
+
+Vérifications réelles : `npm run check` 0 erreur/0 avertissement ; `npm test` 29 tests réussis (5 + 5 + 19) ; `npm run build` six pages ; `npm run verify:build` 72 références locales ; `npm run test:browser` puis relance : 14/14 deux fois, sortie 0. Aucun commit, push ou déploiement. **Prochaine action : migration Astro 7 / MDX 8 / KaTeX récent dans un emplacement isolé, puis audit npm en ligne.**
+
+### 14 novembre 2026 — Migration Astro 7 réalisée par Claude
+
+Résolution complète dans une copie isolée avec Node 22.23.4, puis bascule du projet (`package.json`, `package-lock.json`, `src/content.config.ts`) et `npm ci` (un premier `npm ci` a échoué sur `ENOTEMPTY` dans le cache `node_modules/.vite`, supprimé puis relancé avec succès ; aucun serveur actif). Commentaire obsolète de `astro.config.mjs` actualisé, configuration inchangée. Vérifications : audit npm 0 vulnérabilité ; typage 0 erreur/avertissement/indication ; 29 tests ; 6 pages et 72 références ; 14/14 Firefox ; comparaison texte et pixels des pages avant/après identique ; Atlas WebGL OK ; `astro dev` OK. Captures de comparaison : `test-results/visual-migration/`, `test-results/atlas-migration/`.
+
+**Attention pour la direction : Astro 7 refuse Node 22.22.3 (Node par défaut du terminal). Taper `nvm use` avant `npm run dev`.** Aucun commit, push ou déploiement. **Prochaines actions possibles : sauvegarde GitHub (autorisation distincte nécessaire), vérifications sur téléphone et lecteur d’écran, intégration des contenus de Codex lorsqu’ils seront validés.**

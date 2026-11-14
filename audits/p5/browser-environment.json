@@ -1,0 +1,53 @@
+{
+  "date": "2026-11-14",
+  "status": "blocked",
+  "realBrowserScenariosExecuted": 0,
+  "preparedScenarios": 14,
+  "checks": [
+    {
+      "command": "npm run dev -- --port 4325",
+      "exitCode": 1,
+      "evidence": "listen EPERM: operation not permitted 127.0.0.1:4325"
+    },
+    {
+      "command": "HTTP GET http://127.0.0.1:4321/experiences/p5/",
+      "evidence": "URLError: [Errno 1] Operation not permitted"
+    },
+    {
+      "command": "geckodriver --host 127.0.0.1 --port 4445",
+      "exitCode": 69,
+      "version": "0.36.0",
+      "evidence": "Operation not permitted (os error 1)"
+    },
+    {
+      "command": "Firefox headless smoke, fresh temporary profile",
+      "version": "152.0.1",
+      "exitCode": -11,
+      "screenshotProduced": false
+    },
+    {
+      "command": "HTTP GET p5 2.4.0 CDN",
+      "evidence": "Temporary failure in name resolution"
+    },
+    {
+      "command": "npm run test:browser",
+      "exitCode": 2,
+      "buildPages": 6,
+      "browserStatus": "blocked",
+      "reason": "Serveur local refusé : [Errno 1] Operation not permitted"
+    }
+  ],
+  "staticChecks": {
+    "pythonSyntax": "passed",
+    "webdriverJavaScriptSnippets": 40,
+    "javaScriptSyntaxErrors": 0,
+    "notBrowserExecution": true
+  },
+  "claude": {
+    "newCallStarted": false,
+    "defaultTimeoutSeconds": 60,
+    "policy": "terminate on timeout, record absence of report, continue other work"
+  },
+  "browserReport": "test-results/browser/report.json",
+  "documentation": "docs/TESTS-NAVIGATEUR.md"
+}

@@ -1,0 +1,56 @@
+.p5-experience {
+  display: block;
+  min-width: 0;
+}
+.p5-experience .panel-heading h2 {
+  font-size: 28px;
+}
+.p5-description,
+.p5-fallback {
+  font-size: 14px;
+  line-height: 1.8;
+  color: var(--muted);
+}
+.p5-canvas-host {
+  margin-block: 22px;
+  min-height: 120px;
+  background: var(--green-soft);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+.p5-canvas-host canvas {
+  display: block;
+  width: 100% !important;
+  height: auto !important;
+  touch-action: pan-y !important;
+}
+.p5-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.p5-controls button {
+  min-height: 44px;
+  font-size: 12px;
+}
+.p5-status {
+  margin-block: 16px;
+  min-height: 24px;
+  font-size: 12px;
+  color: var(--green);
+}
+.p5-fallback {
+  border-top: 1px solid var(--line);
+  padding-top: 16px;
+}
+.p5-fallback svg {
+  width: min(100%, 360px);
+  height: auto;
+  margin-block: 12px;
+}
+.p5-lab-content {
+  display: grid;
+  gap: 24px;
+  padding-bottom: 60px;
+}
