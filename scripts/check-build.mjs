@@ -47,9 +47,12 @@ for (const page of pages) {
     const proof = doc.getElementById('preuve-integrale');
     assert.ok(proof && !proof.hidden && !proof.closest('details'), 'Preuve intégrale indépendante des panneaux progressifs');
     assert.ok(doc.querySelector('.lesson-section-nav a[href="#preuve-integrale"]'), 'Accès à la preuve dans la navigation persistante');
-    assert.equal(doc.querySelectorAll('[data-step]').length, 3);
-    assert.ok(doc.querySelector('.pending-content'), 'Emplacement MDX compilé et stylable');
-    assert.match(proof.textContent, /Aucune démonstration validée/);
+    assert.ok(doc.querySelectorAll('[data-step]').length >= 2, 'Démonstration progressive présente');
+    const workspace = doc.querySelector('[data-lesson-status]');
+    assert.equal(workspace?.dataset.lessonStatus, 'validated', 'Cours validé');
+    assert.ok(doc.querySelector('.lesson-status-validated'), 'Mention de validation affichée');
+    assert.ok(doc.querySelectorAll('.katex').length > 0 && !doc.querySelector('.katex-error'), 'Formules rendues par KaTeX');
+    assert.ok(proof.textContent.trim().length > 100, 'Preuve intégrale non vide');
     assert.equal(doc.querySelectorAll('[data-rotation]').length, 3);
   }
   if (page.startsWith('bibliotheque/')) {

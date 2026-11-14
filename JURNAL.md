@@ -120,8 +120,7 @@ La migration proposée prévoyait un fichier `.nvmrc` dans le projet, **sans mod
 | `src/pages/`, `src/layouts/`, `src/components/` | Pages, structure et composants Astro |
 | `src/scripts/atlas.ts`, `square.ts`, `proof.ts`, `companion.ts` | Contrôleurs des interactions |
 | `src/content.config.ts` | Collection MDX explicite et schéma de métadonnées |
-| `src/content/lessons/groupes-rotations.mdx` | Leçon d’emplacements (cours, étapes et preuve intégrale) à remplacer après validation |
-| `src/content/lessons/groupes-rotations-redaction.mdx` | Rédaction de Codex en brouillon, à valider ; note `docs/demandes/codex-groupes-rotations-reponse.md` |
+| `src/content/lessons/groupes-rotations.mdx` | Premier cours, rédigé par Codex et validé par la direction le 14 novembre 2026 ; note `docs/demandes/codex-groupes-rotations-reponse.md` |
 | `netlify.toml`, `docs/DEPLOIEMENT.md` | Configuration Netlify et procédure de mise en ligne (aucun déploiement) |
 | `src/content/lessons/exemple-gabarit.mdx` | Brouillon technique montrant chaque composant, sans contenu mathématique |
 | `src/components/lesson/`, `src/styles/lesson.css` | Gabarit de leçon (blocs mathématiques, exercices, démonstration progressive) ; guide `docs/GABARIT-LECON.md` |
@@ -408,3 +407,21 @@ Commit `472bc46` (parent `df29d9b`) poussé sans forçage sur `bachir151/atlas-m
 - **Vérifications :** typage 0/0 ; tests unitaires 29/29 ; Firefox p5 14/14 et site 22/22 ; `verify:build` OK, brouillon absent de la compilation de production.
 
 **Décisions attendues de la direction :** validation du brouillon de Codex et des trois points de sa note ; autorisation de commit/push ; autorisation de déploiement Netlify (création du site par la direction). Aucun commit, push ou déploiement depuis `472bc46`.
+
+### 14 novembre 2026 — Sauvegarde GitHub `ca5af52`
+
+Commit `ca5af52` (parent `472bc46`) poussé sans forçage sur `bachir151/atlas-mathematique`, branche `main`, avec l’autorisation de la direction : 17 fichiers (configuration Netlify, politique de sécurité, scénario `security-policy`, demande et rédaction de Codex en brouillon). Contrôle de motifs sensibles : aucun. 107 fichiers distants identiques aux fichiers locaux. Le brouillon reste exclu de la compilation de production. Aucun déploiement. Cette entrée reste locale jusqu’à la prochaine sauvegarde.
+
+### 14 novembre 2026 — Premier cours validé et intégré (Claude)
+
+- **Décision de la direction :** « je valide le cours » (rédaction de Codex, y compris ses propositions : preuve par coordonnées dans le parcours principal, approfondissements facultatifs conservés).
+- **Intégration fidèle :** le contenu de `groupes-rotations-redaction.mdx` remplace `groupes-rotations.mdx` (fichier brouillon supprimé). Seules modifications : `status: "validated"` avec référence de validation, fil d’Ariane sans « — brouillon », suppression de la phrase « Brouillon soumis à la direction du projet… », devenue inexacte (la page affiche désormais « Contenu validé par la direction du projet »). Copie d’avant intégration conservée hors projet.
+- **Interface :** catalogue `status: 'validated'` ; carte de bibliothèque « Cours disponible · Cours validé · manipulation interactive · Ouvrir le cours » ; pied de page « Premier cours validé ; les autres contenus scientifiques attendent leur validation. » ; mise en valeur de « Preuve intégrale » dans la navigation quelle que soit sa position.
+- **Tests adaptés :** test unitaire de la leçon validée ; `verify:build` contrôle statut, mention de validation, formules KaTeX et preuve intégrale.
+- **Vérifications :** typage 0/0 ; 29/29 ; Firefox p5 14/14 et site 22/22 (reflow 320 px, zoom 200 %, contrastes et cibles sur la leçon complète) ; `verify:build` OK.
+
+**Reste à faire :** commit/push et déploiement Netlify selon autorisation précise ; aucun accès Netlify n’existe sur la machine (création du site par la direction ou connexion `npx netlify-cli login`).
+
+### 14 novembre 2026 — Autorisation de publication
+
+La direction autorise le commit et le push sur `bachir151/atlas-mathematique`, branche `main`, puis la mise en ligne par un site Netlify relié à ce dépôt, créé par la direction sur netlify.com (option « Push + Netlify relié »). Claude ne dispose d’aucun accès Netlify.

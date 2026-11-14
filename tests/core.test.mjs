@@ -42,13 +42,15 @@ test('Atlas data identifiers and positions are usable independently of Three.js'
   }
 });
 
-test('the placeholder lesson keeps explicit placeholders and an independent full proof', () => {
+test('the validated lesson records its validation and keeps an independent full proof', () => {
   const mdx = readFileSync(new URL('../src/content/lessons/groupes-rotations.mdx', import.meta.url), 'utf8');
-  assert.match(mdx, /^status: "placeholder"$/m);
-  const steps = [...mdx.matchAll(/<ProofStep[^>]*>([\s\S]*?)<\/ProofStep>/g)].map(match => match[1]);
-  assert.equal(steps.length, 3);
-  assert.ok(steps.every(step => step.includes('attente de validation')));
+  assert.match(mdx, /^status: "validated"$/m);
+  assert.match(mdx, /^validation: ".+"$/m, 'A validated lesson references the director\'s decision');
+  assert.doesNotMatch(mdx, /brouillon/i);
+  const steps = [...mdx.matchAll(/<ProofStep[^>]*>([\s\S]*?)<\/ProofStep>/g)];
+  assert.ok(steps.length >= 2);
   const full = mdx.match(/<FullProof slot="full">([\s\S]*?)<\/FullProof>/)?.[1] ?? '';
-  assert.match(full, /Aucune démonstration validée/);
-  assert.match(full, /sans déverrouillage/);
+  assert.ok(full.trim().length > 0, 'Full proof present');
+  assert.equal(lessons.find(lesson => lesson.id === 'groupes-rotations')?.status, 'validated');
 });
+

@@ -1184,9 +1184,14 @@ input[type=search] {
   min-height:35px;
 }
 
-.lesson-nav a:last-child {
-  margin-left:auto;
+/* The full proof stays highlighted wherever it sits in the lesson's sections;
+   it is pushed to the right only when it closes the list. */
+.lesson-nav a[href="#preuve-integrale"] {
   color:var(--green);
+}
+
+.lesson-nav a[href="#preuve-integrale"]:last-child {
+  margin-left:auto;
 }
 
 .lesson-workspace {
@@ -1957,7 +1962,7 @@ input[type=search] {
   .lesson-nav {
     gap:18px;
   }
-  .lesson-nav a:last-child {
+  .lesson-nav a[href="#preuve-integrale"]:last-child {
     margin-left:0;
   }
   .rotation-controls {

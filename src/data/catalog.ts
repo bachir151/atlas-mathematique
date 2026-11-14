@@ -2,7 +2,7 @@ export interface LessonEntry {
   id: string;
   title: string;
   domain: 'Algèbre' | 'Géométrie' | 'Analyse';
-  status: 'prototype' | 'planned';
+  status: 'validated' | 'prototype' | 'planned';
   href?: string;
   number: string;
   visual: 'square' | 'orbit' | 'wave';
@@ -10,7 +10,7 @@ export interface LessonEntry {
 
 // Navigation metadata only. No scientific explanations or lesson text here.
 export const lessons: readonly LessonEntry[] = [
-  { id: 'groupes-rotations', title: 'Groupes & rotations du carré', domain: 'Algèbre', status: 'prototype', href: '/cours/groupes-rotations/', number: '01', visual: 'square' },
+  { id: 'groupes-rotations', title: 'Groupes & rotations du carré', domain: 'Algèbre', status: 'validated', href: '/cours/groupes-rotations/', number: '01', visual: 'square' },
   { id: 'geometrie', title: 'Géométrie', domain: 'Géométrie', status: 'planned', number: '02', visual: 'orbit' },
   { id: 'analyse', title: 'Analyse', domain: 'Analyse', status: 'planned', number: '03', visual: 'wave' },
 ];

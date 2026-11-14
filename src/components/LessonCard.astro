@@ -7,6 +7,6 @@ const { lesson } = Astro.props;
 ---
 <article class:list={['lesson-card', `tone-${lesson.visual}`]} data-lesson-id={lesson.id}>
   <div class="lesson-art"><span class="lesson-number">{lesson.number} /</span><Diagram type={lesson.visual} /><span class="lesson-domain">{lesson.domain}</span></div>
-  <div class="lesson-card-body"><span class="eyebrow">{lesson.status === 'prototype' ? 'Manipulation disponible' : 'Emplacement provisoire'}</span><h3>{lesson.title}</h3><p>{lesson.status === 'prototype' ? 'Interface interactive · cours en attente de validation' : 'Contenu à fournir et à valider'}</p>
-  {lesson.href ? <a class="card-link" href={lesson.href}>Ouvrir le prototype <Icon name="arrow" /></a> : <span class="planned-label">À venir <span aria-hidden="true">↗</span></span>}</div>
+  <div class="lesson-card-body"><span class="eyebrow">{lesson.status === 'validated' ? 'Cours disponible' : lesson.status === 'prototype' ? 'Manipulation disponible' : 'Emplacement provisoire'}</span><h3>{lesson.title}</h3><p>{lesson.status === 'validated' ? 'Cours validé · manipulation interactive' : lesson.status === 'prototype' ? 'Interface interactive · cours en attente de validation' : 'Contenu à fournir et à valider'}</p>
+  {lesson.href ? <a class="card-link" href={lesson.href}>{lesson.status === 'validated' ? 'Ouvrir le cours' : 'Ouvrir le prototype'} <Icon name="arrow" /></a> : <span class="planned-label">À venir <span aria-hidden="true">↗</span></span>}</div>
 </article>

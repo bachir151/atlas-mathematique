@@ -144,7 +144,7 @@ Les leçons utilisent un gabarit générique : un fichier MDX par leçon dans `s
 
 ## Contenus à intégrer après validation
 
-- Corps du cours : `src/content/lessons/groupes-rotations.mdx`.
+- Premier cours validé (14 novembre 2026) : `src/content/lessons/groupes-rotations.mdx`.
 - Étapes et texte intégral de la preuve : composants `<ProofStep>` et `<FullProof>` du même fichier MDX, actuellement constitués uniquement d’emplacements.
 - Descriptions et connexions scientifiques de l’Atlas : `src/data/atlas.ts`.
 
