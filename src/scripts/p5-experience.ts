@@ -1,6 +1,6 @@
 import { resolveViewport } from '../experiences/p5/model.ts';
 import { getExperience, loadSketch } from '../experiences/p5/registry.ts';
-import { loadP5 } from '../experiences/p5/runtime.ts';
+import { loadP5, P5SlowLoadError } from '../experiences/p5/runtime.ts';
 import { createInstance } from '../experiences/p5/instance.ts';
 import { isAvailable as available, setAvailable } from '../lib/availability.ts';
 import type { ManagedInstance, P5Constructor, SketchFactory } from '../experiences/p5/types.ts';
@@ -61,14 +61,16 @@ export function mountP5Experience(root: HTMLElement, dependencies: P5Dependencie
     finally { removing = false; updateControls(); }
   }
 
-  function fail() {
+  function fail(slow = false) {
     if (disposed) return;
     generation++;
     requested = false;
     loading = false;
     prepared = undefined;
     userWantsMotion = false;
-    message = 'Expérience indisponible. Le contenu de remplacement reste accessible. Vous pouvez réessayer.';
+    message = slow
+      ? 'Le chargement est lent et se poursuit. Le contenu de remplacement reste accessible. Réessayez dans un instant.'
+      : 'Expérience indisponible. Le contenu de remplacement reste accessible. Vous pouvez réessayer.';
     void release();
     updateControls();
   }
@@ -110,7 +112,7 @@ export function mountP5Experience(root: HTMLElement, dependencies: P5Dependencie
       prepared = { Constructor, factory: sketch.createSketch };
       loading = false;
       sync();
-    } catch { if (!disposed && token === generation) fail(); }
+    } catch (error) { if (!disposed && token === generation) fail(error instanceof P5SlowLoadError); }
   }
 
   function stopInstance() {

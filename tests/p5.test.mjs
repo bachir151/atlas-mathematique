@@ -304,6 +304,34 @@ test('custom element registration is idempotent and disconnection triggers lifec
   assert.equal(e.window.document.querySelector('script'), null);
 }));
 
+test('a slow p5 download is not restarted: a retry reuses it, even after it completes', async () => environment(async e => {
+  const { loadP5, P5SlowLoadError } = await import('../src/experiences/p5/runtime.ts?test=slow');
+  const first = loadP5(5);
+  const script = e.window.document.querySelector('script');
+  await assert.rejects(first, error => error instanceof P5SlowLoadError);
+  assert.equal(e.window.document.querySelectorAll('script').length, 1, 'download kept after the timeout');
+  e.window.p5 = e.FakeP5; // the download finishes later
+  script.dispatchEvent(new e.window.Event('load'));
+  assert.equal(await loadP5(5), e.FakeP5, 'retry recognises our late-loaded copy');
+  assert.equal(e.window.document.querySelectorAll('script').length, 1);
+}));
+
+test('a retry after a slow download waits for the same script, and a later error allows a fresh one', async () => environment(async e => {
+  const { loadP5, P5SlowLoadError } = await import('../src/experiences/p5/runtime.ts?test=slow-error');
+  await assert.rejects(loadP5(5), P5SlowLoadError);
+  const script = e.window.document.querySelector('script');
+  const waiting = loadP5(1000);
+  assert.equal(e.window.document.querySelector('script'), script, 'same element, no second download');
+  script.dispatchEvent(new e.window.Event('error'));
+  await assert.rejects(waiting, /impossible/);
+  assert.equal(e.window.document.querySelector('script'), null);
+  const fresh = loadP5(1000);
+  const next = e.window.document.querySelector('script');
+  assert.notEqual(next, script);
+  e.window.p5 = e.FakeP5; next.dispatchEvent(new e.window.Event('load'));
+  assert.equal(await fresh, e.FakeP5);
+}));
+
 test('the runtime loader shares one versioned script and supports retry after a network error', async () => environment(async e => {
   const { loadP5, P5_RUNTIME } = await import('../src/experiences/p5/runtime.ts?test=loader');
   assert.equal(e.window.document.querySelectorAll('script').length, 0);

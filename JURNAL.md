@@ -425,3 +425,15 @@ Commit `ca5af52` (parent `472bc46`) poussé sans forçage sur `bachir151/atlas-m
 ### 14 novembre 2026 — Autorisation de publication
 
 La direction autorise le commit et le push sur `bachir151/atlas-mathematique`, branche `main`, puis la mise en ligne par un site Netlify relié à ce dépôt, créé par la direction sur netlify.com (option « Push + Netlify relié »). Claude ne dispose d’aucun accès Netlify.
+
+Commit `9bf2b37` poussé sur `main` (106 fichiers distants identiques aux fichiers locaux). En attente de la création du site Netlify par la direction.
+
+### 14 novembre 2026 — Site public sur Netlify et vérification en ligne
+
+- La direction a créé le projet Netlify `loquacious-concha-324072` relié au dépôt, puis l’a rendu **public** : https://loquacious-concha-324072.netlify.app — déploiement de `9bf2b37` réussi (19 s, 3 règles d’en-têtes).
+- Vérifications en ligne (Claude) : pages 200, brouillons 404, en-têtes et cache conformes, empreinte p5 identique, HTML identique au build local hors ajouts Netlify (commentaire et badge « Powered by Netlify », désactivable par la direction). Atlas 3D fonctionnel dans Firefox.
+- **Défaut trouvé et corrigé localement :** sur connexion lente (17,7 s pour p5.min.js depuis cette machine), le chargeur abandonnait à 15 s et retirait le script ; p5 s’installait quand même et « Réessayer » échouait ensuite (« Une autre installation p5.js est déjà présente ») jusqu’au rechargement. Correction dans `src/experiences/p5/runtime.ts` et `src/scripts/p5-experience.ts` : délai porté à 30 s, téléchargement conservé, nouvel essai réutilisant le même script, message spécifique « Le chargement est lent et se poursuit… ». Deux tests unitaires ajoutés (p5 21/21). Vérifications : typage 0/0, 31 tests, Firefox 14/14 et 22/22, `verify:build` OK.
+
+**En attente :** autorisation de commit/push sur `main` (qui redéploie automatiquement le site) pour publier la correction.
+
+La direction autorise le push du correctif p5 sur `main` (« oui pousse le correctif sur main »), ce qui redéploie le site public.

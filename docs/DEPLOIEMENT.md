@@ -1,6 +1,6 @@
 # Mise en ligne sur Netlify
 
-État au 14 novembre 2026 : **configuration prête, aucun déploiement effectué.**
+État au 14 novembre 2026 : **site en ligne et public** à https://loquacious-concha-324072.netlify.app (projet Netlify `loquacious-concha-324072`, relié à `bachir151/atlas-mathematique`, branche `main`, créé par la direction). Chaque push sur `main` redéploie.
 Le déploiement exige une autorisation explicite de la direction du projet
 précisant l’action et la cible (voir `CLAUDE.md`).
 
@@ -44,6 +44,14 @@ Après la première mise en ligne : vérifier les en-têtes réels
 (`curl -sI https://<site>.netlify.app/`), ouvrir l’Atlas, une expérience p5 et
 la page du cours ; activer HTTPS forcé (par défaut sur Netlify) ; ajouter
 `Strict-Transport-Security` seulement une fois le domaine définitif choisi.
+
+## Vérification en ligne du 14 novembre 2026
+
+- Pages publiques : 200 ; brouillons et page inexistante : 404 avec la page « Hors de la carte ».
+- En-têtes reçus conformes à `netlify.toml` ; Netlify ajoute `Strict-Transport-Security` ; fichiers `/_astro/*` et `/vendor/*` immuables.
+- p5.js en ligne : empreinte SHA-384 identique à la valeur SRI ; l’appel de p5.js vers jsDelivr est bloqué par `connect-src`.
+- HTML en ligne identique au build local, à deux ajouts près de Netlify (offre gratuite) : un commentaire publicitaire et le script du badge « Powered by Netlify » (`/.netlify/scripts/hud`, servi par le site, sans connexion tierce, mémorise son masquage dans `localStorage`). Il peut être désactivé dans *Project configuration → General → Powered by Netlify badge*.
+- Firefox sur le site en ligne : Atlas 3D (WebGL) fonctionnel. Défaut trouvé : sur une connexion lente, p5.js (296 Ko compressés) dépassait le délai de 15 s du chargeur ; corrigé localement (voir `JURNAL.md`), en attente de publication.
 
 ## Limites
 
