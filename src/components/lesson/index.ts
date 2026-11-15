@@ -15,8 +15,9 @@ import Formula from '../Formula.astro';
 import SquareExperiment from '../SquareExperiment.astro';
 import P5Experience from '../experiences/P5Experience.astro';
 import PlaneFigure from '../figures/PlaneFigure.astro';
+import SeriesFigure from '../figures/SeriesFigure.astro';
 
 export const lessonComponents = {
   CourseSection, Definition, Theorem, Example, Remark, Historical, Exercise, Hint, Solution,
-  Proof, ProofStep, FullProof, Formula, SquareExperiment, P5Experience, PlaneFigure,
+  Proof, ProofStep, FullProof, Formula, SquareExperiment, P5Experience, PlaneFigure, SeriesFigure,
 };

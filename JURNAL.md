@@ -468,3 +468,27 @@ Commit `769fbfa` poussé sur `main` ; Netlify a redéployé en ~20 s. Vérificat
 - **Tests adaptés :** recherche de bibliothèque (« reflexions »), `verify:build` sur 7 pages (trois figures et lecture textuelle sans JavaScript), scénarios des figures ajoutés à la suite principale. Résultats : typage 0/0 ; 36 tests unitaires ; Firefox 51/51 (p5 14, site 26, brouillons 11) ; `verify:build` OK, 97 références.
 
 La direction a autorisé le push de la leçon 02 sur `main` (« je valide le reste », point 4).
+
+### 14 novembre 2026 — Leçon 02 en ligne (`43c189b`)
+
+Commit `43c189b` poussé sur `main` (116 fichiers distants identiques) ; Netlify a redéployé en ~20 s. Vérification Firefox sur https://loquacious-concha-324072.netlify.app/cours/mediatrices-reflexions/ : 500 formules sans erreur, mention de validation, tableau dans son cadre défilant, trois figures actives (« Réfléchir », réflexions successives, « Placer P sur d ») ; carte de bibliothèque « Cours disponible » ; pied de page « Deux cours validés ». Cette entrée reste locale jusqu’à la prochaine sauvegarde.
+
+### 14 novembre 2026 — Mises à jour des dépendances ; demande de la leçon 03
+
+- `three` et `@types/three` 0.180 → **0.187.0**.
+- `typescript` 5.9.3 → **6.0.3**. TypeScript 7.0.2 a été essayé puis retiré : `astro check` le refuse (« does not currently support TypeScript 7.0 ») ; l’alternative expérimentale `@astrojs/ts-content-mapper` exige TypeScript 7.1, pas encore publié. À reprendre quand 7.1 sortira ou quand `@astrojs/check` acceptera la 7.
+- Résultats : `npm run check` 0 erreur (58 fichiers) ; 36 tests unitaires ; build + `verify:build` (7 pages, 97 références) ; Firefox p5 14/14, site 26/26, sans erreur de console ni dépréciation Three.js. `jsdom` 31 disponible (outil de test seulement), non mis à jour.
+- Demande de la leçon 03 (Analyse) rédigée : `docs/demandes/codex-lecon-03-analyse.md` ; Codex lancé.
+- Leçon 03 rendue par Codex en brouillon : `src/content/lessons/suites-geometriques-sommes-infinies.mdx`, note `docs/demandes/codex-lecon-03-analyse-reponse.md` (périmètre respecté). Vérifications Claude : `test:drafts` 11/11 réussis (la leçon 03 incluse) ; 445 formules MathML ; aucun débordement de page à 1280 et 320 px (le tableau défile dans son cadre). En attente de la validation de la direction (sujet, niveau, place des approfondissements, figures).
+
+### 15 novembre 2026 — Leçon 03 validée ; deux figures interactives
+
+- **Validation de la direction** (« je suis ok pour le reste », figures 1 et 2 retenues) : `suites-geometriques-sommes-infinies.mdx` passe en `validated` avec sa référence ; fil d’Ariane sans « brouillon » ; mention de brouillon retirée. Catalogue : entrée `analyse` remplacée par la leçon 03 validée (`/cours/suites-geometriques-sommes-infinies/`) ; nœud Atlas « Analyse » relié ; pied de page « Trois cours validés ».
+- **Figures** (SVG, rendues à la compilation, mêmes classes de mise en page que la leçon 02) :
+  - `src/figures/rational.ts` : fractions exactes en BigInt, affichage français (fractions de puissances de 2 comme dans la leçon, décimaux courts, sinon « ≈ » explicite).
+  - `src/figures/series.ts` (modèles), `series-svg.ts` (graphes discrets non reliés, droite L, bande (L − ε, L + ε), segment unité pour le préréglage des moitiés), `series-text.ts` (lecture textuelle et tableau), `series-figure.ts` (point d’entrée commun).
+  - `src/components/figures/SeriesFigure.astro` (`kind` = `somme-geometrique` | `iteration-affine`), `src/scripts/series-figures.ts`, styles dans `figures.css`, composant déclaré dans `src/components/lesson/index.ts` et `docs/GABARIT-LECON.md`.
+  - Figure 1 placée après l’exemple de la somme alternée ; figure 2 à la fin de « Connexions ». Paramètres, bornes et préréglages de la note de Codex ; test |R_N| < ε exact ; « Précision non atteinte dans les 81 sommes affichées » ; cas a = 0, q = 0, x₀ = p traités.
+- **Tests** : `tests/series.test.mjs` (6 tests, ajouté à `test:figures`) ; `check-build` vérifie la page 03 (2 figures, lecture sans JavaScript, tableau) ; scénarios Firefox `series-static`, `series-keyboard`, `series-buttons` (plan principal et brouillons).
+- **Résultats** : `npm run check` 0 erreur ; 42 tests unitaires ; `verify:build` 8 pages, 119 références ; Firefox p5 14/14, site 29/29, brouillons 14/14.
+- Non poussé : la publication de la leçon 03 attend une autorisation explicite de push sur `main`.

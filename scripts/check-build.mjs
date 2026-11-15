@@ -5,7 +5,7 @@ import { resolve } from 'node:path';
 import { JSDOM } from 'jsdom';
 
 const output = resolve('dist');
-const pages = ['index.html', 'atlas/index.html', 'bibliotheque/index.html', 'cours/groupes-rotations/index.html', 'cours/mediatrices-reflexions/index.html', 'experiences/p5/index.html', '404.html'];
+const pages = ['index.html', 'atlas/index.html', 'bibliotheque/index.html', 'cours/groupes-rotations/index.html', 'cours/mediatrices-reflexions/index.html', 'cours/suites-geometriques-sommes-infinies/index.html', 'experiences/p5/index.html', '404.html'];
 let references = 0;
 
 for (const page of pages) {
@@ -57,6 +57,11 @@ for (const page of pages) {
     if (page.includes('mediatrices-reflexions')) {
       assert.equal(doc.querySelectorAll('[data-plane-figure]').length, 3, 'Trois figures interactives');
       assert.ok([...doc.querySelectorAll('[data-plane-status]')].every(status => status.textContent.trim()), 'Lecture textuelle des figures sans JavaScript');
+    }
+    if (page.includes('suites-geometriques')) {
+      assert.equal(doc.querySelectorAll('[data-series-figure]').length, 2, 'Deux figures interactives');
+      assert.ok([...doc.querySelectorAll('[data-series-status]')].every(status => status.textContent.trim()), 'Lecture textuelle des figures sans JavaScript');
+      assert.ok(doc.querySelectorAll('[data-series-table] tr').length >= 1, 'Tableau des itérations présent');
     }
   }
   if (page.startsWith('bibliotheque/')) {

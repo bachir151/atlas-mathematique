@@ -25,7 +25,7 @@ from browser_p5 import (  # noqa: E402
     ROOT, CheckSkipped, Driver, EnvironmentBlocked, QuietHandler, WebDriverError, free_port, wait_for,
 )
 
-PAGES = ['/', '/atlas/', '/bibliotheque/', '/cours/groupes-rotations/', '/cours/mediatrices-reflexions/', '/experiences/p5/', '/404.html']
+PAGES = ['/', '/atlas/', '/bibliotheque/', '/cours/groupes-rotations/', '/cours/mediatrices-reflexions/', '/cours/suites-geometriques-sommes-infinies/', '/experiences/p5/', '/404.html']
 # --drafts: serve the build that includes draft lessons (ATELIER_DRAFTS=1) and
 # run the site-wide accessibility checks on every lesson, plus the figures.
 DRAFTS = '--drafts' in sys.argv
@@ -35,11 +35,12 @@ PLAN = [
     'atlas-cleanup', 'three-not-loaded-elsewhere', 'skip-link', 'keyboard-focus', 'reflow-320',
     'text-zoom-200', 'target-size', 'contrast', 'square-rotation', 'square-reset-history', 'proof-progressive',
     'companion', 'library-filters', 'security-policy', 'figures-static', 'figures-keyboard', 'figures-buttons', 'figures-drag',
-    'atlas-reduced-motion', 'square-reduced-motion', 'page-errors',
+    'series-static', 'series-keyboard', 'series-buttons', 'atlas-reduced-motion', 'square-reduced-motion', 'page-errors',
 ]
 DRAFT_PLAN = [
     'skip-link', 'keyboard-focus', 'reflow-320', 'text-zoom-200', 'target-size', 'contrast',
-    'figures-static', 'figures-keyboard', 'figures-buttons', 'figures-drag', 'page-errors',
+    'figures-static', 'figures-keyboard', 'figures-buttons', 'figures-drag',
+    'series-static', 'series-keyboard', 'series-buttons', 'page-errors',
 ]
 
 # Screen position of vertex A (the orange marker) relative to the rotation centre, in SVG units.
@@ -571,6 +572,82 @@ class SiteChecks:
             return {'draggedTo': state[0]}
         self.case('figures-drag', drag)
 
+    # ---------- Series figures (lesson « Suites géométriques & sommes infinies ») ----------
+    def series(self):
+        d = self.d
+        page = '/cours/suites-geometriques-sommes-infinies/'
+        status = lambda kind: d.js(f"return document.querySelector('#figure-{kind} [data-series-status]').textContent;")
+        rows = lambda kind: d.js(f"return Object.fromEntries([...document.querySelectorAll('#figure-{kind} [data-series-rows] > div')].map(r=>[r.children[0].textContent,r.children[1].textContent]));")
+        set_field = lambda kind, name, value: d.js(f"const f=document.querySelector('#figure-{kind} [data-param={name}]');f.value='{value}';f.dispatchEvent(new Event('input'));")
+
+        def static():
+            html = (self.root / page.strip('/') / 'index.html').read_text(encoding='utf-8')
+            for expected in ('S₃ = 15/16, sous la limite L = 1', 'Rang 0 : x₀ = 0, au-dessous de p = 6', '4 morceaux du segment [0, 1]'):
+                assert expected in html, f'Texte initial absent du HTML compilé : {expected}'
+            self.open(page)
+            state = d.js('''return [...document.querySelectorAll('[data-series-figure]')].map(f=>({id:f.id,
+              enabled:[...f.querySelectorAll('input,button')].every(e=>!e.disabled),
+              label:f.querySelector('svg').getAttribute('aria-labelledby'),
+              dots:f.querySelectorAll('svg .fig-dot').length}));''')
+            assert len(state) == 2 and all(f['enabled'] for f in state), state
+            assert [f['dots'] for f in state] == [4, 1], state
+            for f in state:
+                assert all(d.js('return !!document.getElementById(arguments[0]);', ref) for ref in f['label'].split()), f
+            return {'figures': [f['id'] for f in state]}
+        self.case('series-static', static)
+
+        def keyboard():
+            self.open(page)
+            d.js("document.querySelector('#figure-somme-geometrique [data-param=N]').focus();")
+            for _ in range(3):
+                d.key('\ue013')  # Arrow up: N = 3 → 6
+            time.sleep(0.1)
+            st = status('somme-geometrique')
+            assert st.startswith('S₆ = 127/128') and '< ε = 1/100' in st, st
+            dots = d.js("return [...document.querySelectorAll('#figure-somme-geometrique svg .fig-dot')].map(c=>c.classList.contains('fig-dot-in'));")
+            assert dots == [False] * 6 + [True], dots
+            # Precision radios with the arrow keys: 1/100 → 1/1000.
+            d.js("document.querySelector('#figure-somme-geometrique [data-choice][value=\"100\"]').focus();")
+            d.key('\ue015'); time.sleep(0.1)
+            r = rows('somme-geometrique')
+            assert r['Premier rang où |Rₙ| < ε'] == 'N = 9 (10 termes)' and r['|R₆| < ε ?'].startswith('non'), r
+            # Decimal typed values are rounded to the step and clamped when the field is left.
+            d.js("const f=document.querySelector('#figure-somme-geometrique [data-param=q]');f.focus();f.select();")
+            for ch in '3':
+                d.key(ch)
+            d.key('\ue004'); time.sleep(0.1)
+            q = d.js("return document.querySelector('#figure-somme-geometrique [data-param=q]').value;")
+            assert q == '0.9' and rows('somme-geometrique')['Paramètres'].startswith('a = 0,5 ; q = 0,9'), (q, rows('somme-geometrique'))
+            return {'arrowKeys': True, 'radio': '1/1000', 'clamped': q}
+        self.case('series-keyboard', keyboard)
+
+        def buttons():
+            self.open(page)
+            first = "document.querySelector('#figure-somme-geometrique [data-action=first-rank]')"
+            d.js(first + ".focus();"); d.key('\ue007'); time.sleep(0.1)
+            assert rows('somme-geometrique')['|R₆| < ε ?'] == 'oui (comparaison exacte)', rows('somme-geometrique')
+            assert d.js('return ' + first + ".getAttribute('aria-disabled');") == 'true'
+            d.js("document.querySelector('#figure-somme-geometrique [data-action=preset-alternating]').click();")
+            assert status('somme-geometrique').startswith('S₃ = 5/8, sous la limite L = 2/3 ; erreur |R₃| = 1/24'), status('somme-geometrique')
+            set_field('somme-geometrique', 'a', '2'); set_field('somme-geometrique', 'q', '0.9')
+            d.js("document.querySelector('#figure-somme-geometrique [data-choice][value=\"1000\"]').click();")
+            assert status('somme-geometrique').endswith('Précision non atteinte dans les 81 sommes affichées.'), status('somme-geometrique')
+            nxt = "document.querySelector('#figure-iteration-affine [data-action=next]')"
+            d.js(nxt + ".focus();")
+            for _ in range(3):
+                d.key('\ue007')
+            time.sleep(0.1)
+            it = status('iteration-affine')
+            assert it.startswith('Rang 3 : x₃ = 5,25, au-dessous de p = 6 ; |e₃| = 0,75'), it
+            assert d.js("return document.querySelectorAll('#figure-iteration-affine [data-series-table] tr').length;") == 4
+            d.js("document.querySelector('#figure-iteration-affine [data-action=preset-alternating]').click();" + (nxt + ".click();") * 3)
+            table = d.js("return [...document.querySelectorAll('#figure-iteration-affine [data-series-table] tr')].map(r=>r.children[1].textContent);")
+            assert table == ['7', '1', '4', '2,5'], table
+            set_field('iteration-affine', 'b', '1')
+            assert status('iteration-affine').startswith('Rang 0'), status('iteration-affine')
+            return {'firstRank': 6, 'iteration': it}
+        self.case('series-buttons', buttons)
+
     def reduced(self):
         d = self.d
         self.open('/atlas/')
@@ -655,12 +732,14 @@ def main():
         if DRAFTS:
             checks.site()
             checks.figures()
+            checks.series()
             checks.collect_errors()
         else:
             checks.atlas()
             checks.site()
             checks.interactions()
             checks.figures()
+            checks.series()
             checks.collect_errors()
             driver.close()
             driver.start(True)

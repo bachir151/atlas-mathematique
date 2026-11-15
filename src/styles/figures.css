@@ -190,6 +190,8 @@
   /* The drawing is about half its nominal size: larger text, one graduation in two. */
   .fig-tick { font-size: 20px; }
   .fig-tick-odd { display: none; }
+  .series-figure .fig-tick { font-size: 19px; }
+  .series-figure :is(.fig-axis-title, .fig-line-label) { font-size: 20px; }
   .fig-label { font-size: 26px; }
   .fig-line-label { font-size: 21px; }
   .fig-square-label { font-size: 22px; }
@@ -199,3 +201,31 @@
 /* Only P can be dragged, even when another point is drawn on top of it. */
 [data-plane-svg] :is(circle, text, line, path) { pointer-events: none; }
 [data-plane-svg] [data-drag-handle] circle { pointer-events: all; touch-action: none; /* dragging P must not scroll the page */ }
+
+/* Discrete graphs of the lesson « Suites géométriques & sommes infinies »
+   (src/components/figures/SeriesFigure.astro). */
+.fig-axis-title { font: 12px var(--sans); fill: #5c6158; }
+.fig-band { fill: var(--green); fill-opacity: .14; }
+.fig-limit { stroke: var(--green); stroke-width: 2; stroke-dasharray: 7 5; }
+.fig-dot { stroke: #fff; stroke-width: 1.5; }
+.fig-dot-in { fill: var(--green); }
+.fig-dot-out { fill: var(--orange); }
+.fig-current-ring { fill: none; stroke: var(--ink); stroke-width: 1.6; }
+.fig-piece { fill: var(--green); fill-opacity: .55; stroke: #fff; stroke-width: 1; }
+.fig-piece-odd { fill-opacity: .3; }
+.fig-rest { fill: none; stroke: var(--orange); stroke-width: 1.6; stroke-dasharray: 3 2; }
+
+.series-figure .plane-figure-hint { text-align: left; }
+.series-figure .plane-figure-stage svg { max-width: 460px; }
+
+.series-table {
+  max-height: 320px;
+  overflow-y: auto;
+  margin-top: 6px;
+}
+
+.series-table table { width: 100%; font-size: 14px; }
+.series-table-caption { margin-top: 16px; font-size: 13px; color: var(--muted); }
+.series-table thead th { position: sticky; top: 0; }
+
+[data-series-svg] * { pointer-events: none; }

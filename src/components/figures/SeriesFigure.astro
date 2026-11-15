@@ -1,0 +1,98 @@
+---
+/**
+ * Interactive figures of the lesson « Suites géométriques & sommes infinies ».
+ * The graph, its text reading and (figure 2) the table of iterations are
+ * rendered at build time; src/scripts/series-figures.ts makes the controls live.
+ * Usage in MDX: <SeriesFigure kind="somme-geometrique" number="1" />
+ */
+import { EPSILONS } from '../../figures/series';
+import { seriesModels, type SeriesKind } from '../../figures/series-figure';
+import { HEIGHT, WIDTH } from '../../figures/series-svg';
+import '../../styles/figures.css';
+
+interface Props { kind: SeriesKind; number?: string }
+const { kind, number } = Astro.props;
+const id = `figure-${kind}`;
+const model = seriesModels[kind];
+const state = model.preset();
+const view = model.view(state);
+
+const titles: Record<SeriesKind, string> = {
+  'somme-geometrique': 'Sommes géométriques, limite et erreur',
+  'iteration-affine': 'Itération affine et point fixe',
+};
+const isSum = kind === 'somme-geometrique';
+---
+<figure class="plane-figure series-figure" id={id} data-series-figure={kind} aria-labelledby={`${id}-title`}>
+  <figcaption class="plane-figure-caption">
+    <span class="eyebrow">Figure{number && ` ${number}`} · interactive</span>
+    <span class="plane-figure-title" id={`${id}-title`}>{titles[kind]}</span>
+  </figcaption>
+  <div class="plane-figure-layout">
+    <div class="plane-figure-stage">
+      <svg viewBox={`0 0 ${WIDTH} ${HEIGHT}`} role="img" aria-labelledby={`${id}-title ${id}-status`} data-series-svg set:html={view.svg} />
+      <p class="plane-figure-hint">
+        {isSum ? 'Points (n, Sₙ) non reliés : l’indice n est entier. Bande claire : (L − ε, L + ε) ; points verts : |Rₙ| < ε.'
+          : 'Points (n, xₙ) non reliés ; droite horizontale : le point fixe p.'}
+      </p>
+    </div>
+    <div class="plane-figure-side">
+      <div class="plane-controls" role="group" aria-label="Paramètres de la figure">
+        {model.fields.map(field => (
+          <label class="plane-field">
+            <span>{field.label}</span>
+            <input type="number" inputmode="decimal" step={1 / field.scale} min={field.min / field.scale} max={field.max / field.scale}
+              value={state[field.name] / field.scale} data-param={field.name} data-scale={field.scale} disabled />
+          </label>
+        ))}
+        {isSum && (
+          <fieldset class="plane-order">
+            <legend>Précision ε</legend>
+            {EPSILONS.map(eps => (
+              <label><input type="radio" name={`${id}-eps`} value={eps} checked={eps === state.eps} disabled data-choice="eps" /> 1/{eps}</label>
+            ))}
+          </fieldset>
+        )}
+      </div>
+      <div class="plane-actions">
+        {isSum ? (
+          <>
+            <button type="button" class="button primary" data-action="first-rank" disabled>Aller au premier rang où l’erreur est &lt; ε</button>
+            <button type="button" class="button secondary" data-action="preset-halves" disabled>Préréglage : moitiés</button>
+            <button type="button" class="button secondary" data-action="preset-alternating" disabled>Préréglage : q = −0,5</button>
+          </>
+        ) : (
+          <>
+            <button type="button" class="button primary" data-action="next" disabled>Étape suivante</button>
+            <button type="button" class="button secondary" data-action="reset" disabled>Revenir au début</button>
+            <button type="button" class="button secondary" data-action="preset-average" disabled>Préréglage : q = 0,5</button>
+            <button type="button" class="button secondary" data-action="preset-alternating" disabled>Préréglage : q = −0,5</button>
+          </>
+        )}
+      </div>
+      <dl class="plane-reading" data-series-rows>
+        {view.rows.map(([term, value]) => <div><dt>{term}</dt><dd>{value}</dd></div>)}
+      </dl>
+      <p class="plane-status" id={`${id}-status`} role="status" aria-live="polite" data-series-status>{view.status}</p>
+    </div>
+  </div>
+  {view.table && (
+    <>
+    <p class="series-table-caption" id={`${id}-table-caption`}>Positions et erreurs aux rangs déjà calculés</p>
+    <div class="table-scroll series-table" tabindex="0" role="region" aria-labelledby={`${id}-table-caption`}>
+      <table aria-labelledby={`${id}-table-caption`}>
+        <thead><tr><th scope="col">Rang n</th><th scope="col">xₙ</th><th scope="col">eₙ = xₙ − p</th><th scope="col">|eₙ|</th></tr></thead>
+        <tbody data-series-table>
+          {view.table.map(row => <tr>{row.map(cell => <td>{cell}</td>)}</tr>)}
+        </tbody>
+      </table>
+    </div>
+    </>
+  )}
+  <p class="technical-note">Les valeurs sont calculées exactement, en fractions ; une valeur précédée de « ≈ » est un arrondi d’affichage. Le graphique et les valeurs ne remplacent pas les démonstrations de la leçon.</p>
+  <noscript><p class="technical-note">Activez JavaScript pour modifier la figure. La figure et ses valeurs initiales restent lisibles.</p></noscript>
+</figure>
+<script>
+  import { initSeriesFigure } from '../../scripts/series-figures';
+  document.querySelectorAll<HTMLElement>('[data-series-figure]').forEach(initSeriesFigure);
+</script>

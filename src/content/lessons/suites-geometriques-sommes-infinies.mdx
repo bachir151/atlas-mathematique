@@ -1,0 +1,543 @@
+---
+title: "Suites géométriques & sommes infinies"
+heading:
+  lead: "Suites géométriques &"
+  emphasis: "sommes infinies."
+summary: "Additionner des moitiés successives, définir une limite et savoir exactement ce qui manque à une somme arrêtée."
+domain: "Analyse"
+number: "03"
+breadcrumb: "Suites géométriques & sommes infinies"
+status: "validated"
+validation: "Décision de la direction du projet, 15 novembre 2026 (niveau lycée avec la définition quantifiée de la limite ; raisons négatives dans le parcours principal ; connexions et exercices 4 et 5 facultatifs ; deux figures retenues)"
+companion: false
+sections:
+  - { id: "exploration", label: "Exploration" }
+  - { id: "cours", label: "Le cours" }
+  - { id: "demonstration", label: "Démonstration" }
+  - { id: "preuve-integrale", label: "Preuve intégrale" }
+  - { id: "connexions", label: "Connexions" }
+  - { id: "exercices", label: "Exercices" }
+  - { id: "reconstruction", label: "À reconstruire" }
+---
+
+<CourseSection id="exploration" eyebrow="01 / Exploration" title="Peut-on additionner sans fin et obtenir un nombre ?">
+
+**Pour commencer :** savoir calculer avec des fractions, des puissances entières et des inégalités. La valeur absolue sera interprétée comme une distance sur la droite réelle. Nous rappellerons le principe de récurrence utilisé dans la preuve. Aucune connaissance des dérivées, des intégrales ou des logarithmes n’est nécessaire. Le parcours principal vise le lycée ; les connexions et les deux derniers exercices offrent un approfondissement facultatif vers le début de licence. Les leçons 01 et 02 ne sont pas des prérequis.
+
+Prenez un segment de longueur $1$. Marquez sa moitié, puis ajoutez la moitié de la longueur restante, puis encore la moitié de ce qui reste. Sans dessin, cela revient à calculer les sommes suivantes :
+
+| Nombre $m$ de morceaux ajoutés | Dernier morceau | Longueur totale $T_m$ | Longueur restante |
+| --- | --- | --- | --- |
+| $1$ | $1/2$ | $1/2$ | $1/2$ |
+| $2$ | $1/4$ | $3/4$ | $1/4$ |
+| $3$ | $1/8$ | $7/8$ | $1/8$ |
+| $4$ | $1/16$ | $15/16$ | $1/16$ |
+
+Vous pouvez reproduire ces partages sur une feuille ou continuer les calculs. Après $m$ ajouts, le tableau suggère
+
+$$
+T_m=\frac12+\frac1{2^2}+\cdots+\frac1{2^m}
+=1-\frac1{2^m}.
+$$
+
+Pour tout entier fini $m\geq1$, il resterait donc une longueur strictement positive. Pourtant, cette longueur semble pouvoir devenir aussi petite qu’on le souhaite. Ces deux affirmations sont-elles compatibles ?
+
+L’enjeu de l’analyse apparaît ici : **ne jamais atteindre un nombre en un nombre fini d’étapes n’empêche pas de tendre vers lui**. Nous devons donner un sens précis à « aussi petite qu’on le souhaite », puis le démontrer. Une calculatrice affichant $1$ après plusieurs ajouts ne suffit pas : elle arrondit ses résultats.
+
+</CourseSection>
+
+<CourseSection id="cours" eyebrow="02 / Le cours" title="Du terme à la somme, de l’approximation à la limite">
+
+Nous travaillons dans les nombres réels et posons $\mathbb N=\{0,1,2,\ldots\}$. Pour un réel $x$, la valeur absolue $|x|$ est sa distance à $0$ ; ainsi $|x-L|$ est la distance de $x$ à $L$.
+
+<Definition number="1" name="Suite et suite géométrique" id="definition-suite">
+
+Une **suite réelle** associe un nombre réel $u_n$ à chaque entier $n\in\mathbb N$. L’entier $n$ est son **indice**, et $u_n$ son **terme d’indice $n$**.
+
+Une suite géométrique de premier terme $a$ et de **raison** $q$ est définie par
+
+$$
+u_0=a,\qquad u_{n+1}=q u_n.
+$$
+
+On a $u_n=a q^n$ : c’est vrai au rang $0$, puis multiplier la formule au rang $n$ par $q$ donne celle au rang $n+1$. Dans cette écriture, on convient que $q^0=1$, y compris lorsque $q=0$ ; dans ce dernier cas, les termes sont $a,0,0,\ldots$.
+
+</Definition>
+
+<Definition number="2" name="Convergence vers un réel" id="definition-limite">
+
+Une suite $(v_n)$ **converge vers un réel $L$** si, pour toute précision $\varepsilon>0$, il existe un entier $n_0$ tel que
+
+$$
+\text{pour tout }n\geq n_0,\qquad |v_n-L|<\varepsilon.
+$$
+
+On écrit $v_n\longrightarrow L$ ou $\lim_{n\to\infty}v_n=L$.
+
+Autrement dit, quelle que soit la largeur choisie autour de $L$, **tous** les termes à partir d’un certain rang sont dans l’intervalle $(L-\varepsilon,L+\varepsilon)$. Le rang peut dépendre de la précision ; la suite et $L$ sont fixés avant de choisir cette précision.
+
+</Definition>
+
+Par exemple, $2^{-n}\longrightarrow0$ signifiera que, pour chaque $\varepsilon>0$, toutes les puissances $2^{-n}$ sont inférieures à $\varepsilon$ à partir d’un certain rang. Le tableau de l’exploration ne prouve pas encore cette assertion, puisqu’il ne traite que quatre rangs et aucune précision arbitraire.
+
+<Remark name="Une limite est unique">
+
+Nous utilisons l’inégalité triangulaire $|x+y|\leq|x|+|y|$, propriété usuelle de la valeur absolue. Si une suite convergeait vers deux réels distincts $L$ et $M$, prenons $\varepsilon=|L-M|/3>0$. Au-delà des deux rangs fournis par la définition, on aurait simultanément
+
+$$
+|L-M|\leq|L-v_n|+|v_n-M|
+<\frac23|L-M|,
+$$
+
+ce qui est impossible. On peut donc parler de **la** limite lorsqu’elle existe.
+
+</Remark>
+
+<Definition number="3" name="Sommes partielles et série convergente" id="definition-serie">
+
+Pour une suite $(u_n)$ et un entier $N\geq0$, sa **somme partielle** est
+
+$$
+S_N=\sum_{n=0}^{N}u_n=u_0+u_1+\cdots+u_N.
+$$
+
+Il s’agit d’une somme finie de **$N+1$ termes**. Si la suite $(S_N)$ converge vers un réel $L$, on dit que la **série** de terme général $u_n$ converge, et on note sa somme
+
+$$
+\sum_{n=0}^{\infty}u_n=L.
+$$
+
+Cette notation désigne la limite des sommes partielles, et non une dernière addition effectuée « au rang infini ». Lorsque $(S_N)$ n’a pas de limite réelle, la série ne possède pas de somme réelle au sens de cette définition.
+
+</Definition>
+
+<Theorem kind="Théorème" number="1" name="Série géométrique et erreur exacte" id="theoreme-geometrique">
+
+Soient $a\in\mathbb R$ et $q\in\mathbb R$ avec $|q|<1$, fixés. Posons $u_n=a q^n$ pour $n\in\mathbb N$ et $S_N=\sum_{n=0}^{N}a q^n$.
+
+1. Le terme $u_n$ tend vers $0$.
+2. Pour tout $N\geq0$, la somme finie est
+
+$$
+S_N=a\,\frac{1-q^{N+1}}{1-q}.
+$$
+
+3. La série converge et sa somme vaut
+
+$$
+L=\sum_{n=0}^{\infty}a q^n=\frac{a}{1-q}.
+$$
+
+4. Le **reste**, c’est-à-dire la différence entre la limite et la somme arrêtée, et l’**erreur absolue** sont exactement
+
+$$
+R_N=L-S_N=\frac{a q^{N+1}}{1-q},
+\qquad
+|R_N|=\frac{|a|\,|q|^{N+1}}{1-q}.
+$$
+
+Le dénominateur $1-q$ est strictement positif sous l’hypothèse $|q|<1$.
+
+</Theorem>
+
+Toutes les affirmations du théorème seront démontrées ci-dessous, y compris la convergence des puissances : nous n’allons pas supposer cette convergence pour justifier la formule de la somme infinie. La preuve intégrale est directement accessible dans la navigation et visible indépendamment des étapes.
+
+<Example name="Retrouver les moitiés successives">
+
+Prenons $a=1/2$ et $q=1/2$. La somme partielle $S_N$ contient $N+1$ morceaux. Avec la notation de l’exploration, $T_m=S_{m-1}$ pour $m\geq1$. Le théorème donne
+
+$$
+T_m=1-2^{-m},\qquad 1-T_m=2^{-m},
+\qquad \lim_{m\to\infty}T_m=1.
+$$
+
+Pour toute étape finie, $T_m<1$. En revanche, pour chaque $\varepsilon>0$, il existe un rang à partir duquel $1-T_m<\varepsilon$. La somme infinie vaut $1$ au sens de cette limite, sans qu’aucune somme partielle soit égale à $1$.
+
+</Example>
+
+<Example name="Une limite peut être approchée des deux côtés">
+
+Avec $a=1$ et $q=-1/2$, les premières sommes partielles sont
+
+$$
+S_0=1,\quad S_1=\frac12,\quad S_2=\frac34,
+\quad S_3=\frac58.
+$$
+
+La limite est $L=2/3$. La formule du reste devient
+
+$$
+L-S_N=\frac23\left(-\frac12\right)^{N+1}.
+$$
+
+Si $N$ est pair, le reste est négatif et $S_N>L$ ; si $N$ est impair, le reste est positif et $S_N<L$. Ces oscillations n’empêchent pas la convergence, puisque leur amplitude tend vers $0$. Une suite convergente n’est donc pas nécessairement croissante ou décroissante.
+
+</Example>
+
+<SeriesFigure kind="somme-geometrique" number="1" />
+
+<Remark name="Une condition à ne pas effacer">
+
+La formule finie $S_N=a(1-q^{N+1})/(1-q)$ reste valable pour tout réel $q\ne1$ : sa démonstration algébrique ci-dessous ne requiert pas $|q|<1$. En revanche, la formule de la somme infinie exige ici $|q|<1$.
+
+Pour $a=1$ et $q=1$, on a $S_N=N+1$, sans limite réelle. Pour $a=1$ et $q=-1$, on a $S_N=1$ aux rangs pairs et $S_N=0$ aux rangs impairs. Cette suite n’a pas de limite réelle : avec une précision $1/3$, deux termes tardifs valant respectivement $0$ et $1$ ne peuvent être tous deux à une distance inférieure à $1/3$ d’un même réel, par l’inégalité triangulaire.
+
+Lorsque $a=0$, tous les termes et toutes les sommes partielles sont nuls, quelle que soit la raison $q$. Cette exception ne doit pas être perdue lorsqu’on discute les conditions de convergence.
+
+</Remark>
+
+</CourseSection>
+
+<Proof eyebrow="03 / Démonstration" title="Une somme finie, puis une erreur arbitrairement petite" intro="Nous démontrons le théorème 1. Le calcul de la somme ne suffit pas : il faut aussi prouver que les puissances de toute raison de valeur absolue inférieure à 1 tendent vers 0.">
+
+  <ProofStep title="Décaler une somme finie pour la simplifier" open>
+
+Fixons $N\geq0$. Toutes les sommes de cette étape sont finies. En multipliant $S_N$ par $q$, nous obtenons
+
+$$
+S_N=a+aq+\cdots+aq^N,
+\qquad qS_N=aq+aq^2+\cdots+aq^{N+1}.
+$$
+
+La soustraction annule les termes communs :
+
+$$
+(1-q)S_N=a-aq^{N+1}.
+$$
+
+Puisque $q\ne1$, nous pouvons diviser par $1-q$, d’où $S_N=a(1-q^{N+1})/(1-q)$. Pour $N=0$, la même soustraction s’écrit simplement $a-qa$ et donne bien $S_0=a$.
+
+Cette identité établit la formule finie, sans encore donner une limite.
+
+  </ProofStep>
+
+  <ProofStep title="Prouver une croissance qui servira de comparaison">
+
+Pour tout $h>0$ et tout entier $n\geq0$, montrons que
+
+$$
+(1+h)^n\geq1+nh.
+$$
+
+Nous raisonnons **par récurrence** : vérifier le rang $0$, puis montrer que la vérité au rang $n$ entraîne celle au rang $n+1$, établit la propriété à tous les rangs naturels.
+
+Au rang $0$, les deux membres valent $1$. Si l’inégalité est vraie au rang $n$, multiplier par $1+h>0$ conserve son sens et donne
+
+$$
+(1+h)^{n+1}\geq(1+nh)(1+h)
+=1+(n+1)h+nh^2\geq1+(n+1)h.
+$$
+
+L’inégalité est donc vraie pour tout $n\geq0$.
+
+  </ProofStep>
+
+  <ProofStep title="Faire entrer toutes les puissances dans toute précision">
+
+Posons $r=|q|$. Si $r=0$, on a $r^n=0$ pour tout $n\geq1$ : la convergence vers $0$ est immédiate.
+
+Supposons $0<r<1$ et posons $h=1/r-1>0$. Alors $r=1/(1+h)$. L’inégalité de l’étape précédente, dont les deux membres sont positifs, donne en passant aux inverses
+
+$$
+0<r^n=\frac1{(1+h)^n}\leq\frac1{1+nh}.
+$$
+
+Nous utilisons la **propriété d’Archimède des réels**, admise ici : pour tout réel $B$, il existe un entier naturel strictement supérieur à $B$.
+
+Fixons une précision quelconque $\delta>0$. Choisissons un entier $n_0>1/(h\delta)$. Pour tout $n\geq n_0$, on a $1+nh>1/\delta$, donc $r^n<\delta$. Cela prouve $r^n\longrightarrow0$ avec la définition de la limite.
+
+Si $a\ne0$, appliquer cette conclusion avec $\delta=\varepsilon/|a|$ donne, à partir d’un certain rang, $|u_n|=|a|r^n<\varepsilon$. Si $a=0$, $u_n=0$ pour tout $n$. Ainsi $u_n\longrightarrow0$ dans tous les cas du théorème.
+
+  </ProofStep>
+
+  <ProofStep title="Calculer le reste et établir la convergence de la somme">
+
+Posons $L=a/(1-q)$, un réel bien défini. La formule finie de la première étape donne exactement
+
+$$
+L-S_N=\frac{a q^{N+1}}{1-q},
+\qquad |L-S_N|=C r^{N+1},
+\qquad C=\frac{|a|}{1-q}\geq0.
+$$
+
+Si $C=0$, alors $a=0$ et $S_N=L=0$ pour tout $N$. Sinon, pour chaque $\varepsilon>0$, la convergence de $r^n$ prouvée à l’étape précédente fournit un rang $n_0$ tel que $r^n<\varepsilon/C$ pour tout $n\geq n_0$. Dès que $N\geq n_0$, l’exposant $N+1$ convient aussi et $|L-S_N|<\varepsilon$.
+
+Par définition, $S_N\longrightarrow L$ : la série converge vers $a/(1-q)$. Nous avons également démontré les formules exactes du reste et de l’erreur, sans transformer formellement une addition infinie.
+
+  </ProofStep>
+
+  <FullProof slot="full">
+
+**Preuve intégrale du théorème 1.** Soient $a,q\in\mathbb R$ avec $|q|<1$, et $S_N=\sum_{n=0}^{N}aq^n$ pour $N\geq0$. En soustrayant les deux sommes finies $S_N$ et $qS_N$, tous les termes communs s’annulent, ce qui donne
+
+$$
+(1-q)S_N=a-aq^{N+1}.
+$$
+
+Comme $q\ne1$, on obtient $S_N=a(1-q^{N+1})/(1-q)$ pour tout $N\geq0$. Cette identité vaut aussi lorsque $N=0$.
+
+Établissons maintenant la convergence des puissances. Pour $h>0$, une récurrence donne $(1+h)^n\geq1+nh$ pour tout $n\geq0$ : au rang $0$, c’est une égalité ; si l’inégalité est vraie au rang $n$, alors
+
+$$
+(1+h)^{n+1}\geq(1+nh)(1+h)
+=1+(n+1)h+nh^2\geq1+(n+1)h.
+$$
+
+Posons $r=|q|$. Pour $r=0$, $r^n=0$ dès $n\geq1$, donc $r^n\longrightarrow0$. Pour $0<r<1$, posons $h=1/r-1>0$. L’inégalité qui précède implique
+
+$$
+0<r^n\leq\frac1{1+nh}.
+$$
+
+Pour tout $\delta>0$, la propriété d’Archimède des réels fournit un entier $n_0>1/(h\delta)$. Alors, pour tout $n\geq n_0$, on a $1+nh>1/\delta$, donc $r^n<\delta$. Ceci prouve $r^n\longrightarrow0$ sans supposer un résultat préalable sur les limites des suites géométriques. Si $a=0$, $u_n=0$ ; sinon, prendre $\delta=\varepsilon/|a|$ montre que $|u_n|=|a|r^n<\varepsilon$ à partir d’un certain rang. Ainsi $u_n\longrightarrow0$.
+
+Posons enfin $L=a/(1-q)$. L’identité finie fournit
+
+$$
+L-S_N=\frac{a q^{N+1}}{1-q},
+\qquad |L-S_N|=\frac{|a|r^{N+1}}{1-q},
+$$
+
+puisque $1-q>0$. Si $a=0$, l’erreur est nulle pour tout $N$. Sinon, $C=|a|/(1-q)>0$ ; pour chaque $\varepsilon>0$, la convergence de $r^n$ fournit un entier $n_0$ tel que $r^n<\varepsilon/C$ pour tout $n\geq n_0$. Pour tout $N\geq n_0$, il vient $|L-S_N|=C r^{N+1}<\varepsilon$.
+
+Par définition de la limite, $S_N\longrightarrow a/(1-q)$, donc la série converge et sa somme vaut $a/(1-q)$. Les deux dernières égalités établissent aussi le reste et l’erreur exacts. Toutes les affirmations du théorème sont démontrées.
+
+  </FullProof>
+
+</Proof>
+
+<CourseSection id="connexions" eyebrow="04 / Connexions" title="Quand répéter une transformation rapproche d’un point">
+
+Cette section est facultative. Les deux liens proposés sont des **liens mathématiques démontrés**. Le second est aussi une application à un procédé de calcul ; nous ne proposons aucun modèle physique ni analogie historique.
+
+### De la conservation des distances à leur réduction
+
+Les rotations et les réflexions étudiées dans les deux premières leçons conservent les distances. Sur la droite réelle, la réflexion de centre $0$, $s(x)=-x$, vérifie par exemple
+
+$$
+|s(x)-s(y)|=|-x+y|=|x-y|.
+$$
+
+Sa restriction se retrouve sur une droite perpendiculaire à l’axe d’une réflexion du plan, en prenant pour origine son intersection avec l’axe.
+
+Pour $f(x)=qx$ avec $|q|<1$, on a au contraire
+
+$$
+|f(x)-f(y)|=|q|\,|x-y|.
+$$
+
+Une application qui réduit ainsi toutes les distances d’un facteur constant strictement inférieur à $1$ est appelée ici une **contraction**. Après $n$ applications de $f$, une position initiale $x$ devient $q^n x$ : une récurrence le vérifie. Sa distance à $0$ vaut $|x|\,|q|^n$ et tend vers $0$ par le théorème 1.
+
+Pour $x\ne0$, répéter $s$ laisse au contraire la distance à $0$ égale à $|x|$ ; les positions alternent entre $x$ et $-x$. Le calcul explique ce qui change entre ces deux transformations. Il ne suppose pas que les contractions soient des symétries du carré.
+
+### Une itération affine et son point fixe
+
+Fixons $q,b\in\mathbb R$ avec $|q|<1$, puis un réel initial $x_0$. Définissons
+
+$$
+x_{n+1}=qx_n+b.
+$$
+
+Un **point fixe** est un réel $p$ vérifiant $p=qp+b$. Comme $1-q\ne0$, il en existe exactement un,
+
+$$
+p=\frac{b}{1-q}.
+$$
+
+Soustraire cette égalité à la relation de récurrence donne $x_{n+1}-p=q(x_n-p)$. Par récurrence, en partant du rang $0$, on obtient
+
+$$
+x_n-p=q^n(x_0-p).
+$$
+
+Le théorème 1 appliqué à $a=x_0-p$ montre que cette différence tend vers $0$. Autrement dit, pour toute précision $\varepsilon>0$, $|x_n-p|<\varepsilon$ à partir d’un certain rang : **toute position initiale conduit à la même limite $p$**. Nous venons de démontrer ce résultat pour cette application affine réelle ; aucun théorème général sur les points fixes n’est supposé.
+
+Par exemple, remplacer à chaque étape $x_n$ par sa moyenne avec $6$ donne $q=1/2$, $b=3$ et $p=6$. Si $x_0=0$, la formule exacte est
+
+$$
+x_n=6-6\,2^{-n},\qquad |x_n-6|=6\,2^{-n}.
+$$
+
+Cet algorithme illustre une convergence contrôlée : la formule de l’erreur permet de choisir le nombre d’étapes. Un calcul en machine y ajoute des erreurs d’arrondi, qui ne font pas partie de cette formule en nombres réels exacts.
+
+<SeriesFigure kind="iteration-affine" number="2" />
+
+</CourseSection>
+
+<CourseSection id="exercices" eyebrow="05 / Exercices" title="Distinguer, estimer, puis reconstruire">
+
+Chaque exercice possède un indice et une correction accessibles indépendamment. Les exercices 1 à 3 prolongent le parcours principal ; les exercices 4 et 5 sont facultatifs.
+
+<Exercise number="1" name="Combien de moitiés faut-il ajouter ?" level="Lycée" id="exercice-moities">
+
+Pour $m\geq1$, posons $T_m=\sum_{k=1}^{m}2^{-k}$. Déterminez sa limite et son erreur exacte. Trouvez le plus petit entier $m$ tel que $|T_m-1|<1/100$. Justifiez aussi pourquoi $T_m\ne1$ pour tout $m$ fini.
+
+  <Hint>
+
+Il y a $m$ termes : dans le théorème 1, prenez $a=q=1/2$ et $N=m-1$. Comparez $2^6$ et $2^7$ à $100$.
+
+  </Hint>
+
+  <Solution>
+
+Le théorème donne $T_m=1-2^{-m}$, donc $T_m\longrightarrow1$ et $|T_m-1|=2^{-m}$. Comme $2^6=64<100<128=2^7$, on a $2^{-6}>1/100$ et $2^{-7}<1/100$. Les erreurs décroissent strictement avec $m$, donc le premier rang convenable est $m=7$. Enfin, $2^{-m}>0$ pour chaque entier fini $m$, d’où $T_m<1$.
+
+  </Solution>
+
+</Exercise>
+
+<Exercise number="2" name="Une somme qui oscille autour de sa limite" level="Lycée" id="exercice-alternance">
+
+Soit $S_N=\sum_{n=0}^{N}(-1/2)^n$. Déterminez sa limite, le côté de la limite où se trouve $S_N$ selon la parité de $N$, et le plus petit $N\geq0$ tel que l’erreur soit au plus $1/100$.
+
+  <Hint>
+
+Le reste signé est $\frac23(-1/2)^{N+1}$. Pour l’erreur absolue, simplifiez $\frac23(1/2)^{N+1}$ avant de comparer à $1/100$.
+
+  </Hint>
+
+  <Solution>
+
+La limite est $L=1/(1+1/2)=2/3$. Si $N$ est pair, $L-S_N<0$, donc $S_N>L$ ; si $N$ est impair, $L-S_N>0$, donc $S_N<L$.
+
+L’erreur absolue vaut
+
+$$
+|L-S_N|=\frac1{3\cdot2^N}.
+$$
+
+Au rang $5$, elle vaut $1/96>1/100$ ; au rang $6$, elle vaut $1/192<1/100$. Comme elle décroît strictement, le plus petit rang convenable est $N=6$, soit une somme de $7$ termes.
+
+  </Solution>
+
+</Exercise>
+
+<Exercise number="3" name="Que signifie 0,999… ?" level="Lycée" id="exercice-decimal">
+
+Pour $m\geq1$, définissons le décimal fini $D_m$ par
+
+$$
+D_m=\frac9{10}+\frac9{10^2}+\cdots+\frac9{10^m}.
+$$
+
+On définit ici l’écriture décimale infinie $0{,}999\ldots$ comme la limite de $(D_m)$, si elle existe. Calculez $D_m$ et cette limite. Pourquoi l’inégalité $D_m<1$ à tout rang fini ne contredit-elle pas le résultat ?
+
+  <Hint>
+
+Appliquez le théorème avec $a=9/10$, $q=1/10$ et $N=m-1$. Distinguez chaque décimal fini de la limite de tous ces décimaux.
+
+  </Hint>
+
+  <Solution>
+
+La formule finie donne
+
+$$
+D_m=\frac{9}{10}\,\frac{1-10^{-m}}{1-1/10}
+=1-10^{-m}.
+$$
+
+Puisque $10^{-m}\longrightarrow0$, on a $D_m\longrightarrow1$. Avec la définition proposée, $0{,}999\ldots=1$. Pour chaque entier fini $m$, la différence $1-D_m=10^{-m}$ est positive, mais elle n’est pas une même quantité positive indépendante de $m$. Elle devient inférieure à toute précision prescrite. Il n’y a donc pas de contradiction entre les inégalités finies et l’égalité à la limite.
+
+  </Solution>
+
+</Exercise>
+
+<Exercise number="4" name="Des termes petits ne garantissent pas une somme finie" level="Approfondissement facultatif · lycée avancé / début de licence" id="exercice-harmonique">
+
+1. Supposons qu’une série $\sum_{n=0}^{\infty}u_n$ converge, c’est-à-dire que ses sommes partielles $S_N$ tendent vers un réel $L$. Montrez directement avec la définition de la limite que $u_N\longrightarrow0$. Pour $N\geq1$, utilisez $u_N=S_N-S_{N-1}$.
+2. Pour $M\geq1$, posons $H_M=\sum_{k=1}^{M}1/k$. Montrez que $1/k\longrightarrow0$ lorsque $k\longrightarrow\infty$, mais que, pour tout entier $m\geq0$,
+
+$$
+H_{2^m}\geq1+\frac m2.
+$$
+
+Déduisez-en que la série de termes $1/k$ ne converge pas vers un réel. Pour établir l’inégalité, regroupez les indices en blocs $2^{j-1}<k\leq2^j$.
+
+  <Hint>
+
+Pour la première question, demandez une précision $\varepsilon/2$ pour les deux sommes partielles. Pour la seconde, le bloc d’indice $j\geq1$ contient $2^{j-1}$ termes, chacun au moins égal à $1/2^j$.
+
+  </Hint>
+
+  <Solution>
+
+**Condition nécessaire.** Fixons $\varepsilon>0$. Comme $S_N\longrightarrow L$, il existe $N_0$ tel que $|S_j-L|<\varepsilon/2$ pour tout $j\geq N_0$. Si $N\geq N_0+1$, les indices $N$ et $N-1$ conviennent tous deux, donc
+
+$$
+|u_N|=|S_N-S_{N-1}|
+\leq|S_N-L|+|S_{N-1}-L|<\varepsilon.
+$$
+
+Ainsi $u_N\longrightarrow0$.
+
+**Un contre-exemple à la réciproque.** Pour $\varepsilon>0$, choisissons par la propriété d’Archimède un entier $k_0>1/\varepsilon$. Alors $0<1/k<\varepsilon$ pour tout $k\geq k_0$, ce qui prouve $1/k\longrightarrow0$.
+
+Dans le bloc $2^{j-1}<k\leq2^j$, chacun des $2^{j-1}$ termes vérifie $1/k\geq1/2^j$. La somme de ce bloc est donc au moins $1/2$. Pour $m\geq1$, les $m$ blocs qui suivent le premier terme donnent
+
+$$
+H_{2^m}=1+\sum_{j=1}^{m}
+\sum_{k=2^{j-1}+1}^{2^j}\frac1k
+\geq1+\frac m2.
+$$
+
+L’inégalité est aussi vraie pour $m=0$, avec $H_1=1$. Supposons maintenant que $H_M$ converge vers un réel $L$. Avec la précision $1$, on aurait $H_M<L+1$ pour tout $M$ assez grand. Or nous pouvons choisir $m$ assez grand pour que $1+m/2>L+1$ et que $2^m$ dépasse ce rang : la propriété d’Archimède et $2^m\geq1+m$, démontré dans la preuve avec $h=1$, le garantissent. Alors $H_{2^m}\geq1+m/2>L+1$, contradiction.
+
+Les termes tendent donc bien vers $0$, mais la série ne converge pas. Cette condition nécessaire n’est pas suffisante.
+
+  </Solution>
+
+</Exercise>
+
+<Exercise number="5" name="Construire une limite par itération" level="Approfondissement facultatif · lycée avancé / début de licence" id="exercice-iteration">
+
+Soit $x_0=0$ et, pour tout $n\geq0$, $x_{n+1}=(x_n+6)/2$.
+
+1. Trouvez l’unique point fixe $p$, puis démontrez par récurrence que $x_n=6-6\,2^{-n}$.
+2. Déterminez la limite et le plus petit entier $n$ tel que $|x_n-6|<1/100$.
+3. On remplace maintenant la relation par $y_{n+1}=-y_n/2+9/2$, avec $y_0=7$. Trouvez le point fixe, une formule exacte pour $y_n$ et sa limite. Les termes restent-ils tous du même côté du point fixe ?
+
+  <Hint>
+
+Soustrayez le point fixe à chaque relation. Les erreurs signées forment des suites géométriques de raisons respectives $1/2$ et $-1/2$.
+
+  </Hint>
+
+  <Solution>
+
+**Première itération.** Résoudre $p=(p+6)/2$ donne l’unique solution $p=6$. Au rang $0$, $6-6\,2^0=0=x_0$. Si $x_n=6-6\,2^{-n}$, alors
+
+$$
+x_{n+1}=\frac{6-6\,2^{-n}+6}{2}
+=6-6\,2^{-(n+1)}.
+$$
+
+La formule est donc vraie à tous les rangs par récurrence. L’erreur $|x_n-6|=6\,2^{-n}$ tend vers $0$, donc $x_n\longrightarrow6$. La condition $6\,2^{-n}<1/100$ équivaut à $2^n>600$. Comme $2^9=512<600<1024=2^{10}$, le premier rang convenable est $n=10$.
+
+**Deuxième itération.** L’équation $p=-p/2+9/2$ a pour unique solution $p=3$. En soustrayant cette égalité à la récurrence, on trouve $y_{n+1}-3=-(y_n-3)/2$. Le terme initial de la suite des erreurs est $y_0-3=4$. Une récurrence, partant de cette valeur et multipliant par $-1/2$ à chaque étape, donne
+
+$$
+y_n=3+4\left(-\frac12\right)^n.
+$$
+
+Par le théorème 1, $|y_n-3|=4\,2^{-n}\longrightarrow0$, donc $y_n\longrightarrow3$. Pour $n$ pair, $y_n>3$ ; pour $n$ impair, $y_n<3$. L’alternance du côté d’approche ne change pas la limite.
+
+  </Solution>
+
+</Exercise>
+
+</CourseSection>
+
+<CourseSection id="reconstruction" eyebrow="06 / À reconstruire" title="Donner un sens à l’infini en contrôlant le fini">
+
+Pour reconstruire le parcours sans le relire, essayez de répondre aux questions suivantes :
+
+1. Quelle différence faites-vous entre le terme $u_n$, la somme partielle $S_N$ et la somme d’une série ? Combien de termes contient $S_N$ ?
+2. Dans la définition de la convergence, pourquoi faut-il traiter toute précision et tous les termes à partir d’un rang ?
+3. Pourquoi le calcul de $(1-q)S_N$ est-il une manipulation finie légitime ? À quel endroit précis la condition $|q|<1$ intervient-elle ensuite ?
+4. Comment l’inégalité $(1+h)^n\geq1+nh$ et la propriété d’Archimède permettent-elles de prouver $|q|^n\longrightarrow0$ ?
+5. Comment choisir un nombre d’étapes à partir d’une erreur exigée ? Pourquoi un affichage numérique identique à la limite ne prouve-t-il pas l’égalité exacte ?
+
+La preuve intégrale et les corrections permettent de vérifier chaque réponse. Si vous poursuivez avec les approfondissements, reconstruisez aussi la différence entre « les termes tendent vers $0$ » et « la série converge », puis expliquez pourquoi soustraire un point fixe transforme une itération affine en suite géométrique.
+
+</CourseSection>

@@ -12,7 +12,7 @@ export interface LessonEntry {
 export const lessons: readonly LessonEntry[] = [
   { id: 'groupes-rotations', title: 'Groupes & rotations du carré', domain: 'Algèbre', status: 'validated', href: '/cours/groupes-rotations/', number: '01', visual: 'square' },
   { id: 'mediatrices-reflexions', title: 'Médiatrices & réflexions du plan', domain: 'Géométrie', status: 'validated', href: '/cours/mediatrices-reflexions/', number: '02', visual: 'orbit' },
-  { id: 'analyse', title: 'Analyse', domain: 'Analyse', status: 'planned', number: '03', visual: 'wave' },
+  { id: 'suites-geometriques-sommes-infinies', title: 'Suites géométriques & sommes infinies', domain: 'Analyse', status: 'validated', href: '/cours/suites-geometriques-sommes-infinies/', number: '03', visual: 'wave' },
 ];
 
 export function filterLessons(query: string, domain: string): readonly LessonEntry[] {
