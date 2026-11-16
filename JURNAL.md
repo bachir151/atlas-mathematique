@@ -1,6 +1,6 @@
 # JURNAL — mémoire de continuité du projet
 
-Dernière mise à jour : 14 novembre 2026, 18:15 Europe/Paris (Claude).
+Dernière mise à jour : 16 novembre 2026 (Claude).
 
 Ce fichier conserve l’état opérationnel de **L’Atelier des abstractions** entre deux sessions. Il ne remplace ni les consignes de gouvernance ni les autorisations de la direction du projet. Distinguer les travaux terminés, les travaux en cours et les vérifications impossibles ; ne jamais transformer une intention en résultat acquis.
 
@@ -492,3 +492,30 @@ Commit `43c189b` poussé sur `main` (116 fichiers distants identiques) ; Netlify
 - **Tests** : `tests/series.test.mjs` (6 tests, ajouté à `test:figures`) ; `check-build` vérifie la page 03 (2 figures, lecture sans JavaScript, tableau) ; scénarios Firefox `series-static`, `series-keyboard`, `series-buttons` (plan principal et brouillons).
 - **Résultats** : `npm run check` 0 erreur ; 42 tests unitaires ; `verify:build` 8 pages, 119 références ; Firefox p5 14/14, site 29/29, brouillons 14/14.
 - Non poussé : la publication de la leçon 03 attend une autorisation explicite de push sur `main`.
+
+### 16 novembre 2026 — Leçon 03 en ligne (`76a7652`) ; reprise
+
+- Le commit `76a7652` « Publie la leçon 03 … avec deux figures » est sur `main` (l'entrée du 15 novembre indiquant « non poussé » est donc dépassée). Arbre Git propre à la reprise ; trois cours validés.
+- Le catalogue (`src/data/catalog.ts`) ne contient plus d'entrée « à venir » : la leçon 04 demande un thème choisi par la direction, puis une demande à Codex (modèle : `docs/demandes/codex-lecon-03-analyse.md`).
+- La direction choisit **Algèbre** pour la leçon 04 ; demande rédigée : `docs/demandes/codex-lecon-04-algebre.md`. Un lancement de Codex sans progression a été arrêté avant toute écriture ; à relancer.
+- Restent ouverts : vérifications sur téléphone réel et lecteur d'écran ; CSP en en-tête HTTP à confirmer dans `netlify.toml` ; TypeScript 7 en attente de `@astrojs/check` ; badge « Powered by Netlify » à désactiver par la direction.
+- Aucun code modifié, aucun commit ni push dans cette entrée.
+- **Progression et charte créées à la demande de la direction :** `docs/PROGRESSION.md` (7 modules, 8 rubriques chacun, « À compléter par Codex » partout sauf thèmes) et `docs/CHARTE_PEDAGOGIQUE.md`. Aucun cours ni théorème rédigé. Aucun autre fichier modifié hors demande de la leçon 04 et journal.
+
+### 16 novembre 2026 — Leçon 04 rédigée par Codex (brouillon) ; réinstallation des dépendances
+
+- Demande `docs/demandes/codex-lecon-04-algebre.md`, transmise par `codex exec` après lecture de `docs/PROGRESSION.md` et `docs/CHARTE_PEDAGOGIQUE.md`. Livrables : `src/content/lessons/sous-groupes-entiers.mdx` (« Sous-groupes et multiples entiers » : classification des sous-groupes de ℤ, lien avec PGCD/Bézout et les rotations, 4 exercices corrigés, reconstruction guidée) et `docs/demandes/codex-lecon-04-algebre-reponse.md`. `git status` : Codex n'a créé que ces deux fichiers. Texte non modifié.
+- Note de Codex : propositions pour le module 1 (non appliquées à `PROGRESSION.md`) ; interaction proposée après validation (droite graduée, pas a et b de −12 à 12, coefficients m et n de −5 à 5, alternative textuelle), non développée.
+- **Dépendances :** `node_modules` était incomplet (liens `.bin` absents, paquets partiels). Un `npm ci` a échoué une première fois sur une erreur réseau passagère après avoir vidé `node_modules`, puis a réussi au second essai : 364 paquets, 0 vulnérabilité. `package.json` et `package-lock.json` inchangés.
+- **Vérifications :** typage 0/0/0 ; 42 tests unitaires ; `build:drafts` 10 pages ; 278 formules MathML, 0 erreur KaTeX ; Firefox 157 `test:drafts` 14/14 (reflow 320 px, zoom 200 %, contrastes et cibles sur la leçon 04).
+- (Décisions ci-dessous : la direction a validé la leçon et l'interaction.)
+
+### 16 novembre 2026 — Leçon 04 validée ; figure « pas entiers » (Claude)
+
+- **Décision de la direction :** « je valide la leçon 04 et l'interaction ». `sous-groupes-entiers.mdx` passe en `status: "validated"` avec sa référence ; aucun autre changement du texte de Codex (une balise `<StepsFigure number="1" />` ajoutée à la fin de l'exploration). Rattachement au module 1 : validé implicitement ; `docs/PROGRESSION.md` **non modifié** (les propositions de Codex pour le module 1 restent à valider séparément).
+- **Figure** (spécifications de Codex : pas a, b de −12 à 12, préréglage 6 et 4 ; coefficients m, n de −5 à 5, initialement 0 ; boutons m ± 1, n ± 1, remise à zéro) : calcul en entiers `src/figures/steps.ts`, dessin `steps-svg.ts` (droite graduée, point par position listée, segments m×a puis n×b, anneau sur la position courante), composant `src/components/figures/StepsFigure.astro`, contrôleur `src/scripts/steps-figures.ts`, déclaration dans `src/components/lesson/index.ts`, ligne dans `docs/GABARIT-LECON.md`. Alternative permanente : champs et boutons au clavier (indisponibles en `aria-disabled`, focus conservé), lecture textuelle, tableau des positions listées avec un couple (m, n) minimisant |m|+|n|. La plage finie est annoncée dans le texte, l'indication de figure et la ligne d'état ; le cas a = b = 0 est traité.
+- **Navigation :** entrée de catalogue 04 (Algèbre, validée) ; pied de page « Quatre cours validés ». Le nœud « Groupes » de l'Atlas reste relié à la leçon 01 (aucun lien scientifique ajouté).
+- **Défaut corrigé :** deux cartes de bibliothèque de même visuel (`square`) produisaient un identifiant SVG dupliqué (`grid-square`) sur l'accueil ; `Diagram.astro` reçoit un `uid` (`LessonCard.astro` y passe l'identifiant de la leçon).
+- **Tests :** `tests/steps.test.mjs` (6 tests, ajoutés à `test:figures`, dont vérification exhaustive de la plage) ; test de bibliothèque adapté au nombre de leçons ; `verify:build` (9 pages, 141 références, une figure, tableau, une seule preuve) ; scénarios Firefox `steps-static`, `steps-keyboard`, `steps-buttons` (suite principale et brouillons).
+- **Résultats :** `npm run check` 0/0/0 ; 48 tests unitaires ; `verify:build` OK ; `npm run test:browser` : 63 scénarios réussis (p5 14, site 32, brouillons 17). Contrôle visuel de la leçon sur capture Firefox : mise en page correcte. Non vérifié : téléphone réel, lecteur d'écran.
+- **Non poussé :** la publication attend une autorisation explicite de push sur `main` (redéploie Netlify).

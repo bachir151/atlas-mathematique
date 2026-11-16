@@ -1,0 +1,223 @@
+---
+title: "Sous-groupes & multiples entiers"
+heading:
+  lead: "Sous-groupes"
+  emphasis: "& multiples entiers."
+summary: "Partir de pas sur une droite, construire des sous-groupes et démontrer que ceux des entiers sont exactement les ensembles de multiples."
+domain: "Algèbre"
+number: "04"
+breadcrumb: "Sous-groupes & multiples"
+status: "validated"
+validation: "Décision de la direction du projet, 16 novembre 2026 (sujet, niveau, exercices, reconstruction et interaction « pas entiers » retenus)"
+companion: false
+sections:
+  - { id: "exploration", label: "Exploration" }
+  - { id: "cours", label: "Le cours" }
+  - { id: "demonstration", label: "Démonstration" }
+  - { id: "preuve-integrale", label: "Preuve intégrale" }
+  - { id: "connexions", label: "Connexions" }
+  - { id: "exercices", label: "Exercices" }
+  - { id: "reconstruction", label: "À reconstruire" }
+---
+
+<CourseSection id="exploration" eyebrow="01 / Exploration" title="Quels nombres peut-on atteindre en combinant des pas ?">
+
+**Pour commencer :** savoir additionner et soustraire des entiers relatifs, connaître les multiples et la division euclidienne. La leçon 01 introduit les groupes avec les rotations du carré ; nous rappelons ici les propriétés utilisées. Le parcours principal vise une fin de lycée ou un début de licence, selon la familiarité avec les preuves et les ensembles.
+
+Sur une droite graduée, partez de $0$. Vous avez droit à des pas de $6$ et de $4$, dans les deux sens, et à autant de pas que vous voulez. Par exemple, $6-4=2$. Pouvez-vous atteindre $1$ ? Quels entiers semblent accessibles ?
+
+Sur une feuille, inscrivez les sommes $6a+4b$ pour quelques entiers relatifs $a$ et $b$. La liste contient $0$, $2$, $4$, $6$ et leurs opposés. Tout nombre obtenu est pair, car $6a+4b=2(3a+2b)$. Réciproquement, chaque entier pair $2k$ est accessible : $2k=k(6-4)$. Les nombres accessibles sont donc exactement les entiers pairs. Les essais ont suggéré la réponse ; ces deux arguments prouvent les deux inclusions.
+
+Si les pas autorisés changent, l'ensemble des positions accessibles a-t-il toujours une forme aussi simple ? Pour répondre à une question sur **tous** les ensembles de ce type, nous allons isoler les propriétés nécessaires, puis démontrer une classification.
+
+<StepsFigure number="1" />
+
+</CourseSection>
+
+<CourseSection id="cours" eyebrow="02 / Le cours" title="Garder une structure à l’intérieur des entiers">
+
+On note $\mathbb Z$ l'ensemble des entiers relatifs. L'addition y est associative, $0$ est son élément neutre et chaque entier $x$ a un opposé $-x$. Ensemble, ces propriétés et la stabilité par addition font de $(\mathbb Z,+)$ un groupe. L'addition y est aussi commutative, mais ce n'est pas une propriété exigée de tout groupe.
+
+<Definition number="1" name="Sous-groupe de l’addition des entiers">
+
+Une partie $H$ de $\mathbb Z$ est un **sous-groupe** de $(\mathbb Z,+)$ si elle contient $0$, si pour tous $x,y\in H$ on a $x+y\in H$, et si pour tout $x\in H$ on a $-x\in H$. L'addition sur $H$ hérite alors de l'associativité de celle sur $\mathbb Z$ : $H$ est lui-même un groupe pour cette addition.
+
+</Definition>
+
+<Example name="Les multiples d’un entier">
+
+Pour un entier $d\geq 0$, posons $d\mathbb Z=\{dk\mid k\in\mathbb Z\}$. C'est un sous-groupe : $0=d\cdot 0$, la somme de $da$ et $db$ est $d(a+b)$ et l'opposé de $da$ est $d(-a)$. En particulier, $0\mathbb Z=\{0\}$ et $1\mathbb Z=\mathbb Z$.
+
+</Example>
+
+<Example name="Une propriété qui ne suffit pas">
+
+L'ensemble des entiers positifs ou nuls contient $0$ et est stable par addition, mais il ne contient pas l'opposé de $1$. Ce n'est donc pas un sous-groupe de $(\mathbb Z,+)$. La stabilité par addition seule ne suffit pas.
+
+</Example>
+
+<Definition number="2" name="Division et divisibilité">
+
+Pour $d,n\in\mathbb Z$, dire que $d$ **divise** $n$, noté $d\mid n$, signifie qu'il existe $k\in\mathbb Z$ tel que $n=dk$. Ainsi $n\in d\mathbb Z$ équivaut à $d\mid n$. Avec cette définition, $0$ divise uniquement $0$.
+
+</Definition>
+
+Nous utilisons la **division euclidienne** sous la forme suivante : pour tout entier $x$ et tout entier $d>0$, il existe des entiers $q,r$ tels que $x=qd+r$ et $0\leq r<d$. Elle vaut aussi pour $x$ négatif : par exemple $-7=(-2)\cdot 4+1$.
+
+<Theorem kind="Théorème" number="1" name="Classification des sous-groupes de Z" id="classification">
+
+Pour tout sous-groupe $H$ de $(\mathbb Z,+)$, il existe un **unique** entier $d\geq 0$ tel que $H=d\mathbb Z$. Si $H\ne\{0\}$, cet entier $d$ est le plus petit élément strictement positif de $H$. Réciproquement, pour tout entier $d\geq 0$, $d\mathbb Z$ est un sous-groupe.
+
+</Theorem>
+
+Le cas $H=\{0\}$ demande un traitement séparé : il ne possède aucun élément strictement positif. La démonstration progressive et la preuve intégrale établissent l'existence et l'unicité ; l'exemple ci-dessus établit déjà la réciproque.
+
+<Remark name="Sous-groupe engendré">
+
+Pour des entiers $a,b$, l'ensemble $a\mathbb Z+b\mathbb Z=\{ma+nb\mid m,n\in\mathbb Z\}$ est un sous-groupe : il contient $0$, et les sommes et opposés s'obtiennent en additionnant ou en opposant les coefficients. C'est le plus petit sous-groupe contenant $a$ et $b$, au sens de l'inclusion : tout sous-groupe qui les contient contient aussi leurs multiples entiers, puis toutes leurs sommes. On l'appelle le sous-groupe **engendré** par $a$ et $b$.
+
+</Remark>
+
+</CourseSection>
+
+<Proof eyebrow="03 / Démonstration" title="Pourquoi un seul pas suffit-il ?" intro="Nous prouvons le théorème 1 en distinguant le sous-groupe réduit à zéro, puis en divisant par le plus petit pas positif.">
+
+  <ProofStep title="Traiter zéro et trouver un pas positif" open>
+
+Si $H=\{0\}$, alors $H=0\mathbb Z$. Sinon, $H$ contient un entier non nul $x$. Si $x>0$, il est positif ; si $x<0$, son opposé $-x$ appartient à $H$ et est positif. L'ensemble des éléments strictement positifs de $H$ est donc non vide. Par le principe du plus petit entier naturel, il possède un plus petit élément, noté $d>0$.
+
+  </ProofStep>
+
+  <ProofStep title="Construire tous les multiples">
+
+Puisque $d\in H$, les sommes répétées donnent $kd\in H$ pour tout entier $k>0$. Pour $k=0$, on obtient $0\in H$ ; pour $k<0$, on prend l'opposé d'un multiple positif. Ainsi $d\mathbb Z\subseteq H$.
+
+  </ProofStep>
+
+  <ProofStep title="Éliminer le reste">
+
+Pour $x\in H$, la division euclidienne donne $x=qd+r$, où $q,r\in\mathbb Z$ et $0\leq r<d$. Puisque $qd\in H$, son opposé appartient à $H$, puis $r=x-qd\in H$. Si $r>0$, ce serait un élément positif de $H$ plus petit que $d$, contradiction. Donc $r=0$ et $x=qd\in d\mathbb Z$. Ainsi $H\subseteq d\mathbb Z$, puis $H=d\mathbb Z$.
+
+  </ProofStep>
+
+  <ProofStep title="Justifier l’unicité et la réciproque">
+
+Si $H=d\mathbb Z$ avec $d>0$, $d$ est son plus petit élément strictement positif : un multiple positif $dk$ a $k\geq 1$ et vaut donc au moins $d$. L'entier positif qui représente $H$ est ainsi imposé. Le seul ensemble représenté par $d=0$ est $\{0\}$, tandis que $d\mathbb Z$ contient $d>0$ si $d>0$. L'unicité vaut aussi dans ce cas. Enfin chaque $d\mathbb Z$ est un sous-groupe, comme vérifié dans le cours.
+
+  </ProofStep>
+
+  <FullProof slot="full">
+
+**Preuve intégrale du théorème 1.** Soit $H$ un sous-groupe de $(\mathbb Z,+)$. Si $H=\{0\}$, alors $H=0\mathbb Z$. Sinon, $H$ contient un entier non nul et, en prenant son opposé s'il est négatif, contient un entier strictement positif. Le principe du plus petit entier naturel assure donc l'existence du plus petit élément strictement positif $d$ de $H$.
+
+Comme $d\in H$, la stabilité par addition et par passage à l'opposé, ainsi que $0\in H$, donnent $kd\in H$ pour tout $k\in\mathbb Z$. Donc $d\mathbb Z\subseteq H$. Réciproquement, pour $x\in H$, divisons $x$ par $d>0$ : il existe $q,r\in\mathbb Z$ tels que $x=qd+r$ et $0\leq r<d$. Nous savons que $qd\in H$, donc $r=x-qd\in H$. Si $r$ était strictement positif, il contredirait la minimalité de $d$. Ainsi $r=0$, donc $x=qd\in d\mathbb Z$. Les deux inclusions prouvent $H=d\mathbb Z$.
+
+Pour l'unicité, si $d>0$, tout multiple strictement positif de $d$ est de la forme $kd$ avec $k\geq 1$ ; son plus petit multiple strictement positif est donc $d$. Deux entiers strictement positifs représentant le même sous-groupe sont égaux. Enfin $0\mathbb Z=\{0\}$, alors que pour $d>0$, $d\mathbb Z$ contient $d\ne 0$ : $0$ ne peut représenter le même sous-groupe qu'un entier positif.
+
+Réciproquement, pour tout $d\geq 0$, l'ensemble $d\mathbb Z$ contient $0$, et $da+db=d(a+b)$, $-(da)=d(-a)$ pour $a,b\in\mathbb Z$. Il est donc un sous-groupe. Cela démontre toutes les affirmations.
+
+  </FullProof>
+
+</Proof>
+
+<CourseSection id="connexions" eyebrow="04 / Connexions" title="Du plus petit pas au calcul du PGCD">
+
+**Lien mathématique démontré.** Soient $a,b$ deux entiers non tous deux nuls et $H=a\mathbb Z+b\mathbb Z$. Le théorème donne $H=d\mathbb Z$ pour un unique $d>0$, puisque $H$ contient un entier non nul. Comme $a,b\in H$, $d$ divise $a$ et $b$. De plus, $d\in H$, donc il existe $u,v\in\mathbb Z$ tels que $d=ua+vb$. Tout diviseur commun positif $c$ de $a$ et $b$ divise alors $d$ : si $a=cs$ et $b=ct$, alors $d=c(us+vt)$. En particulier $c\leq d$, car $d>0$. Ainsi $d$ est le plus grand diviseur commun positif de $a$ et $b$, leur **PGCD**, et l'égalité $d=ua+vb$ est une identité de Bézout.
+
+Ce raisonnement prouve à la fois l'existence du PGCD et celle de coefficients entiers pour deux entiers non tous deux nuls. Si $a=b=0$, le sous-groupe est $\{0\}$ ; nous ne définissons pas ici leur PGCD.
+
+**Lien mathématique avec la leçon 01.** Si $r$ est le quart de tour du carré et $r^0=e$, l'application $k\mapsto r^k$ envoie une addition d'entiers sur une composition : $r^{m+n}=r^m\circ r^n$, y compris pour les exposants négatifs, définis à l'aide de la rotation inverse. Elle est surjective sur $\{e,r,r^2,r^3\}$. Puisque $r^4=e$ et que $e,r,r^2,r^3$ sont distinctes, ses entiers envoyés sur $e$ sont exactement les multiples de $4$ : la division euclidienne $k=4q+s$, $0\leq s<4$, donne $r^k=r^s$. Ce lien relie des pas entiers à un cycle de quatre positions ; les entiers eux-mêmes ne sont pas un groupe fini.
+
+</CourseSection>
+
+<CourseSection id="exercices" eyebrow="05 / Exercices" title="Tester, calculer, puis justifier">
+
+Chaque exercice propose un indice et une correction accessibles directement. Les trois premiers constituent le parcours principal ; le quatrième approfondit le lien avec le PGCD.
+
+<Exercise number="1" name="Reconnaître un sous-groupe" level="Découverte" id="exercice-reconnaitre">
+
+Les ensembles $3\mathbb Z$, $\{0,1,2\}$ et $\{0\}$ sont-ils des sous-groupes de $(\mathbb Z,+)$ ? Justifiez chaque réponse.
+
+<Hint>
+
+Pour réfuter une stabilité, une seule paire d'éléments peut suffire.
+
+</Hint>
+
+<Solution>
+
+$3\mathbb Z$ est un sous-groupe d'après le cours. L'ensemble $\{0,1,2\}$ n'est pas stable par addition : $2+1=3$ n'en fait pas partie. Enfin $\{0\}=0\mathbb Z$ est un sous-groupe.
+
+</Solution>
+
+</Exercise>
+
+<Exercise number="2" name="Deux pas" level="Application" id="exercice-pas">
+
+Déterminez $H=8\mathbb Z+12\mathbb Z$. Démontrez les deux inclusions de votre réponse et indiquez son plus petit élément positif.
+
+<Hint>
+
+Tout nombre de $H$ est divisible par $4$. Trouvez $4$ à partir de $8$ et $12$.
+
+</Hint>
+
+<Solution>
+
+Pour tous $m,n\in\mathbb Z$, $8m+12n=4(2m+3n)$, donc $H\subseteq4\mathbb Z$. Comme $4=12-8\in H$ et que $H$ est un sous-groupe, tous les multiples entiers de $4$ appartiennent à $H$. Ainsi $4\mathbb Z\subseteq H$, d'où $H=4\mathbb Z$. Son plus petit élément positif est $4$.
+
+</Solution>
+
+</Exercise>
+
+<Exercise number="3" name="La nécessité des opposés" level="Raisonnement" id="exercice-opposes">
+
+Soit $H$ une partie non vide de $\mathbb Z$ telle que, pour tous $x,y\in H$, $x-y\in H$. Montrez que $H$ est un sous-groupe. Pourquoi la non-vacuité est-elle nécessaire dans cet énoncé ?
+
+<Hint>
+
+Choisissez un élément $a$ de $H$, puis formez $a-a$, $0-x$ et $x-(-y)$.
+
+</Hint>
+
+<Solution>
+
+Par non-vacuité, choisissons $a\in H$. Alors $0=a-a\in H$. Pour tout $x\in H$, $-x=0-x\in H$. Pour $x,y\in H$, on a donc $-y\in H$, puis $x+y=x-(-y)\in H$. Les trois conditions de la définition sont satisfaites. L'ensemble vide vérifie la condition sur $x-y$ de façon vacante, mais ne contient pas $0$ : sans non-vacuité, la conclusion serait fausse.
+
+</Solution>
+
+</Exercise>
+
+<Exercise number="4" name="Un PGCD et ses coefficients" level="Approfondissement" id="exercice-bezout">
+
+Déterminez $18\mathbb Z+30\mathbb Z$, puis trouvez des entiers $u,v$ tels que $6=18u+30v$. Déduisez-en le PGCD de $18$ et $30$ et expliquez pourquoi $18m+30n=5$ n'a aucune solution entière.
+
+<Hint>
+
+Calculez $30-18$, puis $18-(30-18)$.
+
+</Hint>
+
+<Solution>
+
+Tout élément $18m+30n$ est multiple de $6$. Réciproquement, $6=2\cdot18-30$ appartient au sous-groupe, qui contient donc tous les multiples de $6$. Ainsi $18\mathbb Z+30\mathbb Z=6\mathbb Z$ et l'on peut prendre $u=2$, $v=-1$. Le lien démontré dans « Connexions » donne $\operatorname{PGCD}(18,30)=6$. Comme $5$ n'est pas multiple de $6$, il n'appartient pas à ce sous-groupe : l'équation proposée n'a pas de solution entière.
+
+</Solution>
+
+</Exercise>
+
+</CourseSection>
+
+<CourseSection id="reconstruction" eyebrow="06 / Reconstruction" title="Reconstruire la classification">
+
+Sans consulter la preuve, reconstituez-la à l'aide des questions suivantes, puis comparez votre argument à la preuve intégrale.
+
+1. Quelles propriétés une partie de $\mathbb Z$ doit-elle vérifier pour être un sous-groupe ? Donnez un exemple et un contre-exemple.
+2. Pourquoi un sous-groupe non réduit à $\{0\}$ contient-il un plus petit entier strictement positif $d$ ?
+3. Pourquoi contient-il tous les multiples de $d$ ? Pour un de ses éléments $x$, pourquoi le reste de la division de $x$ par $d$ appartient-il encore au sous-groupe et doit-il être nul ?
+4. Pourquoi faut-il traiter $\{0\}$ séparément ? Comment établit-on l'unicité de $d\geq 0$ ?
+5. Construisez enfin un exemple de deux pas dont le sous-groupe engendré est $5\mathbb Z$ ; prouvez les deux inclusions et trouvez une combinaison de ces pas égale à $5$.
+
+Par exemple, pour la dernière question, les pas $10$ et $15$ conviennent : leurs combinaisons sont des multiples de $5$, et $15-10=5$ permet d'obtenir tous ces multiples.
+
+</CourseSection>

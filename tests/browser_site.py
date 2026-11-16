@@ -25,7 +25,7 @@ from browser_p5 import (  # noqa: E402
     ROOT, CheckSkipped, Driver, EnvironmentBlocked, QuietHandler, WebDriverError, free_port, wait_for,
 )
 
-PAGES = ['/', '/atlas/', '/bibliotheque/', '/cours/groupes-rotations/', '/cours/mediatrices-reflexions/', '/cours/suites-geometriques-sommes-infinies/', '/experiences/p5/', '/404.html']
+PAGES = ['/', '/atlas/', '/bibliotheque/', '/cours/groupes-rotations/', '/cours/mediatrices-reflexions/', '/cours/suites-geometriques-sommes-infinies/', '/cours/sous-groupes-entiers/', '/experiences/p5/', '/404.html']
 # --drafts: serve the build that includes draft lessons (ATELIER_DRAFTS=1) and
 # run the site-wide accessibility checks on every lesson, plus the figures.
 DRAFTS = '--drafts' in sys.argv
@@ -35,12 +35,12 @@ PLAN = [
     'atlas-cleanup', 'three-not-loaded-elsewhere', 'skip-link', 'keyboard-focus', 'reflow-320',
     'text-zoom-200', 'target-size', 'contrast', 'square-rotation', 'square-reset-history', 'proof-progressive',
     'companion', 'library-filters', 'security-policy', 'figures-static', 'figures-keyboard', 'figures-buttons', 'figures-drag',
-    'series-static', 'series-keyboard', 'series-buttons', 'atlas-reduced-motion', 'square-reduced-motion', 'page-errors',
+    'series-static', 'series-keyboard', 'series-buttons', 'steps-static', 'steps-keyboard', 'steps-buttons', 'atlas-reduced-motion', 'square-reduced-motion', 'page-errors',
 ]
 DRAFT_PLAN = [
     'skip-link', 'keyboard-focus', 'reflow-320', 'text-zoom-200', 'target-size', 'contrast',
     'figures-static', 'figures-keyboard', 'figures-buttons', 'figures-drag',
-    'series-static', 'series-keyboard', 'series-buttons', 'page-errors',
+    'series-static', 'series-keyboard', 'series-buttons', 'steps-static', 'steps-keyboard', 'steps-buttons', 'page-errors',
 ]
 
 # Screen position of vertex A (the orange marker) relative to the rotation centre, in SVG units.
@@ -648,6 +648,75 @@ class SiteChecks:
             return {'firstRank': 6, 'iteration': it}
         self.case('series-buttons', buttons)
 
+    # ---------- Steps figure (lesson « Sous-groupes & multiples entiers ») ----------
+    def steps(self):
+        d = self.d
+        page = '/cours/sous-groupes-entiers/'
+        fig = '#figure-pas-entiers'
+        status = lambda: d.js(f"return document.querySelector('{fig} [data-steps-status]').textContent;")
+        rows = lambda: d.js(f"return Object.fromEntries([...document.querySelectorAll('{fig} [data-steps-rows] > div')].map(r=>[r.children[0].textContent,r.children[1].textContent]));")
+        set_field = lambda name, value: d.js(f"const f=document.querySelector('{fig} [data-param={name}]');f.value='{value}';f.dispatchEvent(new Event('input'));")
+        action = lambda name: d.js(f"document.querySelector('{fig} [data-action={name}]').click();")
+
+        def static():
+            html = (self.root / page.strip('/') / 'index.html').read_text(encoding='utf-8')
+            for expected in ('Position courante : 0 + 0 = 0.', 'Positions calculées seulement pour m et n entre −5 et 5'):
+                assert expected in html, f'Texte initial absent du HTML compilé : {expected}'
+            self.open(page)
+            state = d.js(f"""const f=document.querySelector('{fig}');return {{
+              enabled:[...f.querySelectorAll('input,button')].every(e=>!e.disabled),
+              label:f.querySelector('svg').getAttribute('aria-labelledby'),
+              dots:f.querySelectorAll('svg .fig-dot').length,
+              table:f.querySelectorAll('[data-steps-table] tr').length}};""")
+            assert state['enabled'], state
+            # One dot and one table row per listed position.
+            assert state['dots'] == state['table'] and state['dots'] > 10, state
+            assert all(d.js('return !!document.getElementById(arguments[0]);', ref) for ref in state['label'].split()), state
+            return {'positions': state['dots']}
+        self.case('steps-static', static)
+
+        def keyboard():
+            self.open(page)
+            d.js(f"document.querySelector('{fig} [data-param=m]').focus();")
+            d.key('\ue013'); time.sleep(0.1)  # Arrow up: m = 1
+            d.js(f"document.querySelector('{fig} [data-param=n]').focus();")
+            d.key('\ue015'); time.sleep(0.1)  # Arrow down: n = −1
+            r = rows()
+            assert r['Position m a + n b'] == '6 + (−4) = 2', r
+            assert r['Plus petite position strictement positive affichée'] == '2', r
+            # Out-of-range values are clamped when the field is left.
+            d.js(f"const f=document.querySelector('{fig} [data-param=a]');f.focus();f.select();")
+            for ch in '99':
+                d.key(ch)
+            d.key('\ue004'); time.sleep(0.1)
+            a = d.js(f"return document.querySelector('{fig} [data-param=a]').value;")
+            assert a == '12' and rows()['Pas et coefficients'].startswith('a = 12 ;'), (a, rows())
+            return {'arrowKeys': True, 'clamped': a}
+        self.case('steps-keyboard', keyboard)
+
+        def buttons():
+            self.open(page)
+            up = f"document.querySelector('{fig} [data-action=m-up]')"
+            d.js(up + ".focus();")
+            for _ in range(7):
+                d.key('\ue007')  # Enter: stops at the bound m = 5
+            time.sleep(0.1)
+            assert rows()['m × a'] == '5 × 6 = 30', rows()
+            assert d.js('return ' + up + ".getAttribute('aria-disabled');") == 'true'
+            assert d.js(f"return document.activeElement === {up};"), 'Le focus doit rester sur le bouton indisponible'
+            action('n-down'); action('n-down')
+            assert rows()['Position m a + n b'] == '30 + (−8) = 22', rows()
+            action('reset')
+            assert rows()['Position m a + n b'] == '0 + 0 = 0', rows()
+            set_field('a', '0'); set_field('b', '0')
+            st = status()
+            assert st.startswith('a = b = 0 : toute combinaison m a + n b vaut 0'), st
+            assert rows()['Plus petite position strictement positive affichée'] == 'aucune', rows()
+            set_field('a', '-6'); set_field('b', '4'); action('m-down')
+            assert rows()['m × a'] == '(−1) × (−6) = 6', rows()
+            return {'bound': True, 'zero': True}
+        self.case('steps-buttons', buttons)
+
     def reduced(self):
         d = self.d
         self.open('/atlas/')
@@ -733,6 +802,7 @@ def main():
             checks.site()
             checks.figures()
             checks.series()
+            checks.steps()
             checks.collect_errors()
         else:
             checks.atlas()
@@ -740,6 +810,7 @@ def main():
             checks.interactions()
             checks.figures()
             checks.series()
+            checks.steps()
             checks.collect_errors()
             driver.close()
             driver.start(True)

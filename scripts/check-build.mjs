@@ -5,7 +5,7 @@ import { resolve } from 'node:path';
 import { JSDOM } from 'jsdom';
 
 const output = resolve('dist');
-const pages = ['index.html', 'atlas/index.html', 'bibliotheque/index.html', 'cours/groupes-rotations/index.html', 'cours/mediatrices-reflexions/index.html', 'cours/suites-geometriques-sommes-infinies/index.html', 'experiences/p5/index.html', '404.html'];
+const pages = ['index.html', 'atlas/index.html', 'bibliotheque/index.html', 'cours/groupes-rotations/index.html', 'cours/mediatrices-reflexions/index.html', 'cours/suites-geometriques-sommes-infinies/index.html', 'cours/sous-groupes-entiers/index.html', 'experiences/p5/index.html', '404.html'];
 let references = 0;
 
 for (const page of pages) {
@@ -58,6 +58,12 @@ for (const page of pages) {
       assert.equal(doc.querySelectorAll('[data-plane-figure]').length, 3, 'Trois figures interactives');
       assert.ok([...doc.querySelectorAll('[data-plane-status]')].every(status => status.textContent.trim()), 'Lecture textuelle des figures sans JavaScript');
     }
+    if (page.includes('sous-groupes-entiers')) {
+      assert.equal(doc.querySelectorAll('[data-steps-figure]').length, 1, 'Une figure interactive');
+      assert.match(doc.querySelector('[data-steps-status]').textContent, /Position courante : 0 \+ 0 = 0\./, 'Lecture textuelle de la figure sans JavaScript');
+      assert.ok(doc.querySelectorAll('[data-steps-table] tr').length > 10, 'Tableau des positions présent');
+      assert.equal(doc.querySelectorAll('[data-proof]').length, 1, 'Une seule preuve intégrale');
+    }
     if (page.includes('suites-geometriques')) {
       assert.equal(doc.querySelectorAll('[data-series-figure]').length, 2, 'Deux figures interactives');
       assert.ok([...doc.querySelectorAll('[data-series-status]')].every(status => status.textContent.trim()), 'Lecture textuelle des figures sans JavaScript');
@@ -65,7 +71,7 @@ for (const page of pages) {
     }
   }
   if (page.startsWith('bibliotheque/')) {
-    assert.equal(doc.querySelectorAll('[data-lesson-id]').length, 3);
+    assert.equal(doc.querySelectorAll('[data-lesson-id]').length, 4);
     assert.deepEqual([...doc.querySelectorAll('select option')].map(option => option.textContent), ['Tous les domaines', 'Algèbre', 'Géométrie', 'Analyse']);
   }
   if (page.startsWith('atlas/')) {

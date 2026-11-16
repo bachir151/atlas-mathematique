@@ -21,7 +21,7 @@
     "test:browser": "npm run build && python3 tests/browser_p5.py && python3 tests/browser_site.py && npm run test:drafts",
     "build:drafts": "ATELIER_DRAFTS=1 astro build --outDir test-results/dist-drafts",
     "test:drafts": "npm run build:drafts && python3 tests/browser_site.py --drafts",
-    "test:figures": "node --experimental-strip-types tests/figures.test.mjs && node --experimental-strip-types tests/series.test.mjs"
+    "test:figures": "node --experimental-strip-types tests/figures.test.mjs && node --experimental-strip-types tests/series.test.mjs && node --experimental-strip-types tests/steps.test.mjs"
   },
   "dependencies": {
     "@astrojs/markdown-satteri": "^0.4.10",

@@ -78,7 +78,7 @@ test('library controller combines filters and restores all cards when cleared', 
   assert.equal(doc.querySelector('[data-empty]').hidden, false);
   assert.equal(doc.querySelector('[data-result-count]').textContent, '0 résultats');
   doc.querySelector('[data-clear]').click();
-  assert.equal(doc.querySelector('[data-result-count]').textContent, '3 résultats');
+  assert.equal(doc.querySelector('[data-result-count]').textContent, `${lessons.length} résultats`);
   assert.equal(doc.querySelector('[data-empty]').hidden, true);
   assert.ok([...doc.querySelectorAll('[data-lesson-id]')].every(card => !card.hidden));
   assert.equal(doc.activeElement, search);

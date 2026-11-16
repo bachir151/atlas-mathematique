@@ -228,4 +228,4 @@
 .series-table-caption { margin-top: 16px; font-size: 13px; color: var(--muted); }
 .series-table thead th { position: sticky; top: 0; }
 
-[data-series-svg] * { pointer-events: none; }
+[data-series-svg] *, [data-steps-svg] * { pointer-events: none; }

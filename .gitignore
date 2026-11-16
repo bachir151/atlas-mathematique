@@ -11,3 +11,4 @@ public/vendor/
 playwright-report/
 *.log
 *:Zone.Identifier
+__pycache__/

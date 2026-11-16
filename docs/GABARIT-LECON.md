@@ -86,6 +86,7 @@ balise ouvrante et avant la balise fermante pour que le Markdown intérieur
 | `<SquareExperiment>`, `<P5Experience>` | voir `docs/P5.md` | expériences interactives |
 | `<PlaneFigure>` | `kind` (`mediatrice`, `reflexion`, `deux-reflexions`), `number` | figures planes interactives de la leçon 02 (SVG, clavier, alternative textuelle) |
 | `<SeriesFigure>` | `kind` (`somme-geometrique`, `iteration-affine`), `number` | graphes discrets de la leçon 03, calcul exact en fractions, alternative textuelle |
+| `<StepsFigure>` | `number` | droite graduée de la leçon 04 : positions m·a + n·b (pas a, b de −12 à 12, coefficients de −5 à 5), calcul en entiers, tableau et lecture textuelle |
 
 Exemple de structure :
 
