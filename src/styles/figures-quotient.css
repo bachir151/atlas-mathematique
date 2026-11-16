@@ -1,0 +1,18 @@
+/* Own styles of <QuotientFigure>; the shared figure styles live in figures.css. */
+[data-quotient-svg] *  { pointer-events: none; }
+
+.quotient-figure .fig-class { fill: var(--green); fill-opacity: .06; stroke: var(--green); stroke-opacity: .5; stroke-width: 1.2; }
+.quotient-figure .fig-class-marked { fill-opacity: .16; stroke-opacity: 1; stroke-width: 1.8; }
+.quotient-figure .fig-class-sum { fill: var(--orange); fill-opacity: .2; stroke: var(--orange); stroke-opacity: 1; stroke-width: 2.2; }
+.quotient-figure .fig-label { font-size: 15px; }
+
+.quotient-table { max-height: none; overflow-x: auto; overflow-y: auto; }
+.quotient-table table { width: auto; min-width: 100%; text-align: center; }
+.quotient-table th, .quotient-table td { text-align: center; white-space: nowrap; padding: 6px 10px; }
+.quotient-table thead th { position: sticky; top: 0; }
+.quotient-table tbody th { position: sticky; left: 0; background: var(--paper, #f4f6f0); }
+.quotient-table td[aria-current="true"] { outline: 2px solid var(--orange); outline-offset: -2px; font-weight: 700; }
+
+@media (max-width: 760px) {
+  .quotient-figure .fig-label { font-size: 24px; }
+}

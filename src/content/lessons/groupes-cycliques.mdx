@@ -1,0 +1,218 @@
+---
+title: "Groupes cycliques & ordre d’un élément"
+heading:
+  lead: "Groupes cycliques"
+  emphasis: "et retours à l’identité."
+summary: "Répéter une transformation, compter ses retours et comprendre le lien entre les puissances d’un élément et les entiers modulo n."
+domain: "Algèbre"
+number: "05"
+breadcrumb: "Groupes cycliques"
+status: "validated"
+validation: "Décision de la direction du projet, 16 novembre 2026 (sujet, niveau, exercices, reconstruction et interaction retenus)"
+companion: false
+sections:
+  - { id: "exploration", label: "Exploration" }
+  - { id: "cours", label: "Le cours" }
+  - { id: "demonstration", label: "Démonstration" }
+  - { id: "preuve-integrale", label: "Preuve intégrale" }
+  - { id: "connexions", label: "Connexions" }
+  - { id: "exercices", label: "Exercices" }
+  - { id: "reconstruction", label: "À reconstruire" }
+---
+
+<CourseSection id="exploration" eyebrow="01 / Exploration" title="Quand retrouve-t-on le point de départ ?">
+
+**Pour commencer :** connaître les entiers relatifs, les multiples, la division euclidienne et la notion de groupe. La leçon sur les sous-groupes de $\mathbb Z$ fournit un résultat utilisé dans la preuve. Le parcours vise une fin de lycée ou un début de licence, selon l’expérience des démonstrations.
+
+Une aiguille avance de quatre heures à chaque geste sur un cadran de douze heures. En partant de 0, elle passe par 4, puis 8, puis revient à 0. En avançant de deux heures, elle visite davantage de positions avant son retour. Peut-on prévoir leur nombre sans les parcourir une à une ?
+
+Le cadran représente les heures par les restes de 0 à 11 : les nombres 0 et 12 désignent la même position. Compter quelques pas suggère une réponse, mais ne prouve pas qu’aucun retour plus précoce n’existe. Nous allons comprendre ce phénomène dans un groupe quelconque, fini ou infini.
+
+<CycleFigure number="1" />
+
+</CourseSection>
+
+<CourseSection id="cours" eyebrow="02 / Le cours" title="Répéter, inverser, engendrer">
+
+Un groupe $(G,\cdot)$ possède une opération associative, un élément neutre $e$ et un inverse $g^{-1}$ pour chaque $g\in G$. La loi n’est pas supposée commutative. Pour $k>0$, $g^k$ est le produit de $k$ copies de $g$ ; $g^0=e$ et $g^{-k}=(g^{-1})^k$. Les règles des puissances donnent, pour tous $a,b\in\mathbb Z$, $g^ag^b=g^{a+b}$ et $(g^a)^{-1}=g^{-a}$, même lorsque $G$ n’est pas commutatif : il s’agit de puissances du même élément.
+
+<Definition number="1" name="Sous-groupe engendré et groupe cyclique">
+
+Le **sous-groupe engendré** par $g\in G$ est $\langle g\rangle=\{g^k\mid k\in\mathbb Z\}$. Un groupe est **cyclique** s’il existe $g$ tel que $G=\langle g\rangle$ ; un tel élément est appelé **générateur** de $G$.
+
+</Definition>
+
+Cet ensemble est bien un sous-groupe : il contient $g^0=e$, le produit de deux de ses éléments est une puissance de $g$, et l’inverse d’une puissance en est une autre. Tout sous-groupe contenant $g$ contient aussi $e$, ses puissances positives et négatives ; il contient donc $\langle g\rangle$. C’est ainsi le plus petit sous-groupe contenant $g$, au sens de l’inclusion. De plus $g^ag^b=g^{a+b}=g^{b+a}=g^bg^a$ : tout groupe cyclique est commutatif.
+
+<Definition number="2" name="Ordre d’un élément">
+
+Si un entier $n>0$ vérifie $g^n=e$, le plus petit de ces entiers est l’**ordre** de $g$, noté $\operatorname{ord}(g)$. Si aucun entier strictement positif ne convient, $g$ est d’**ordre infini**. En particulier $\operatorname{ord}(e)=1$.
+
+</Definition>
+
+<Theorem kind="Théorème" number="1" name="Les retours et les puissances">
+
+Soit $g$ un élément d’un groupe $G$.
+
+- Si $g$ est d’ordre fini $n$, alors, pour tous $a,b\in\mathbb Z$, $g^a=g^b$ si et seulement si $n\mid(a-b)$. Les éléments $e,g,\ldots,g^{n-1}$ sont distincts et forment $\langle g\rangle$, qui possède donc exactement $n$ éléments.
+- Si $g$ est d’ordre infini, les puissances $g^k$, pour $k\in\mathbb Z$, sont toutes distinctes ; $\langle g\rangle$ est infini.
+
+</Theorem>
+
+La preuve progressive et la preuve intégrale suivent immédiatement le cours. Le théorème relie l’ordre d’un élément au nombre d’éléments de son sous-groupe engendré, sans supposer que le groupe entier est fini.
+
+<Example name="Rotations du carré">
+
+Pour le quart de tour positif $r$ de la leçon 01, $r^4=e$ et $e,r,r^2,r^3$ sont distinctes. Ainsi $r$ est d’ordre 4 et engendre les quatre rotations du carré. Le demi-tour $r^2$ est d’ordre 2 : son carré vaut $e$, mais il est distinct de $e$. Il n’engendre que $\{e,r^2\}$. Un élément d’un groupe cyclique n’est donc pas nécessairement un générateur.
+
+</Example>
+
+<Example name="Une droite sans retour">
+
+Dans $(\mathbb Z,+)$, les puissances s’écrivent comme des multiples : la répétition de $2$ donne $2k$, pour $k\in\mathbb Z$. Son sous-groupe engendré est $2\mathbb Z$ et son ordre est infini, car $2k\ne0$ pour tout $k>0$. Le groupe $\mathbb Z$ est lui-même cyclique, engendré par $1$ ou par $-1$.
+
+</Example>
+
+</CourseSection>
+
+<Proof eyebrow="03 / Démonstration" title="Pourquoi les retours déterminent-ils toutes les puissances ?" intro="Nous prouvons le théorème 1 à partir de la classification des sous-groupes de Z.">
+
+  <ProofStep title="Rassembler les exposants qui ramènent au neutre" open>
+
+Posons $H=\{k\in\mathbb Z\mid g^k=e\}$. Il contient 0. Si $a,b\in H$, alors $g^{a+b}=g^ag^b=e$ et $g^{-a}=(g^a)^{-1}=e$. Ainsi $H$ est un sous-groupe de $(\mathbb Z,+)$.
+
+  </ProofStep>
+
+  <ProofStep title="Utiliser la classification de Z">
+
+La classification des sous-groupes de $\mathbb Z$ donne $H=d\mathbb Z$ pour un unique $d\geq0$. Si $H\ne\{0\}$, son plus petit élément strictement positif est $d$ : par définition $d=\operatorname{ord}(g)$. Si $H=\{0\}$, aucun exposant positif ne ramène à $e$ et l’ordre est infini.
+
+  </ProofStep>
+
+  <ProofStep title="Comparer deux puissances">
+
+Pour tous $a,b\in\mathbb Z$, $g^a=g^b$ équivaut à $g^{a-b}=e$, en multipliant par $g^{-b}$. Dans le cas fini, cela équivaut à $a-b\in n\mathbb Z$, donc à $n\mid(a-b)$. Dans le cas infini, cela équivaut à $a-b=0$.
+
+  </ProofStep>
+
+  <ProofStep title="Compter les puissances">
+
+Si l’ordre est $n$, la division euclidienne écrit chaque entier $k=qn+s$, avec $0\leq s<n$. Alors $g^k=g^s$. Ces $n$ puissances sont distinctes : si $0\leq s,t<n$ et $n\mid(s-t)$, alors $s=t$. Si l’ordre est infini, les puissances indexées par les entiers sont toutes distinctes, donc en nombre infini.
+
+  </ProofStep>
+
+  <FullProof slot="full">
+
+**Preuve intégrale du théorème 1.** Soit $H=\{k\in\mathbb Z\mid g^k=e\}$. On a $0\in H$ ; si $a,b\in H$, alors $g^{a+b}=g^ag^b=e$ et $g^{-a}=(g^a)^{-1}=e$. Ainsi $H$ est un sous-groupe de $(\mathbb Z,+)$. Par la classification des sous-groupes de $\mathbb Z$, il existe un unique $d\geq0$ tel que $H=d\mathbb Z$.
+
+Si $H\ne\{0\}$, son plus petit élément strictement positif est $d>0$ ; c’est l’ordre $n$ de $g$. Si $H=\{0\}$, aucun entier strictement positif n’appartient à $H$ et l’ordre de $g$ est infini.
+
+Pour $a,b\in\mathbb Z$, multiplier par $g^{-b}$ montre que $g^a=g^b$ équivaut à $g^{a-b}=e$, donc à $a-b\in H$. Dans le cas fini, $H=n\mathbb Z$ : l’égalité équivaut à $n\mid(a-b)$. La division euclidienne de tout entier $k$ par $n$ donne $k=qn+s$ avec $0\leq s<n$, d’où $g^k=g^s$. Ces $n$ puissances sont distinctes : pour $0\leq s,t<n$, le seul multiple de $n$ compris strictement entre $-n$ et $n$ est 0. Elles constituent donc exactement $\langle g\rangle$.
+
+Dans le cas infini, $H=\{0\}$ et $g^a=g^b$ équivaut à $a=b$. Les puissances indexées par les entiers sont toutes distinctes et $\langle g\rangle$ est infini. Cela prouve les deux cas.
+
+  </FullProof>
+
+</Proof>
+
+<CourseSection id="connexions" eyebrow="04 / Connexions" title="Un cycle et les restes">
+
+**Lien mathématique démontré.** Soit $n>0$. Deux entiers sont congrus modulo $n$ lorsque leur différence est multiple de $n$. La classe de $a$, notée $\overline a$, rassemble tous les entiers congrus à $a$. L’ensemble des classes est noté $\mathbb Z/n\mathbb Z$ ; on y additionne par $\overline a+\overline b=\overline{a+b}$. Cette addition est bien définie : remplacer $a$ ou $b$ par un entier congru ne change la somme que d’un multiple de $n$. Chaque classe possède un unique représentant parmi $0,\ldots,n-1$, par division euclidienne. L’associativité vient de celle des entiers, $\overline0$ est neutre et $\overline{-a}$ est l’opposé de $\overline a$ : ces classes forment un groupe additif.
+
+Si $g$ est d’ordre $n$, associons $g^a$ à $\overline a$. Le théorème assure que cette correspondance est bien définie et bijective : deux exposants donnent la même puissance exactement lorsqu’ils sont congrus modulo $n$. De plus, à la somme $\overline a+\overline b$ correspond le produit $g^ag^b=g^{a+b}$. Le cycle des puissances et les classes d’entiers ont donc la même structure de groupe. La notion générale d’isomorphisme sera étudiée dans la leçon sur les morphismes et isomorphismes ; la construction générale des groupes quotients sera étudiée séparément.
+
+Sur le cadran de l’exploration, les positions forment $\mathbb Z/12\mathbb Z$. Le pas $\overline4$ revient à $\overline0$ après trois gestes : $4$, $8$, puis $12$. Les deux premiers résultats ne sont pas $\overline0$, donc son ordre est 3. Ce cadran est un modèle mathématique de positions périodiques ; il ne décrit ni la durée physique d’un geste ni les mouvements de l’aiguille entre deux positions.
+
+</CourseSection>
+
+<CourseSection id="exercices" eyebrow="05 / Exercices" title="Calculer et justifier">
+
+Les indices et corrections sont accessibles pour chaque exercice.
+
+<Exercise number="1" name="Sur le cadran" level="Découverte" id="exercice-cadran">
+
+Dans $\mathbb Z/12\mathbb Z$, déterminez l’ordre de $\overline2$ et les éléments qu’il engendre. Est-ce un générateur du groupe entier ?
+
+<Hint>
+
+Listez les multiples successifs de 2 jusqu’au premier retour à $\overline0$.
+
+</Hint>
+
+<Solution>
+
+Les multiples donnent $\overline0,\overline2,\overline4,\overline6,\overline8,\overline{10}$, puis $\overline{12}=\overline0$. Les cinq premiers multiples positifs ne sont pas nuls, donc l’ordre est 6. Ces six classes forment le sous-groupe engendré. Il manque par exemple $\overline1$ : $\overline2$ ne génère pas tout le groupe.
+
+</Solution>
+
+</Exercise>
+
+<Exercise number="2" name="Exposants négatifs" level="Application" id="exercice-exposants">
+
+Soit $g$ d’ordre 7. Simplifiez $g^{-10}$ en une puissance d’exposant entre 0 et 6. L’égalité $g^{15}=g$ est-elle vraie ?
+
+<Hint>
+
+Utilisez la division euclidienne, y compris pour un entier négatif.
+
+</Hint>
+
+<Solution>
+
+Comme $-10=(-2)\cdot7+4$, le théorème donne $g^{-10}=g^4$. De plus $15-1=14$ est multiple de 7 : $g^{15}=g$.
+
+</Solution>
+
+</Exercise>
+
+<Exercise number="3" name="Un retour ne suffit pas" level="Raisonnement" id="exercice-retour">
+
+On sait seulement que $g^{12}=e$. L’ordre de $g$ vaut-il nécessairement 12 ? Montrez qu’il est fini et qu’il divise 12.
+
+<Hint>
+
+Considérez le premier retour positif et appliquez le théorème avec les exposants 12 et 0.
+
+</Hint>
+
+<Solution>
+
+L’ordre $n$ existe puisque 12 est un retour positif. Le théorème appliqué à $g^{12}=g^0$ donne $n\mid12$. Il n’est pas nécessairement égal à 12 : pour $g=e$, il vaut 1. Un retour positif peut donc être un multiple du premier retour.
+
+</Solution>
+
+</Exercise>
+
+<Exercise number="4" name="Ordre d’une puissance" level="Approfondissement" id="exercice-puissance">
+
+Soit $g$ d’ordre fini $n$ et $k$ un entier. En notant $d$ le PGCD positif de $n$ et $k$, montrez que $g^k$ est d’ordre $n/d$. Que se passe-t-il pour $k=0$ ?
+
+<Hint>
+
+Écrivez $n=dn'$ et $k=dk'$ avec $n'$ et $k'$ premiers entre eux. Utilisez une identité de Bézout pour caractériser les entiers $t>0$ tels que $n\mid kt$.
+
+</Hint>
+
+<Solution>
+
+Comme $n>0$, le PGCD $d>0$ existe même si $k=0$. Écrivons $n=dn'$ et $k=dk'$, avec $\operatorname{PGCD}(n',k')=1$. Le théorème donne $(g^k)^t=e$ si et seulement si $n\mid kt$, c’est-à-dire $n'\mid k't$. Une identité de Bézout $un'+vk'=1$ montre que si $n'\mid k't$, alors $n'\mid t=un't+vk't$. La réciproque est immédiate. Le plus petit $t>0$ convenable est donc $n'=n/d$. Pour $k=0$, $d=n$ et l’ordre de $g^0=e$ est bien 1.
+
+</Solution>
+
+</Exercise>
+
+</CourseSection>
+
+<CourseSection id="reconstruction" eyebrow="06 / Reconstruction" title="Reconstruire le passage des entiers au cycle">
+
+Sans regarder la preuve, répondez aux questions suivantes, puis comparez avec la preuve intégrale.
+
+1. Pourquoi les puissances entières de $g$ forment-elles le plus petit sous-groupe contenant $g$ ?
+2. Pourquoi les exposants $k$ tels que $g^k=e$ forment-ils un sous-groupe de $\mathbb Z$ ?
+3. Comment la classification de ces sous-groupes distingue-t-elle l’ordre fini de l’ordre infini ?
+4. Pourquoi $g^a=g^b$ revient-il à étudier $a-b$ ? Comment compte-t-on les puissances dans le cas fini ?
+5. Pour un élément d’ordre 4, construisez la correspondance entre ses puissances et $\mathbb Z/4\mathbb Z$, puis vérifiez qu’elle respecte une addition de votre choix.
+
+Pour contrôler le dernier point, $\overline3+\overline2=\overline1$ correspond à $g^3g^2=g^5=g$.
+
+</CourseSection>

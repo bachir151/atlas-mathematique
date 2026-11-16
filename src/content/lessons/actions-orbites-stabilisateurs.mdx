@@ -1,0 +1,239 @@
+---
+title: "Actions de groupes, orbites & stabilisateurs"
+heading:
+  lead: "Actions de groupes"
+  emphasis: "orbites & stabilisateurs."
+summary: "Suivre les sommets d’un carré, distinguer les mouvements possibles et ceux qui fixent un point, puis relier leurs nombres."
+domain: "Algèbre"
+number: "09"
+breadcrumb: "Actions, orbites & stabilisateurs"
+status: "validated"
+validation: "Décision de la direction du projet, 16 novembre 2026 (sujet, niveau, exercices, reconstruction et interaction retenus)"
+companion: false
+sections:
+  - { id: "exploration", label: "Exploration" }
+  - { id: "cours", label: "Le cours" }
+  - { id: "demonstration", label: "Démonstration" }
+  - { id: "preuve-integrale", label: "Preuve intégrale" }
+  - { id: "connexions", label: "Connexions" }
+  - { id: "exercices", label: "Exercices" }
+  - { id: "reconstruction", label: "À reconstruire" }
+---
+
+<CourseSection id="exploration" eyebrow="01 / Exploration" title="Combien de chemins vers un sommet ?">
+
+**Pour commencer :** connaître les ensembles, les applications et les axiomes d’un groupe : associativité, élément neutre et inverses. La leçon 01 introduit les rotations du carré et leur composition ; nous rappelons ici les faits nécessaires. Le parcours vise le début de licence et ne suppose pas connus les groupes quotients ni le théorème de Lagrange.
+
+Un carré a quatre sommets $A,B,C,D$, dans cet ordre autour du carré. Notons $r$ le quart de tour qui envoie $A$ sur $B$, $B$ sur $C$, $C$ sur $D$ et $D$ sur $A$. Les rotations qui conservent le carré sont $e,r,r^2,r^3$, avec $r^4=e$. Appliquons-les à $A$ : elles donnent respectivement $A,B,C,D$. Toutes les positions sont accessibles et seule l’identité laisse $A$ à sa place.
+
+Ajoutons maintenant la réflexion $s$ qui fixe la diagonale passant par $A$ et $C$ : elle fixe $A,C$ et échange $B,D$. Les huit symétries sont $e,r,r^2,r^3,s,rs,r^2s,r^3s$, où $rs$ signifie qu’on applique d’abord $s$, puis $r$. Les quatre premières envoient $A$ sur $A,B,C,D$ ; les quatre dernières font exactement de même puisque $s$ fixe $A$. Ainsi deux symétries envoient $A$ sur chaque sommet. Pourquoi ce nombre est-il le même pour toutes les positions accessibles ?
+
+<ActionFigure number="1" />
+
+Ce tableau suggère une règle. Pour la démontrer, il faudra décrire toutes les transformations qui donnent une même image, et non seulement compter les lignes du tableau.
+
+</CourseSection>
+
+<CourseSection id="cours" eyebrow="02 / Le cours" title="Agir, atteindre, fixer">
+
+Dans toute la leçon, $G$ est un groupe de neutre $e$, et $X$ un ensemble. Le produit $gh$ est lu de droite à gauche lorsqu’il représente une composition.
+
+<Definition number="1" name="Action à gauche">
+
+Une **action à gauche** de $G$ sur $X$ est une application qui à chaque couple $(g,x)\in G\times X$ associe un élément $g\cdot x\in X$, telle que, pour tous $g,h\in G$ et $x\in X$,
+
+$$
+e\cdot x=x,\qquad (gh)\cdot x=g\cdot(h\cdot x).
+$$
+
+Pour chaque $g$, l’application $x\mapsto g\cdot x$ est une bijection de $X$ : son inverse est $x\mapsto g^{-1}\cdot x$, d’après les deux règles. Une action indique donc comment chaque élément du groupe transforme les points de $X$.
+
+</Definition>
+
+<Example name="Rotations et sommets">
+
+Les quatre rotations du carré agissent sur l’ensemble $X=\{A,B,C,D\}$ par évaluation : $g\cdot x$ est l’image du sommet $x$ par la rotation $g$. L’identité fixe chaque sommet et la composition des rotations vérifie la deuxième règle. Les huit symétries de l’exploration agissent de la même façon.
+
+</Example>
+
+<Example name="Les entiers agissent par translation">
+
+Le groupe additif $(\mathbb Z,+)$ agit sur $\mathbb Z$ par $n\cdot x=x+2n$. En effet $0\cdot x=x$ et $(m+n)\cdot x=m\cdot(n\cdot x)$. Depuis $0$, on atteint exactement les entiers pairs ; depuis $1$, exactement les impairs. Cette action est définie sur un ensemble infini.
+
+</Example>
+
+<Remark name="Une règle qui échoue">
+
+La formule $n\cdot x=x+n+1$ sur $\mathbb Z$ ne définit pas une action de $(\mathbb Z,+)$ : le neutre $0$ envoie $x$ sur $x+1$, et non sur $x$. Une formule qui associe une transformation à chaque élément ne suffit pas ; les deux règles doivent être vérifiées.
+
+</Remark>
+
+<Definition number="2" name="Orbite et stabilisateur">
+
+Pour $x\in X$, son **orbite** et son **stabilisateur** sont respectivement
+
+$$
+G\cdot x=\{g\cdot x\mid g\in G\},\qquad
+G_x=\{g\in G\mid g\cdot x=x\}.
+$$
+
+L’orbite est une partie de $X$ ; le stabilisateur est une partie de $G$. Il est même un sous-groupe : $e\in G_x$ ; si $g,h\in G_x$, alors $(gh)\cdot x=g\cdot x=x$ ; enfin $g\cdot x=x$ implique $g^{-1}\cdot x=g^{-1}\cdot(g\cdot x)=x$.
+
+</Definition>
+
+Deux orbites sont égales ou disjointes. En effet, si $y=g\cdot x$, chaque $h\cdot y=(hg)\cdot x$ appartient à $G\cdot x$ ; réciproquement $x=g^{-1}\cdot y$, d’où l’inclusion inverse. Si deux orbites ont un point commun, elles sont donc égales. Chaque point appartenant à sa propre orbite, les orbites forment une partition de $X$, y compris lorsque $X$ est vide.
+
+L’action est dite **transitive** si $X$ est non vide et si chaque point peut être envoyé sur chaque autre point. Cela revient à dire que $X$ est une seule orbite. Elle est dite **libre** si tous les stabilisateurs sont réduits à $\{e\}$. Une action peut être transitive sans être libre : les huit symétries du carré agissent transitivement sur les sommets, mais $s$ fixe $A$ sans être l’identité.
+
+<Theorem kind="Théorème" number="1" name="Orbite et stabilisateur" id="theoreme-orbite">
+
+Soit une action à gauche de $G$ sur $X$ et soit $x\in X$. Pour $g\in G$, posons $gG_x=\{gh\mid h\in G_x\}$. L’application qui envoie la partie $gG_x$ sur $g\cdot x$ est une bijection de l’ensemble des parties distinctes $gG_x$ vers $G\cdot x$.
+
+Si $G$ est fini, alors
+
+$$
+|G|=|G\cdot x|\,|G_x|.
+$$
+
+La première affirmation reste vraie pour un groupe infini. Les parties $gG_x$ sont appelées **classes à gauche** du stabilisateur ; elles sont ici des sous-ensembles de $G$, sans opération de groupe quotient supposée.
+
+</Theorem>
+
+</CourseSection>
+
+<Proof eyebrow="03 / Démonstration" title="Regrouper les transformations qui ont la même image" intro="Nous démontrons le théorème 1 en caractérisant les transformations qui envoient x sur une position donnée.">
+
+  <ProofStep title="Comparer deux images" open>
+
+Pour $g,k\in G$, les règles de l’action donnent
+
+$$
+g\cdot x=k\cdot x\quad\Longleftrightarrow\quad
+(k^{-1}g)\cdot x=x\quad\Longleftrightarrow\quad k^{-1}g\in G_x.
+$$
+
+La première équivalence s’obtient en appliquant $k^{-1}$ aux deux membres dans un sens, puis $k$ dans l’autre.
+
+  </ProofStep>
+
+  <ProofStep title="Décrire une classe">
+
+L’appartenance $k^{-1}g\in G_x$ équivaut à $g\in kG_x$. Par conséquent les éléments qui envoient $x$ sur $k\cdot x$ sont exactement ceux de $kG_x$. Deux classes sont donc égales si elles correspondent à la même image, et disjointes sinon. Chaque image de l’orbite est atteinte par définition : les classes distinctes correspondent bijectivement aux points de l’orbite.
+
+  </ProofStep>
+
+  <ProofStep title="Compter si le groupe est fini">
+
+Pour chaque $k$, l’application $h\mapsto kh$ de $G_x$ vers $kG_x$ est bijective : elle est surjective par définition et son inverse envoie $kh$ sur $k^{-1}kh=h$. Les classes partitionnent $G$, chacune contient $|G_x|$ éléments et il y en a $|G\cdot x|$. Si $G$ est fini, leur dénombrement donne la formule.
+
+  </ProofStep>
+
+  <FullProof slot="full">
+
+**Preuve intégrale du théorème 1.** Pour $g,k\in G$, appliquer $k^{-1}$ à l’égalité $g\cdot x=k\cdot x$ et utiliser les règles de l’action montre qu’elle équivaut à $(k^{-1}g)\cdot x=x$. Cette dernière condition équivaut à $k^{-1}g\in G_x$, soit encore $g\in kG_x$. Ainsi $kG_x$ est exactement l’ensemble des éléments qui envoient $x$ sur $k\cdot x$.
+
+Les classes $kG_x$ sont donc les fibres non vides de l’application $g\mapsto g\cdot x$ : elles partitionnent $G$. Deux représentants d’une même classe ont la même image, et deux classes ayant la même image sont égales. L’application annoncée est donc bien définie et injective ; elle est surjective par définition de l’orbite. C’est une bijection, que $G$ soit fini ou infini.
+
+Pour tout $k\in G$, la multiplication à gauche $h\mapsto kh$ est une bijection de $G_x$ sur $kG_x$, d’inverse $u\mapsto k^{-1}u$. Si $G$ est fini, les classes qui partitionnent $G$ ont donc toutes $|G_x|$ éléments, et leur nombre est $|G\cdot x|$. On obtient $|G|=|G\cdot x|\,|G_x|$.
+
+  </FullProof>
+
+</Proof>
+
+<CourseSection id="connexions" eyebrow="04 / Connexions" title="Deux façons d’agir">
+
+**Lien mathématique démontré.** Dans l’action des huit symétries du carré sur ses sommets, l’orbite de $A$ est $\{A,B,C,D\}$ et son stabilisateur est $\{e,s\}$, d’après la liste de l’exploration. La formule donne $8=4\times2$. Pour les quatre rotations seules, le stabilisateur de $A$ est $\{e\}$ et $4=4\times1$. Changer le groupe agissant peut donc changer le stabilisateur même si l’orbite reste la même.
+
+**Application en informatique.** Pour réduire une recherche sur des configurations, on peut considérer comme équivalentes celles qu’une symétrie autorisée transforme l’une en l’autre, puis examiner un représentant par orbite. Cette réduction est correcte pour une propriété seulement si celle-ci est conservée par les symétries choisies ; elle ne justifie pas de confondre des configurations dont les différences comptent pour le problème.
+
+</CourseSection>
+
+<CourseSection id="exercices" eyebrow="05 / Exercices" title="Calculer et vérifier les hypothèses">
+
+<Exercise number="1" name="Translations paires" level="Application" id="exercice-translations">
+
+Pour l’action $n\cdot x=x+2n$ de $\mathbb Z$ sur $\mathbb Z$, déterminez l’orbite et le stabilisateur de $3$. L’action est-elle libre ou transitive ?
+
+<Hint>
+
+Résolvez $3+2n=3$ et comparez les parités.
+
+</Hint>
+
+<Solution>
+
+L’orbite est $\{3+2n\mid n\in\mathbb Z\}=1+2\mathbb Z$, l’ensemble des impairs. L’égalité $3+2n=3$ impose $n=0$, donc le stabilisateur est $\{0\}$. Le même calcul pour tout $x$ prouve que l’action est libre. Elle n’est pas transitive : aucun entier pair n’est dans l’orbite de $3$.
+
+</Solution>
+
+</Exercise>
+
+<Exercise number="2" name="Fixer un sommet" level="Application" id="exercice-carre">
+
+Dans l’action des huit symétries du carré, trouvez toutes celles qui envoient $A$ sur $C$. Calculez aussi le stabilisateur de $C$.
+
+<Hint>
+
+Utilisez la liste de l’exploration et appliquez la transformation de droite en premier.
+
+</Hint>
+
+<Solution>
+
+Les symétries recherchées sont $r^2$ et $r^2s$ : $s$ fixe $A$, puis $r^2$ l’envoie sur $C$. Les autres éléments de la liste envoient $A$ sur un autre sommet. Le stabilisateur de $C$ est $\{e,s\}$ : $s$ fixe $C$, et chaque $r^ks$ envoie $C$ comme $r^k$ puisque $s$ fixe $C$. Seul $k=0$ le laisse sur place parmi $k=0,1,2,3$.
+
+</Solution>
+
+</Exercise>
+
+<Exercise number="3" name="Tester une action" level="Raisonnement" id="exercice-action">
+
+Sur $\mathbb Z$, posez $n\star x=x-n$. Cette formule définit-elle une action du groupe additif $\mathbb Z$ ? Déterminez l’orbite et le stabilisateur de $0$.
+
+<Hint>
+
+Vérifiez séparément la règle du neutre et celle de la somme.
+
+</Hint>
+
+<Solution>
+
+Oui : $0\star x=x$, et $m\star(n\star x)=(x-n)-m=x-(m+n)=(m+n)\star x$. L’orbite de $0$ est $\{-n\mid n\in\mathbb Z\}=\mathbb Z$ et son stabilisateur est $\{0\}$, car $-n=0$ implique $n=0$.
+
+</Solution>
+
+</Exercise>
+
+<Exercise number="4" name="Une action triviale" level="Approfondissement" id="exercice-trivial">
+
+Soit $G$ un groupe ayant au moins deux éléments et $X$ un ensemble non vide. On pose $g\cdot x=x$ pour tous $g\in G$ et $x\in X$. Vérifiez les axiomes, décrivez les orbites et les stabilisateurs. À quelle condition sur $X$ l’action est-elle transitive ? Est-elle libre ?
+
+<Hint>
+
+Chaque élément du groupe fixe chaque point. Pensez au cas où $X$ possède exactement un point.
+
+</Hint>
+
+<Solution>
+
+On a $e\cdot x=x$ et $(gh)\cdot x=x=g\cdot(h\cdot x)$ : c’est une action. Chaque orbite est le singleton $\{x\}$ et chaque stabilisateur est $G$. Comme $X$ est non vide, l’action est transitive exactement lorsque $X$ a un seul élément. Elle n’est jamais libre ici, puisque $G\ne\{e\}$.
+
+</Solution>
+
+</Exercise>
+
+</CourseSection>
+
+<CourseSection id="reconstruction" eyebrow="06 / Reconstruction" title="Retrouver le lien entre images et transformations">
+
+Sans consulter la preuve, reconstruisez les étapes suivantes, puis comparez-les à la preuve intégrale.
+
+1. Quelles sont les deux règles d’une action ? Pourquoi chaque élément agit-il par une bijection ?
+2. Quelle différence y a-t-il entre l’orbite d’un point et son stabilisateur ? Pourquoi ce dernier est-il un sous-groupe ?
+3. Pour $g,k\in G$, pourquoi $g\cdot x=k\cdot x$ équivaut-il à $g\in kG_x$ ?
+4. Pourquoi les classes $kG_x$ partitionnent-elles $G$ et ont-elles toutes le même nombre d’éléments lorsque $G$ est fini ?
+5. Donnez un exemple d’action transitive non libre et un exemple d’action libre non transitive. Pourquoi une liste finie d’essais ne prouve-t-elle pas à elle seule un résultat général ?
+
+Les deux actions du carré et les translations paires fournissent des exemples à comparer. Les essais motivent la formule ; la preuve explique pourquoi elle vaut pour toute action satisfaisant les hypothèses.
+
+</CourseSection>

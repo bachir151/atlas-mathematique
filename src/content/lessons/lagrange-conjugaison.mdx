@@ -1,0 +1,246 @@
+---
+title: "Lagrange & conjugaison"
+heading:
+  lead: "Lagrange"
+  emphasis: "& conjugaison."
+summary: "Découper un groupe fini en classes, compter ses éléments et comprendre comment une symétrie transforme une autre par conjugaison."
+domain: "Algèbre"
+number: "10"
+breadcrumb: "Lagrange & conjugaison"
+status: "validated"
+validation: "Décision de la direction du projet, 16 novembre 2026 (sujet, niveau, exercices, reconstruction et interaction retenus)"
+companion: false
+sections:
+  - { id: "exploration", label: "Exploration" }
+  - { id: "cours", label: "Le cours" }
+  - { id: "demonstration", label: "Démonstration" }
+  - { id: "preuve-integrale", label: "Preuve intégrale" }
+  - { id: "connexions", label: "Connexions" }
+  - { id: "exercices", label: "Exercices" }
+  - { id: "reconstruction", label: "À reconstruire" }
+---
+
+<CourseSection id="exploration" eyebrow="01 / Exploration" title="Comment compter sans compter chaque élément séparément ?">
+
+**Pour commencer :** connaître les groupes, les sous-groupes, les puissances entières et la divisibilité. La leçon 01 donne un exemple de groupe de rotations du carré. Le parcours principal vise le début de licence et rappelle les notions nécessaires ; aucune connaissance préalable des actions de groupes ou des groupes quotients n’est exigée.
+
+Dans le groupe $R=\{e,r,r^2,r^3\}$ des rotations du carré, $r$ est un quart de tour, $r^4=e$, et ces quatre rotations sont distinctes. Prenons le sous-groupe $H=\{e,r^2\}$. À partir de $e$, multiplier à droite par les éléments de $H$ donne $\{e,r^2\}$. À partir de $r$, on obtient $\{r,r^3\}$. Ces deux paquets sont disjoints, chacun contient deux éléments et leur réunion est $R$.
+
+Essayez de partir de $r^2$, puis de $r^3$ : retrouvez-vous de nouveaux paquets ? Pourquoi cette méthode devrait-elle fonctionner pour un sous-groupe quelconque d’un groupe fini ? L’exemple suggère une divisibilité, mais il ne la démontre pas pour tous les groupes.
+
+Une autre question apparaît lorsqu’on ajoute aux rotations une réflexion $s$ du carré. Effectuer $r^{-1}$, puis $s$, puis $r$ donne $rsr^{-1}$, avec notre convention de composition de droite à gauche. Quel rapport cette nouvelle transformation entretient-elle avec $s$ ?
+
+</CourseSection>
+
+<CourseSection id="cours" eyebrow="02 / Le cours" title="Classes et transformations conjuguées">
+
+Nous écrivons le produit d’un groupe $G$ multiplicativement, son neutre $e$ et l’inverse de $g$ sous la forme $g^{-1}$. Pour des transformations, $gh$ signifie que l’on applique d’abord $h$, puis $g$. Un **sous-groupe** $H$ contient $e$ et est stable par produit et par passage à l’inverse. L’**ordre** d’un groupe fini est son nombre d’éléments, noté $|G|$.
+
+<Definition number="1" name="Classe à gauche">
+
+Pour $a\in G$ et un sous-groupe $H$, la **classe à gauche** de $H$ représentée par $a$ est
+
+$$
+aH=\{ah\mid h\in H\}.
+$$
+
+Le représentant est placé à gauche. Ce sous-ensemble n’est pas nécessairement un sous-groupe : si $a\notin H$, il ne contient pas $e$, car $ah=e$ impliquerait $a=h^{-1}\in H$.
+
+</Definition>
+
+<LagrangeFigure kind="classes-gauche" number="1" />
+
+<Theorem kind="Théorème" number="1" name="Théorème de Lagrange" id="theoreme-lagrange">
+
+Soient $G$ un groupe fini et $H$ un sous-groupe de $G$. Les classes à gauche de $H$ forment une partition de $G$ et chacune contient $|H|$ éléments. Si leur nombre est noté $[G:H]$, alors
+
+$$
+|G|=[G:H]\,|H|.
+$$
+
+En particulier, l’ordre de $H$ divise l’ordre de $G$.
+
+</Theorem>
+
+Une **partition** est une famille de parties non vides, deux à deux disjointes, dont la réunion est l’ensemble entier. Le nombre $[G:H]$ est l’**indice** de $H$ dans $G$. La preuve progressive et la preuve intégrale établissent tous les points de l’énoncé. Il ne s’agit pas ici de définir une multiplication sur les classes : la construction d’un groupe quotient exige des hypothèses supplémentaires, étudiées dans la leçon sur les groupes quotients.
+
+<Example name="Deux classes dans les rotations du carré">
+
+Avec $R$ et $H$ de l’exploration, $eH=r^2H=\{e,r^2\}$ et $rH=r^3H=\{r,r^3\}$. Ainsi $[R:H]=2$ et $|R|=2\cdot2=4$. La classe $rH$ ne contient pas $e$ : elle n’est pas un sous-groupe.
+
+</Example>
+
+<Definition number="2" name="Ordre d’un élément">
+
+L’**ordre** de $g\in G$ est le plus petit entier $m\geq1$ tel que $g^m=e$, s’il existe. Le sous-groupe engendré par $g$ est $\langle g\rangle=\{g^k\mid k\in\mathbb Z\}$, les exposants négatifs utilisant $g^{-1}$.
+
+Si $g$ appartient à un groupe fini, son ordre existe : parmi les $|G|+1$ puissances $e,g,\ldots,g^{|G|}$, deux sont égales ; en simplifiant par une inverse, une puissance d’exposant strictement positif vaut $e$. Si $m$ est le plus petit tel exposant, la division euclidienne montre que toute puissance est l’une de $e,g,\ldots,g^{m-1}$ ; ces $m$ éléments sont distincts, sinon une puissance positive d’exposant inférieur à $m$ vaudrait $e$. Ainsi $|\langle g\rangle|=m$.
+
+</Definition>
+
+<Remark name="Une conséquence et une limite">
+
+Dans un groupe fini, l’ordre de chaque élément divise $|G|$ par Lagrange appliqué à $\langle g\rangle$. En particulier $g^{|G|}=e$. La réciproque de Lagrange n’est pas garantie : un diviseur de $|G|$ ne fournit pas à lui seul un sous-groupe de cet ordre. L’exercice 4 en donne un exemple.
+
+</Remark>
+
+<Definition number="3" name="Conjugaison">
+
+Deux éléments $x,y\in G$ sont **conjugués** s’il existe $g\in G$ tel que $y=gxg^{-1}$. La **classe de conjugaison** de $x$ est l’ensemble des $gxg^{-1}$ lorsque $g$ parcourt $G$.
+
+Cette relation est réflexive en prenant $g=e$, symétrique car $x=g^{-1}yg$, et transitive car conjuguer successivement par $g$ puis par $h$ revient à conjuguer par $hg$. Les classes de conjugaison partitionnent donc $G$ : deux classes qui se rencontrent sont égales par symétrie et transitivité.
+
+</Definition>
+
+Pour tout $g\in G$, l’application $x\mapsto gxg^{-1}$ est une bijection de $G$ sur lui-même, d’inverse $x\mapsto g^{-1}xg$. Elle respecte le produit car $(gxg^{-1})(gyg^{-1})=gxyg^{-1}$. Elle envoie donc les puissances de $x$ sur celles de $gxg^{-1}$ et conserve l’ordre de chaque élément lorsqu’il existe. Des éléments de même ordre ne sont pas nécessairement conjugués : dans un groupe commutatif, chaque classe de conjugaison est réduite à un élément.
+
+</CourseSection>
+
+<Proof eyebrow="03 / Démonstration" title="Pourquoi les paquets ont-ils tous la même taille ?" intro="Nous démontrons le théorème 1 pour un sous-groupe H d’un groupe fini G.">
+
+  <ProofStep title="Chaque classe a la taille de H" open>
+
+Pour $a\in G$, l’application $h\mapsto ah$ de $H$ vers $aH$ est surjective par définition. Elle est injective : $ah=ah'$ implique $h=h'$ après multiplication à gauche par $a^{-1}$. C’est donc une bijection, et $|aH|=|H|$.
+
+  </ProofStep>
+
+  <ProofStep title="Deux classes qui se rencontrent sont égales">
+
+Supposons $aH\cap bH\ne\varnothing$. Il existe $h,k\in H$ tels que $ah=bk$, donc $a=bkh^{-1}$. Comme $kh^{-1}\in H$, pour tout $t\in H$ on a $at=b(kh^{-1}t)\in bH$. Ainsi $aH\subseteq bH$. En échangeant $a$ et $b$, on obtient l’inclusion inverse : $aH=bH$.
+
+  </ProofStep>
+
+  <ProofStep title="Recouvrir puis compter">
+
+Tout $a\in G$ appartient à $aH$ car $e\in H$. Les classes sont non vides, recouvrent $G$ et, d’après l’étape précédente, sont égales ou disjointes. Les classes distinctes forment donc une partition. Comme $G$ est fini, il n’y en a qu’un nombre fini $[G:H]$. Chacune contient $|H|$ éléments, d’où $|G|=[G:H]|H|$ et la divisibilité annoncée.
+
+  </ProofStep>
+
+  <FullProof slot="full">
+
+**Preuve intégrale du théorème 1.** Soient $G$ un groupe fini et $H$ un sous-groupe. Pour chaque $a\in G$, l’application de $H$ vers $aH$ définie par $h\mapsto ah$ est surjective par définition. Elle est injective, car $ah=ah'$ entraîne $h=h'$ après multiplication à gauche par $a^{-1}$. Elle est donc bijective et $|aH|=|H|$.
+
+Si deux classes $aH$ et $bH$ se rencontrent, il existe $h,k\in H$ tels que $ah=bk$. Donc $a=bkh^{-1}$. Pour tout $t\in H$, la stabilité de $H$ donne $kh^{-1}t\in H$, puis $at\in bH$. Ainsi $aH\subseteq bH$. Le même raisonnement en échangeant $a$ et $b$ donne $bH\subseteq aH$ : les deux classes sont égales.
+
+Enfin, $e\in H$ implique $a=ae\in aH$ pour tout $a\in G$. Les classes sont donc non vides et recouvrent $G$ ; les classes distinctes sont disjointes. Elles forment une partition de $G$. Puisque $G$ est fini, leur nombre $[G:H]$ est fini. En additionnant les tailles de ces parties disjointes, toutes égales à $|H|$, on obtient $|G|=[G:H]|H|$. Ainsi $|H|$ divise $|G|$.
+
+  </FullProof>
+
+</Proof>
+
+<CourseSection id="connexions" eyebrow="04 / Connexions" title="Conjuguer une réflexion du carré">
+
+**Lien mathématique démontré avec les leçons 01 et 02.** Dans le plan, soit $Q=[-1,1]^2$, $r(x,y)=(-y,x)$ et $s(x,y)=(-x,y)$. La rotation $r$ et la réflexion $s$ conservent le carré. Leur composée $rsr^{-1}$ le conserve aussi, puisque chaque facteur le conserve. Comme $r^{-1}(x,y)=(y,-x)$, un calcul donne
+
+$$
+rsr^{-1}(x,y)=r(-y,-x)=(x,-y).
+$$
+
+C’est la réflexion d’axe horizontal. Le quart de tour a transporté l’axe vertical de $s$ sur l’axe horizontal. Les deux réflexions sont conjuguées et ont le même ordre, ici $2$ : chacune est distincte de l’identité et son carré vaut l’identité. Ce calcul est une propriété exacte des transformations considérées, pas seulement une ressemblance visuelle.
+
+Pour relier conjugaison et dénombrement, fixons $x$ dans un groupe fini $G$. Son **centralisateur** est $C_G(x)=\{g\in G\mid gx=xg\}$. C’est un sous-groupe : $e$ commute avec $x$, et si $a,b$ commutent avec $x$, alors $ab$ et $a^{-1}$ aussi. Pour $a,b\in G$,
+
+$$
+axa^{-1}=bxb^{-1}\quad\Longleftrightarrow\quad b^{-1}a\in C_G(x)
+\quad\Longleftrightarrow\quad aC_G(x)=bC_G(x).
+$$
+
+La première équivalence vient de la multiplication par $b^{-1}$ à gauche et $a$ à droite ; la seconde de la définition des classes. Ainsi chaque classe à gauche du centralisateur correspond à un unique conjugué, et réciproquement. Le nombre de conjugués de $x$ vaut $[G:C_G(x)]$ et divise $|G|$ par Lagrange. C’est un cas de la formule orbite-stabilisateur, abordée dans la leçon sur les actions ; l’argument donné ici ne la suppose pas.
+
+<LagrangeFigure kind="conjugaison" number="2" />
+
+</CourseSection>
+
+<CourseSection id="exercices" eyebrow="05 / Exercices" title="Compter, conjuguer, puis tester les réciproques">
+
+Chaque exercice possède un indice et une correction. Le dernier est un approfondissement facultatif.
+
+<Exercise number="1" name="Des ordres possibles" level="Application" id="exercice-ordres">
+
+Soit $G$ un groupe d’ordre $15$. Quels sont les ordres possibles de ses sous-groupes et de ses éléments ? Que vaut $g^{15}$ pour $g\in G$ ? Ces conditions assurent-elles à elles seules l’existence d’un sous-groupe de chacun des ordres listés ?
+
+<Hint>
+
+Listez les diviseurs positifs de $15$ et distinguez condition nécessaire et existence.
+
+</Hint>
+
+<Solution>
+
+Les ordres possibles sont parmi $1,3,5,15$, pour les sous-groupes comme pour les éléments. Pour tout $g$, son ordre divise $15$, donc $g^{15}=e$. Lagrange seul donne une condition nécessaire et ne fournit pas, à lui seul, l’existence des ordres intermédiaires. En revanche $\{e\}$ et $G$ existent toujours. La question ne demande pas de déterminer si d’autres théorèmes assurent ici les ordres $3$ et $5$.
+
+</Solution>
+
+</Exercise>
+
+<Exercise number="2" name="Classes dans les rotations" level="Calcul" id="exercice-classes">
+
+Dans $R=\{e,r,r^2,r^3\}$ avec $r^4=e$ et quatre éléments distincts, prenez $K=\{e\}$. Écrivez toutes les classes $aK$, leur nombre et vérifiez la formule de Lagrange. Recommencez avec $K=R$.
+
+<Hint>
+
+Multiplier par le seul élément de $\{e\}$ ne change pas le représentant.
+
+</Hint>
+
+<Solution>
+
+Pour $K=\{e\}$, les classes sont $\{e\}$, $\{r\}$, $\{r^2\}$ et $\{r^3\}$ : il y en a quatre et $4=4\cdot1$. Pour $K=R$, chaque $aR$ vaut $R$ : l’inclusion $aR\subseteq R$ est la stabilité, et tout $b\in R$ s’écrit $a(a^{-1}b)$. Il y a une classe et $4=1\cdot4$.
+
+</Solution>
+
+</Exercise>
+
+<Exercise number="3" name="Conjuguer dans le carré" level="Raisonnement" id="exercice-conjugaison">
+
+Avec les transformations $r$ et $s$ de la section « Connexions », calculez $r^2sr^{-2}$. Est-ce égal à $s$ ? Les rotations $e$ et $r^2$ sont-elles conjuguées dans le groupe des symétries du carré ?
+
+<Hint>
+
+Le demi-tour est sa propre inverse. Toute conjugaison de $e$ vaut $e$.
+
+</Hint>
+
+<Solution>
+
+On a $r^2(x,y)=(-x,-y)$ et $r^{-2}=r^2$. Ainsi $r^2sr^{-2}(x,y)=(-x,y)=s(x,y)$. En revanche $e$ et $r^2$ ne sont pas conjuguées : pour toute symétrie $g$, $geg^{-1}=e$, tandis que $r^2\ne e$.
+
+</Solution>
+
+</Exercise>
+
+<Exercise number="4" name="Un diviseur sans sous-groupe correspondant" level="Approfondissement" id="exercice-reciproque">
+
+Considérez le groupe $A$ des permutations paires de $\{1,2,3,4\}$, de cardinal $12$. On admet ici que ses éléments sont l’identité, les huit cycles de longueur $3$ et les trois produits de deux transpositions disjointes. Montrez que $A$ n’a pas de sous-groupe d’ordre $6$. On pourra utiliser le fait qu’un sous-groupe d’indice $2$ est stable par conjugaison, à démontrer.
+
+<Hint>
+
+Un sous-groupe d’indice $2$ a une seule classe à gauche hors de lui et une seule classe à droite hors de lui. Ensuite, conjuguez les cycles en renommant leurs symboles par une permutation paire ; comptez les classes de conjugaison possibles.
+
+</Hint>
+
+<Solution>
+
+Supposons $H$ d’ordre $6$. Son indice est $2$. Les classes à gauche sont $H$ et son complémentaire ; les classes à droite aussi, par le même argument de partition appliqué aux ensembles $Ha$. Donc $aH=Ha$ pour tout $a$, d’où $aHa^{-1}=H$. Ainsi $H$ est une réunion de classes de conjugaison dans $A$.
+
+Les classes sont de tailles $1,3,4,4$. Justifions ce décompte. L’identité est seule. Les trois doubles transpositions sont conjuguées par les puissances de $(123)$, qui permutent les trois appariements de $\{1,2,3,4\}$ ; elles forment donc une classe de taille $3$. Pour un $3$-cycle $c=(123)$, une permutation qui commute avec $c$ fixe son unique point fixe $4$, puis est déterminée par l’image de $1$, qui peut être $1,2$ ou $3$. Son centralisateur dans $A$ est donc $\{e,c,c^2\}$, de taille $3$. La formule de la section « Connexions » donne une classe de taille $12/3=4$ pour chaque $3$-cycle. Les huit $3$-cycles forment donc deux classes de taille $4$.
+
+Puisque $H$ contient l’identité et est une réunion de ces classes, son cardinal doit être $1$ plus une somme choisie parmi $3,4,4$. Aucune de ces sommes ne vaut $5$ : $|H|=6$ est impossible. Ainsi $6$ divise $12$, mais $A$ ne possède aucun sous-groupe d’ordre $6$.
+
+</Solution>
+
+</Exercise>
+
+</CourseSection>
+
+<CourseSection id="reconstruction" eyebrow="06 / Reconstruction" title="Rebâtir le comptage et son lien avec la conjugaison">
+
+Sans consulter la preuve, essayez de répondre aux questions suivantes, puis comparez avec la preuve intégrale et les corrections.
+
+1. Que contient $aH$ ? Pourquoi la multiplication par $a$ donne-t-elle une bijection de $H$ sur $aH$ ?
+2. Si $aH$ et $bH$ ont un élément commun, comment prouver les deux inclusions ? Pourquoi cela donne-t-il une partition ?
+3. Où la finitude intervient-elle dans le comptage ? Pourquoi l’ordre d’un élément divise-t-il celui du groupe fini ?
+4. Quel calcul montre qu’une conjugaison respecte le produit ? Pourquoi conserve-t-elle l’ordre d’un élément ?
+5. Quelles conjugaisons donnent le même conjugué de $x$ ? Reliez votre réponse aux classes du centralisateur, puis expliquez pourquoi la réciproque de Lagrange demande une justification distincte.
+
+</CourseSection>

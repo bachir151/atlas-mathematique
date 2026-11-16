@@ -1,0 +1,87 @@
+---
+/**
+ * Interactive figures of the lesson « Lagrange & conjugaison » on the group D₄
+ * of the symmetries of the square: left cosets of a subgroup, and conjugation.
+ * The drawing, the text reading and the table are rendered at build time;
+ * src/scripts/lagrange-figures.ts makes the controls live.
+ * Usage in MDX: <LagrangeFigure kind="classes-gauche" number="1" />
+ *               <LagrangeFigure kind="conjugaison" number="2" />
+ */
+import {
+  CLASSES_PRESET, CONJUGATION_PRESET, ELEMENT_NAMES, SUBGROUPS,
+  classesReading, classesText, conjugationReading, conjugationText,
+} from '../../figures/lagrange';
+import { classesSvg, conjugationSvg, HEIGHT, WIDTH } from '../../figures/lagrange-svg';
+import '../../styles/figures.css';
+import '../../styles/figures-lagrange.css';
+
+interface Props { kind?: 'classes-gauche' | 'conjugaison'; number?: string }
+const { kind = 'classes-gauche', number } = Astro.props;
+const isClasses = kind === 'classes-gauche';
+const id = isClasses ? 'figure-lagrange-classes' : 'figure-lagrange-conjugaison';
+const title = isClasses ? 'Classes à gauche d’un sous-groupe de D₄' : 'Conjuguer dans D₄';
+const text = isClasses ? classesText(CLASSES_PRESET, classesReading(CLASSES_PRESET)) : conjugationText(CONJUGATION_PRESET, conjugationReading(CONJUGATION_PRESET));
+const svg = isClasses
+  ? classesSvg(CLASSES_PRESET, classesReading(CLASSES_PRESET))
+  : conjugationSvg(CONJUGATION_PRESET, conjugationReading(CONJUGATION_PRESET));
+const elementOptions = ELEMENT_NAMES.map((label, value) => ({ label, value }));
+const params: { name: string; label: string; options: { label: string; value: number }[]; value: number }[] = isClasses
+  ? [
+      { name: 'sub', label: 'Sous-groupe H', options: SUBGROUPS.map((s, value) => ({ label: s.label, value })), value: CLASSES_PRESET.sub },
+      { name: 'rep', label: 'Représentant a', options: elementOptions, value: CLASSES_PRESET.rep },
+    ]
+  : [
+      { name: 'x', label: 'Élément x', options: elementOptions, value: CONJUGATION_PRESET.x },
+      { name: 'g', label: 'Conjugueur g', options: elementOptions, value: CONJUGATION_PRESET.g },
+    ];
+const hint = isClasses
+  ? 'D₄ = {rⁱ, rⁱs}, r quart de tour antihoraire, s réflexion d’axe vertical, composition de droite à gauche. Chaque élément porte le numéro de sa classe à gauche ; l’anneau plein marque les éléments de aH, l’anneau en tirets le représentant a. Une classe peut ne pas contenir e.'
+  : 'D₄ = {rⁱ, rⁱs}, r quart de tour antihoraire, s réflexion d’axe vertical, composition de droite à gauche. Pour une réflexion x, les tirets verts donnent l’axe de x et les tirets orange l’axe de g x g⁻¹.';
+const note = 'Les calculs sont exacts. La figure explore un groupe fini de huit éléments : elle ne démontre rien et ne remplace pas les démonstrations de la leçon.';
+---
+<figure class={`plane-figure series-figure lagrange-figure lagrange-${kind}`} id={id} data-lagr-figure data-lagr-kind={kind} aria-labelledby={`${id}-title`}>
+  <figcaption class="plane-figure-caption">
+    <span class="eyebrow">Figure{number && ` ${number}`} · interactive</span>
+    <span class="plane-figure-title" id={`${id}-title`}>{title}</span>
+  </figcaption>
+  <div class="plane-figure-layout">
+    <div class="plane-figure-stage">
+      <svg viewBox={`0 0 ${WIDTH} ${HEIGHT}`} role="img" aria-labelledby={`${id}-title ${id}-status`} data-lagr-svg set:html={svg} />
+      <p class="plane-figure-hint">{hint}</p>
+    </div>
+    <div class="plane-figure-side">
+      <div class="plane-controls" role="group" aria-label={isClasses ? 'Sous-groupe et représentant' : 'Élément et conjugueur'}>
+        {params.map(p => (
+          <label class="plane-field">
+            <span>{p.label}</span>
+            <select data-lagr-param={p.name} disabled>
+              {p.options.map(o => <option value={o.value} selected={o.value === p.value}>{o.label}</option>)}
+            </select>
+          </label>
+        ))}
+      </div>
+      <div class="plane-actions">
+        <button type="button" class="button primary" data-lagr-action="reset" aria-disabled="true" disabled>Remettre les valeurs initiales</button>
+      </div>
+      <dl class="plane-reading" data-lagr-rows>
+        {text.rows.map(([term, value]) => <div><dt>{term}</dt><dd>{value}</dd></div>)}
+      </dl>
+      <p class="plane-status" id={`${id}-status`} role="status" aria-live="polite" data-lagr-status>{text.status}</p>
+    </div>
+  </div>
+  <p class="series-table-caption" id={`${id}-table-caption`} data-lagr-caption>{text.caption}</p>
+  <div class="table-scroll series-table" tabindex="0" role="region" aria-labelledby={`${id}-table-caption`}>
+    <table aria-labelledby={`${id}-table-caption`}>
+      <thead><tr data-lagr-head>{text.headers.map(h => <th scope="col">{h}</th>)}</tr></thead>
+      <tbody data-lagr-table>
+        {text.table.map(row => <tr>{row.map(cell => <td>{cell}</td>)}</tr>)}
+      </tbody>
+    </table>
+  </div>
+  <p class="technical-note">{note}</p>
+  <noscript><p class="technical-note">Activez JavaScript pour modifier la figure. La figure, ses valeurs initiales et le tableau restent lisibles.</p></noscript>
+</figure>
+<script>
+  import { initLagrangeFigure } from '../../scripts/lagrange-figures';
+  document.querySelectorAll<HTMLElement>('[data-lagr-figure]').forEach(initLagrangeFigure);
+</script>

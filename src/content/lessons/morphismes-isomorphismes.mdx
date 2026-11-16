@@ -1,0 +1,248 @@
+---
+title: "Morphismes & isomorphismes de groupes"
+heading:
+  lead: "Morphismes &"
+  emphasis: "structures de groupes."
+summary: "Comparer des groupes en préservant leurs opérations, mesurer les pertes d’information et reconnaître une même structure."
+domain: "Algèbre"
+number: "06"
+breadcrumb: "Morphismes & isomorphismes"
+status: "validated"
+validation: "Décision de la direction du projet, 16 novembre 2026 (sujet, niveau, exercices, reconstruction et interaction retenus)"
+companion: false
+sections:
+  - { id: "exploration", label: "Exploration" }
+  - { id: "cours", label: "Le cours" }
+  - { id: "demonstration", label: "Démonstration" }
+  - { id: "preuve-integrale", label: "Preuve intégrale" }
+  - { id: "connexions", label: "Connexions" }
+  - { id: "exercices", label: "Exercices" }
+  - { id: "reconstruction", label: "À reconstruire" }
+---
+
+<CourseSection id="exploration" eyebrow="01 / Exploration" title="Des pas entiers aux rotations">
+
+**Pour commencer :** savoir calculer avec les entiers relatifs, lire une application et connaître les propriétés d’un groupe et d’un sous-groupe. La leçon sur les rotations du carré fournit un exemple, rappelé ici ; celle sur les sous-groupes des entiers explique la notation $d\mathbb Z$. Le parcours vise une fin de lycée familière des preuves ou un début de licence.
+
+Un quart de tour positif du carré est noté $r$ et l’identité $e$. Les rotations qui conservent le carré sont $C_4=\{e,r,r^2,r^3\}$, avec $r^4=e$ et la composition comme opération. À chaque entier $k$, associons la rotation $r^k$ : un exposant négatif signifie que l’on répète la rotation inverse, et $r^0=e$.
+
+Sur papier, comparez les rotations associées à $1+2$ et à $1$ puis $2$ ; comparez ensuite celles associées à $1$ et à $5$. Dans le premier cas, $r^{1+2}=r^1\circ r^2=r^3$. Dans le second, $r^5=r$ : deux entiers différents peuvent décrire la même rotation.
+
+<MorphismFigure number="1" />
+
+Cette correspondance respecte l’addition et la composition, mais elle perd de l’information sur le nombre de tours complets. Comment décrire précisément ce qu’elle conserve et ce qu’elle oublie ?
+
+</CourseSection>
+
+<CourseSection id="cours" eyebrow="02 / Le cours" title="Comparer les opérations">
+
+Soient $(G,\cdot)$ et $(H,\ast)$ deux groupes, de neutres respectifs $e_G$ et $e_H$. Dans un groupe, l’inverse de $x$ est noté $x^{-1}$. Une application associe à chaque élément de son ensemble de départ exactement un élément de son ensemble d’arrivée.
+
+<Definition number="1" name="Morphisme de groupes">
+
+Une application $f\colon G\to H$ est un **morphisme de groupes** si, pour tous $x,y\in G$,
+
+$$
+f(x\cdot y)=f(x)\ast f(y).
+$$
+
+À gauche, on effectue d’abord l’opération de $G$ ; à droite, on transporte les deux éléments puis on effectue l’opération de $H$. En notation additive, la condition s’écrit par exemple $f(x+y)=f(x)+f(y)$ lorsque les deux opérations sont des additions.
+
+</Definition>
+
+Un morphisme préserve nécessairement le neutre et les inverses. En effet, $f(e_G)=f(e_G)\ast f(e_G)$ ; en composant à gauche par l’inverse de $f(e_G)$, on obtient $f(e_G)=e_H$. Puis $f(x)\ast f(x^{-1})=f(e_G)=e_H$ et, dans l’autre ordre, $f(x^{-1})\ast f(x)=e_H$. Ainsi $f(x^{-1})=f(x)^{-1}$.
+
+<Example name="Compter les quarts de tour">
+
+L’application $p\colon\mathbb Z\to C_4$ définie par $p(k)=r^k$ est un morphisme : pour tous entiers $m,n$, $r^{m+n}=r^m\circ r^n$. Cette règle des puissances reste vraie pour les exposants négatifs, définis par les inverses. Les quatre rotations sont atteintes par $0,1,2,3$ : $p$ est **surjective**. Elle n’est pas **injective**, car $p(0)=p(4)=e$ alors que $0\ne4$.
+
+</Example>
+
+<Example name="Une application qui ne préserve pas l’opération">
+
+L’application $t\colon\mathbb Z\to\mathbb Z$ définie par $t(n)=n+1$ est bijective, mais n’est pas un morphisme de $(\mathbb Z,+)$ dans lui-même : $t(0+0)=1$, tandis que $t(0)+t(0)=2$. Une bijection seule ne garantit pas la conservation de la structure.
+
+</Example>
+
+<Definition number="2" name="Noyau et image">
+
+Pour un morphisme $f\colon G\to H$, son **noyau** et son **image** sont les ensembles
+
+$$
+\ker f=\{x\in G\mid f(x)=e_H\},
+\qquad \operatorname{Im}f=\{f(x)\mid x\in G\}.
+$$
+
+Le noyau est une partie de $G$ et l’image une partie de $H$. L’image comprend les éléments effectivement atteints ; $f$ est surjective exactement lorsque $\operatorname{Im}f=H$.
+
+</Definition>
+
+Le noyau est un sous-groupe de $G$ : il contient $e_G$ et, si $x,y$ y appartiennent, alors $f(x\cdot y)=e_H$ et $f(x^{-1})=e_H$. De même, l’image est un sous-groupe de $H$ : elle contient $e_H=f(e_G)$, le produit de $f(x)$ et $f(y)$ vaut $f(x\cdot y)$, et l’inverse de $f(x)$ vaut $f(x^{-1})$. L’associativité est héritée des groupes ambiants.
+
+Pour $p$, l’image est $C_4$ et le noyau est $4\mathbb Z$. En effet, la division euclidienne écrit tout entier $k=4q+s$ avec $0\leq s<4$ ; alors $r^k=r^s$, et parmi $e,r,r^2,r^3$ seule la première rotation vaut $e$. Ainsi $p(k)=e$ exactement lorsque $s=0$, c’est-à-dire lorsque $k$ est multiple de $4$.
+
+<Definition number="3" name="Isomorphisme">
+
+Un **isomorphisme de groupes** est un morphisme bijectif. Deux groupes sont **isomorphes** s’il existe un tel morphisme entre eux. Une bijection est à la fois injective (deux éléments distincts ont des images distinctes) et surjective (tout élément de l’ensemble d’arrivée est atteint).
+
+</Definition>
+
+Un isomorphisme donne une correspondance sans perte entre les éléments, compatible avec les opérations. Son application réciproque est elle-même un morphisme : si $a=f(x)$ et $b=f(y)$, alors $f^{-1}(a\ast b)=f^{-1}(f(x\cdot y))=x\cdot y=f^{-1}(a)\cdot f^{-1}(b)$. Les deux groupes peuvent avoir des éléments de nature différente tout en ayant la même structure de groupe.
+
+<Theorem kind="Théorème" number="1" name="Noyau et injectivité" id="theoreme-noyau">
+
+Pour tout morphisme de groupes $f\colon G\to H$, on a
+
+$$
+f\text{ injective}\quad\Longleftrightarrow\quad\ker f=\{e_G\}.
+$$
+
+Plus précisément, pour tous $x,y\in G$, $f(x)=f(y)$ si et seulement si $x^{-1}\cdot y\in\ker f$.
+
+</Theorem>
+
+La preuve progressive et la preuve intégrale sont accessibles ci-dessous. L’équivalence précise identifie toutes les collisions, même lorsque le groupe n’est pas commutatif.
+
+</CourseSection>
+
+<Proof eyebrow="03 / Démonstration" title="Comment le noyau détecte-t-il les collisions ?" intro="Nous démontrons les deux affirmations du théorème 1 pour des groupes quelconques, sans supposer la commutativité.">
+
+  <ProofStep title="Comparer deux images par leur différence de groupe" open>
+
+Pour $x,y\in G$, la conservation des inverses et de l’opération donne
+
+$$
+f(x^{-1}\cdot y)=f(x)^{-1}\ast f(y).
+$$
+
+Dans $H$, ce produit vaut $e_H$ exactement lorsque $f(x)=f(y)$ : multiplier à gauche par $f(x)$ donne une implication, et l’autre découle de la définition de l’inverse. Par définition du noyau, $f(x)=f(y)$ équivaut donc à $x^{-1}\cdot y\in\ker f$.
+
+  </ProofStep>
+
+  <ProofStep title="De l’injectivité au noyau réduit au neutre">
+
+Supposons $f$ injective. Tout $x\in\ker f$ vérifie $f(x)=e_H=f(e_G)$, donc $x=e_G$. Comme $e_G$ appartient toujours au noyau, celui-ci est exactement $\{e_G\}$.
+
+  </ProofStep>
+
+  <ProofStep title="Du noyau réduit au neutre à l’injectivité">
+
+Supposons $\ker f=\{e_G\}$ et $f(x)=f(y)$. La première étape donne $x^{-1}\cdot y=e_G$. Multiplier à gauche par $x$ fournit $y=x$. C’est la définition de l’injectivité.
+
+  </ProofStep>
+
+  <FullProof slot="full">
+
+**Preuve intégrale du théorème 1.** Pour tous $x,y\in G$, les propriétés d’un morphisme donnent $f(x^{-1}\cdot y)=f(x)^{-1}\ast f(y)$. Ce dernier produit est égal à $e_H$ si et seulement si $f(x)=f(y)$ : si le produit vaut $e_H$, on multiplie à gauche par $f(x)$ ; la réciproque utilise l’inverse de $f(x)$. Par définition du noyau,
+
+$$
+f(x)=f(y)\quad\Longleftrightarrow\quad x^{-1}\cdot y\in\ker f.
+$$
+
+Si $f$ est injective, tout $x\in\ker f$ vérifie $f(x)=e_H=f(e_G)$, donc $x=e_G$. Comme $e_G\in\ker f$, on a $\ker f=\{e_G\}$.
+
+Réciproquement, si $\ker f=\{e_G\}$ et si $f(x)=f(y)$, l’équivalence établie donne $x^{-1}\cdot y=e_G$. En multipliant à gauche par $x$, on obtient $y=x$. Donc $f$ est injective. Les deux affirmations sont démontrées.
+
+  </FullProof>
+
+</Proof>
+
+<CourseSection id="connexions" eyebrow="04 / Connexions" title="Même calcul, objets différents">
+
+**Lien mathématique démontré.** Les entiers pairs $2\mathbb Z$ forment un groupe pour l’addition. L’application $u\colon\mathbb Z\to2\mathbb Z$, $u(n)=2n$, est un morphisme car $2(m+n)=2m+2n$. Elle est injective puisque $2m=2n$ implique $m=n$, et surjective puisque chaque élément de $2\mathbb Z$ s’écrit $2n$. C’est donc un isomorphisme, de réciproque $2n\mapsto n$.
+
+Le choix de l’ensemble d’arrivée compte : la même formule $n\mapsto2n$, considérée de $\mathbb Z$ vers $\mathbb Z$, n’est pas surjective, car $1$ n’est pas pair. Elle reste injective. Par ailleurs, $p\colon\mathbb Z\to C_4$ est surjective mais non injective : aucun de ces deux morphismes vers l’ensemble d’arrivée indiqué n’est un isomorphisme.
+
+Dire que $\mathbb Z$ et $2\mathbb Z$ sont isomorphes ne les rend pas égaux comme ensembles : $1$ appartient au premier et non au second. La correspondance conserve ici la structure additive, sans affirmer qu’elle conserve toutes les propriétés possibles des entiers.
+
+</CourseSection>
+
+<CourseSection id="exercices" eyebrow="05 / Exercices" title="Tester les correspondances">
+
+Les trois premiers exercices prolongent le parcours principal ; le quatrième propose une propriété générale facultative. Chacun comporte un indice et une correction.
+
+<Exercise number="1" name="Une multiplication entière" level="Application" id="exercice-double">
+
+Pour $f\colon\mathbb Z\to\mathbb Z$ définie par $f(n)=3n$, montrez que $f$ est un morphisme. Déterminez son noyau et son image, puis décidez si elle est injective et surjective.
+
+<Hint>
+
+Résolvez $3n=0$ et décrivez les entiers qui s’écrivent $3n$.
+
+</Hint>
+
+<Solution>
+
+$f(m+n)=3m+3n=f(m)+f(n)$, donc $f$ est un morphisme. Son noyau est $\{0\}$ car $3n=0$ impose $n=0$. Son image est $3\mathbb Z$ par définition. Le théorème donne l’injectivité ; elle n’est pas surjective car $1\notin3\mathbb Z$.
+
+</Solution>
+
+</Exercise>
+
+<Exercise number="2" name="Une collision de rotations" level="Application" id="exercice-rotation">
+
+Pour le morphisme $p(k)=r^k$, caractérisez les couples d’entiers $m,n$ tels que $p(m)=p(n)$. Les entiers $-3$ et $5$ ont-ils la même image ?
+
+<Hint>
+
+Appliquez le théorème en notation additive : l’élément à tester dans le noyau est $n-m$.
+
+</Hint>
+
+<Solution>
+
+Puisque $\ker p=4\mathbb Z$, le théorème donne $p(m)=p(n)$ exactement lorsque $n-m$ est multiple de $4$. Pour $m=-3$ et $n=5$, la différence vaut $8$ : les deux images sont égales, toutes deux à $r$.
+
+</Solution>
+
+</Exercise>
+
+<Exercise number="3" name="Une bijection compatible ?" level="Raisonnement" id="exercice-bijection">
+
+Sur $\mathbb Z$, considérez $a(n)=-n$ et $b(n)=n+1$. Lesquelles de ces applications sont des isomorphismes de $(\mathbb Z,+)$ vers lui-même ?
+
+<Hint>
+
+Vérifiez la conservation de l’addition, puis cherchez une application réciproque. Un morphisme doit envoyer $0$ sur $0$.
+
+</Hint>
+
+<Solution>
+
+$a(m+n)=-m-n=a(m)+a(n)$ ; de plus $a(a(n))=n$, donc $a$ est bijective et est un isomorphisme. En revanche, $b(0)=1\ne0$ : $b$ n’est pas un morphisme, bien qu’elle soit bijective de réciproque $n\mapsto n-1$. Elle n’est donc pas un isomorphisme.
+
+</Solution>
+
+</Exercise>
+
+<Exercise number="4" name="Composer deux morphismes" level="Approfondissement" id="exercice-composition">
+
+Soient $f\colon G\to H$ et $g\colon H\to K$ deux morphismes de groupes. Montrez que $g\circ f$ est un morphisme. Si $f$ et $g$ sont des isomorphismes, montrez que $g\circ f$ en est un et donnez sa réciproque.
+
+<Hint>
+
+Appliquez successivement les deux propriétés de conservation. Pour la réciproque, parcourez les applications dans l’ordre inverse.
+
+</Hint>
+
+<Solution>
+
+Pour $x,y\in G$, on a $g(f(x\cdot y))=g(f(x)\ast f(y))=g(f(x))\diamond g(f(y))$, où $\diamond$ désigne l’opération de $K$. La composée est donc un morphisme. Si $f$ et $g$ sont bijectives, $f^{-1}\circ g^{-1}$ est sa réciproque : les deux compositions dans les deux ordres donnent les identités correspondantes. La composée est alors bijective et constitue un isomorphisme.
+
+</Solution>
+
+</Exercise>
+
+</CourseSection>
+
+<CourseSection id="reconstruction" eyebrow="06 / Reconstruction" title="Retrouver ce qui est conservé">
+
+Sans consulter les corrections, reconstruisez le raisonnement, puis comparez-le à la preuve intégrale.
+
+1. Quelle égalité doit vérifier une application pour être un morphisme ? Pourquoi envoie-t-elle le neutre sur le neutre ?
+2. Dans l’exemple $p(k)=r^k$, quels sont le domaine, l’ensemble d’arrivée, l’image et le noyau ? Pourquoi les calculs sur quelques entiers ne suffisent-ils pas à déterminer ce dernier ?
+3. Comment transformer l’égalité $f(x)=f(y)$ en une appartenance au noyau, sans changer l’ordre des facteurs ? Déduisez-en les deux sens du théorème.
+4. Pourquoi une bijection ne suffit-elle pas à définir un isomorphisme ? Donnez aussi un exemple de morphisme qui n’est pas bijectif.
+5. Construisez une correspondance entre $\mathbb Z$ et $2\mathbb Z$ qui préserve l’addition, puis expliquez pourquoi la précision de l’ensemble d’arrivée est indispensable.
+
+</CourseSection>

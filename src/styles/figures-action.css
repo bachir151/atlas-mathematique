@@ -1,0 +1,19 @@
+/* Styles of <ActionFigure> only (the shared figure styles stay in figures.css). */
+.action-figure .action-controls {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 10px;
+}
+.action-figure .plane-order[hidden],
+.action-figure .plane-order label[hidden] { display: none; }
+.action-figure .plane-order label:has(input:focus-visible) { outline: 2px solid var(--green); outline-offset: 2px; }
+.action-figure .plane-order input:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
+.action-figure fieldset:has([data-act-vertex]),
+.action-figure fieldset:has([data-act-transform]) {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px 18px;
+}
+.action-figure fieldset legend { flex-basis: 100%; }
+.action-figure .series-table th[scope='row'] { text-align: left; font-weight: 600; }
+.action-figure .plane-figure-stage svg { max-width: 360px; }

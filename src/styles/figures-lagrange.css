@@ -1,0 +1,24 @@
+/* Own styles of <LagrangeFigure> (lesson « Lagrange & conjugaison »). */
+.lagrange-figure .plane-field select {
+  min-height: 44px;
+  padding: 6px 10px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--ink);
+  font: 16px var(--sans);
+  max-width: 100%;
+}
+.lagrange-figure .plane-field select:focus-visible { outline: 3px solid var(--orange); outline-offset: 2px; }
+.lagrange-figure .lagr-node { stroke: #33594b; stroke-width: 1.4; }
+.lagrange-figure .lagr-class-0 { fill: #dbe8df; }
+.lagrange-figure .lagr-class-1 { fill: #f3dfcf; }
+.lagrange-figure .lagr-class-2 { fill: #d5e2ee; }
+.lagrange-figure .lagr-class-3 { fill: #e8e4d0; }
+.lagrange-figure .lagr-node-name { font: italic 16px var(--serif); fill: var(--ink); }
+.lagrange-figure .lagr-coset-ring { stroke: var(--orange); stroke-width: 2.6; }
+.lagrange-figure .lagr-axis-after { stroke: var(--orange); }
+.lagrange-figure .fig-square { fill-opacity: .07; }
+@media (max-width: 640px) {
+  .lagrange-figure .lagr-node-name { font-size: 24px; }
+}

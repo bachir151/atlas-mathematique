@@ -1,0 +1,89 @@
+---
+/**
+ * Interactive figure of the lesson « Actions de groupes, orbites & stabilisateurs »:
+ * the four vertices of a square, the four rotations or the eight symmetries,
+ * image, orbit and stabilizer of the chosen vertex. The drawing, the text
+ * reading and both tables are rendered at build time;
+ * src/scripts/action-figures.ts makes the controls live.
+ * Usage in MDX: <ActionFigure number="1" />
+ */
+import { ACTION_PRESET, GROUPS, GROUP_LABELS, TRANSFORMS, VERTICES, actionReading, actionText, transformsOf } from '../../figures/action';
+import { actionSvg, HEIGHT, WIDTH } from '../../figures/action-svg';
+import '../../styles/figures.css';
+import '../../styles/figures-action.css';
+
+interface Props { number?: string }
+const { number } = Astro.props;
+const id = 'figure-action';
+const state = { ...ACTION_PRESET };
+const reading = actionReading(state);
+const text = actionText(state, reading);
+const shown = transformsOf(state.group);
+---
+<figure class="plane-figure series-figure action-figure" id={id} data-act-figure aria-labelledby={`${id}-title`}>
+  <figcaption class="plane-figure-caption">
+    <span class="eyebrow">Figure{number && ` ${number}`} · interactive</span>
+    <span class="plane-figure-title" id={`${id}-title`}>Suivre les sommets du carré</span>
+  </figcaption>
+  <div class="plane-figure-layout">
+    <div class="plane-figure-stage">
+      <svg viewBox={`0 0 ${WIDTH} ${HEIGHT}`} role="img" aria-labelledby={`${id}-title ${id}-status`} data-act-svg set:html={actionSvg(reading, state.group)} />
+      <p class="plane-figure-hint">
+        L’anneau orange entoure le sommet choisi ; le point bleu est son image par la transformation choisie ; les points verts sont les autres sommets de l’orbite. Avec les huit symétries, la diagonale pointillée passe par A et C. La figure illustre un cas fini et ne démontre pas le théorème général.
+      </p>
+    </div>
+    <div class="plane-figure-side">
+      <div class="plane-controls action-controls">
+        <fieldset class="plane-order">
+          <legend>Groupe</legend>
+          {GROUPS.map(group => (
+            <label><input type="radio" name={`${id}-group`} value={group} checked={group === state.group} disabled data-act-group /> {GROUP_LABELS[group]}</label>
+          ))}
+        </fieldset>
+        <fieldset class="plane-order">
+          <legend>Sommet choisi</legend>
+          {VERTICES.map((name, index) => (
+            <label><input type="radio" name={`${id}-vertex`} value={String(index)} checked={index === state.vertex} disabled data-act-vertex /> {name}</label>
+          ))}
+        </fieldset>
+        <fieldset class="plane-order">
+          <legend>Transformation</legend>
+          {TRANSFORMS.map(t => (
+            <label hidden={!shown.includes(t)} data-act-transform-label={t.id}><input type="radio" name={`${id}-transform`} value={t.id} checked={t.id === state.transform} disabled data-act-transform /> {t.name}</label>
+          ))}
+        </fieldset>
+      </div>
+      <div class="plane-actions">
+        <button type="button" class="button primary" data-act-reset disabled>Remettre à zéro</button>
+      </div>
+      <dl class="plane-reading" data-act-rows>
+        {text.rows.map(([term, value]) => <div><dt>{term}</dt><dd>{value}</dd></div>)}
+      </dl>
+      <p class="plane-status" id={`${id}-status`} role="status" aria-live="polite" data-act-status>{text.status}</p>
+    </div>
+  </div>
+  <p class="series-table-caption" id={`${id}-table-caption`}>Image des sommets A, B, C, D par chaque transformation du groupe choisi</p>
+  <div class="table-scroll series-table" tabindex="0" role="region" aria-labelledby={`${id}-table-caption`}>
+    <table aria-labelledby={`${id}-table-caption`}>
+      <thead><tr><th scope="col">Transformation</th>{VERTICES.map(v => <th scope="col">Image de {v}</th>)}</tr></thead>
+      <tbody data-act-table>
+        {text.table.map(row => <tr>{row.map((cell, i) => i === 0 ? <th scope="row">{cell}</th> : <td>{cell}</td>)}</tr>)}
+      </tbody>
+    </table>
+  </div>
+  <p class="series-table-caption" id={`${id}-groups-caption`} data-act-groups-caption>Transformations regroupées selon l’image du sommet choisi</p>
+  <div class="table-scroll series-table" tabindex="0" role="region" aria-labelledby={`${id}-groups-caption`}>
+    <table aria-labelledby={`${id}-groups-caption`}>
+      <thead><tr><th scope="col">Image</th><th scope="col">Transformations qui y envoient le sommet choisi</th></tr></thead>
+      <tbody data-act-groups>
+        {text.groups.map(([target, list]) => <tr><th scope="row">{target}</th><td>{list}</td></tr>)}
+      </tbody>
+    </table>
+  </div>
+  <p class="technical-note">Les images sont calculées par le modèle de la figure. Elle explore un exemple : elle ne remplace pas les démonstrations de la leçon.</p>
+  <noscript><p class="technical-note">Activez JavaScript pour modifier la figure. La figure, ses valeurs initiales et le tableau des images restent lisibles.</p></noscript>
+</figure>
+<script>
+  import { initActionFigure } from '../../scripts/action-figures';
+  document.querySelectorAll<HTMLElement>('[data-act-figure]').forEach(initActionFigure);
+</script>

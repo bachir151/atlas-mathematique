@@ -5,7 +5,7 @@ import { resolve } from 'node:path';
 import { JSDOM } from 'jsdom';
 
 const output = resolve('dist');
-const pages = ['index.html', 'atlas/index.html', 'bibliotheque/index.html', 'cours/groupes-rotations/index.html', 'cours/mediatrices-reflexions/index.html', 'cours/suites-geometriques-sommes-infinies/index.html', 'cours/sous-groupes-entiers/index.html', 'experiences/p5/index.html', '404.html'];
+const pages = ['index.html', 'atlas/index.html', 'bibliotheque/index.html', 'cours/groupes-rotations/index.html', 'cours/mediatrices-reflexions/index.html', 'cours/suites-geometriques-sommes-infinies/index.html', 'cours/sous-groupes-entiers/index.html', 'cours/groupes-cycliques/index.html', 'cours/morphismes-isomorphismes/index.html', 'cours/groupes-quotients/index.html', 'cours/permutations-cycles/index.html', 'cours/actions-orbites-stabilisateurs/index.html', 'cours/lagrange-conjugaison/index.html', 'experiences/p5/index.html', '404.html'];
 let references = 0;
 
 for (const page of pages) {
@@ -64,6 +64,43 @@ for (const page of pages) {
       assert.ok(doc.querySelectorAll('[data-steps-table] tr').length > 10, 'Tableau des positions présent');
       assert.equal(doc.querySelectorAll('[data-proof]').length, 1, 'Une seule preuve intégrale');
     }
+if (page.includes('groupes-cycliques')) {
+  assert.equal(doc.querySelectorAll('[data-cycle-figure]').length, 1, 'Une figure interactive');
+  assert.match(doc.querySelector('[data-cycle-status]').textContent, /^Nombre signé de pas : 0 ; position : 0 \(0 × 4 = 0 = 0 × 12 \+ 0\)\./, 'Lecture textuelle de la figure sans JavaScript');
+  assert.equal(doc.querySelectorAll('[data-cycle-table] tr').length, 1, 'Historique initial : ligne de départ');
+}
+    if (page.includes('morphismes-isomorphismes')) {
+      assert.equal(doc.querySelectorAll('[data-morphism-figure]').length, 1, 'Une figure interactive');
+      assert.match(doc.querySelector('[data-morphism-status]').textContent, /Essai avec m = 1 et n = 5 : p\(m\) = r, p\(n\) = r/, 'Lecture textuelle de la figure sans JavaScript');
+      assert.match(doc.querySelector('[data-morphism-status]').textContent, /ne prouvent pas la propriété générale/, 'Plage finie annoncée');
+      assert.equal(doc.querySelectorAll('[data-morphism-table] tr').length, 25, 'Tableau des 25 entiers présent');
+    }
+    if (page.includes('groupes-quotients')) {
+      assert.equal(doc.querySelectorAll('[data-quotient-figure]').length, 1, 'Une figure interactive');
+      assert.match(doc.querySelector('[data-quotient-status]').textContent, /Cas courant dans ℤ\/4ℤ : \[1\] \+ \[2\] = \[3\]/, 'Lecture textuelle de la figure sans JavaScript');
+      assert.equal(doc.querySelectorAll('[data-quotient-table] tr').length, 4, 'Table des sommes de classes présente');
+      assert.equal(doc.querySelectorAll('[data-quotient-head] th[scope="col"]').length, 5, 'En-têtes de colonnes');
+      assert.equal(doc.querySelectorAll('[data-quotient-table] th[scope="row"]').length, 4, 'En-têtes de lignes');
+    }
+    if (page.includes('permutations-cycles')) {
+      assert.equal(doc.querySelectorAll('[data-perm-figure]').length, 1, 'Une figure interactive');
+      assert.match(doc.querySelector('[data-perm-status]').textContent, /Les cartes sont à leur position initiale\. Décomposition de σ : \(1.3.2\)\./, 'Lecture textuelle de la figure sans JavaScript');
+      assert.equal(doc.querySelectorAll('[data-perm-table] tr').length, 4, 'Table des images présente');
+    }
+if (page.includes('actions-orbites-stabilisateurs')) {
+  assert.equal(doc.querySelectorAll('[data-act-figure]').length, 1, 'Une figure interactive');
+  assert.match(doc.querySelector('[data-act-status]').textContent, /^e envoie A sur A\. Orbite de A : \{A, B, C, D\}\. Stabilisateur de A : \{e\}\./, 'Lecture textuelle sans JavaScript');
+  assert.equal(doc.querySelectorAll('[data-act-table] tr').length, 4, 'Tableau des images (quatre rotations)');
+  assert.equal(doc.querySelectorAll('[data-act-groups] tr').length, 4, 'Tableau des regroupements');
+}
+    if (page.includes('lagrange-conjugaison')) {
+      assert.equal(doc.querySelectorAll('[data-lagr-figure]').length, 2, 'Deux figures interactives');
+      assert.ok([...doc.querySelectorAll('[data-lagr-status]')].every(status => status.textContent.trim()), 'Lecture textuelle des figures sans JavaScript');
+      assert.match(doc.querySelector('#figure-lagrange-classes [data-lagr-status]').textContent, /^aH = \{r, r³\} : 2 éléments, ne contient pas e\./);
+      assert.match(doc.querySelector('#figure-lagrange-conjugaison [data-lagr-status]').textContent, /L’axe vertical devient l’axe horizontal\./);
+      assert.equal(doc.querySelectorAll('#figure-lagrange-classes [data-lagr-table] tr').length, 4, 'Tableau des classes présent');
+      assert.equal(doc.querySelectorAll('#figure-lagrange-conjugaison [data-lagr-table] tr').length, 8, 'Tableau des conjugués présent');
+    }
     if (page.includes('suites-geometriques')) {
       assert.equal(doc.querySelectorAll('[data-series-figure]').length, 2, 'Deux figures interactives');
       assert.ok([...doc.querySelectorAll('[data-series-status]')].every(status => status.textContent.trim()), 'Lecture textuelle des figures sans JavaScript');
@@ -71,7 +108,7 @@ for (const page of pages) {
     }
   }
   if (page.startsWith('bibliotheque/')) {
-    assert.equal(doc.querySelectorAll('[data-lesson-id]').length, 4);
+    assert.equal(doc.querySelectorAll('[data-lesson-id]').length, 10);
     assert.deepEqual([...doc.querySelectorAll('select option')].map(option => option.textContent), ['Tous les domaines', 'Algèbre', 'Géométrie', 'Analyse']);
   }
   if (page.startsWith('atlas/')) {

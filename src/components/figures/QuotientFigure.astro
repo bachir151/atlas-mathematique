@@ -1,0 +1,75 @@
+---
+/**
+ * Interactive figure of the lesson « Groupes quotients & classes »: classes
+ * modulo n (n from 2 to 8), remainders of two integers a and b, and the full
+ * table of sums of classes. The drawing, its text reading and the table are
+ * rendered at build time; src/scripts/quotient-figures.ts makes the controls
+ * live. Usage in MDX: <QuotientFigure number="1" />
+ */
+import { FIELDS, LIMITS, QUOTIENT_PRESET, quotientReading, quotientText, type QuotientField } from '../../figures/quotient';
+import { quotientSvg, HEIGHT, WIDTH } from '../../figures/quotient-svg';
+import '../../styles/figures.css';
+import '../../styles/figures-quotient.css';
+
+interface Props { number?: string }
+const { number } = Astro.props;
+const id = 'figure-quotient';
+const state = { ...QUOTIENT_PRESET };
+const reading = quotientReading(state);
+const text = quotientText(reading);
+const labels: Record<QuotientField, string> = { n: 'Modulo n (de 2 à 8)', a: 'Représentant a (de −20 à 20)', b: 'Représentant b (de −20 à 20)' };
+const actions: [string, string][] = [
+  ['a-up', `a + ${state.n}`], ['a-down', `a − ${state.n}`], ['b-up', `b + ${state.n}`], ['b-down', `b − ${state.n}`],
+];
+---
+<figure class="plane-figure series-figure quotient-figure" id={id} data-quotient-figure aria-labelledby={`${id}-title`}>
+  <figcaption class="plane-figure-caption">
+    <span class="eyebrow">Figure{number && ` ${number}`} · interactive</span>
+    <span class="plane-figure-title" id={`${id}-title`}>Classes modulo n et addition des restes</span>
+  </figcaption>
+  <div class="plane-figure-layout">
+    <div class="plane-figure-stage">
+      <svg viewBox={`0 0 ${WIDTH} ${HEIGHT}`} role="img" aria-labelledby={`${id}-title ${id}-status`} data-quotient-svg set:html={quotientSvg(reading)} />
+      <p class="plane-figure-hint">
+        Sur la droite, les points orange sont les entiers de la classe de a + b ; en dessous, les n classes, dont celles de a, de b et de a + b sont repérées. La figure couvre seulement les entiers de −40 à 40.
+      </p>
+    </div>
+    <div class="plane-figure-side">
+      <div class="plane-controls" role="group" aria-label="Modulo et représentants">
+        {FIELDS.map(name => (
+          <label class="plane-field">
+            <span>{labels[name]}</span>
+            <input type="number" inputmode="numeric" step="1" min={LIMITS[name][0]} max={LIMITS[name][1]} value={state[name]} data-param={name} disabled />
+          </label>
+        ))}
+      </div>
+      <div class="plane-actions">
+        {actions.map(([action, label]) => (
+          <button type="button" class="button secondary" data-action={action} disabled>{label}</button>
+        ))}
+        <button type="button" class="button primary" data-action="reset" disabled>Remettre les valeurs initiales</button>
+      </div>
+      <dl class="plane-reading" data-quotient-rows>
+        {text.rows.map(([term, value]) => <div><dt>{term}</dt><dd>{value}</dd></div>)}
+      </dl>
+      <p class="plane-status" id={`${id}-status`} role="status" aria-live="polite" data-quotient-status>{text.status}</p>
+    </div>
+  </div>
+  <p class="series-table-caption" id={`${id}-table-caption`} data-quotient-caption>{text.caption}</p>
+  <div class="table-scroll series-table quotient-table" tabindex="0" role="region" aria-labelledby={`${id}-table-caption`}>
+    <table aria-labelledby={`${id}-table-caption`}>
+      <thead data-quotient-head><tr><th scope="col">+</th>{text.head.map(label => <th scope="col">{label}</th>)}</tr></thead>
+      <tbody data-quotient-table>
+        {text.body.map(({ header, cells }, i) => (
+          <tr><th scope="row">{header}</th>{cells.map((cell, j) => <td aria-current={i === text.current.row && j === text.current.col ? 'true' : undefined}>{cell}</td>)}</tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+  <p class="technical-note">Les calculs sont exacts (entiers). La figure illustre un cas, avec des valeurs bornées : elle ne démontre rien et ne remplace pas les démonstrations de la leçon.</p>
+  <noscript><p class="technical-note">Activez JavaScript pour modifier la figure. La figure, ses valeurs initiales et la table restent lisibles.</p></noscript>
+</figure>
+<script>
+  import { initQuotientFigure } from '../../scripts/quotient-figures';
+  document.querySelectorAll<HTMLElement>('[data-quotient-figure]').forEach(initQuotientFigure);
+</script>

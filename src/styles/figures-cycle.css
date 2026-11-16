@@ -1,0 +1,15 @@
+/* Own styles of <CycleFigure>; the shared ones are in figures.css. */
+.cycle-figure .plane-figure-stage svg { max-width: 420px; }
+.cycle-figure .cycle-dot-unvisited { fill: #fff; stroke: var(--green); stroke-width: 1.5; }
+.cycle-figure .cycle-hand { stroke-linecap: round; }
+.cycle-figure .cycle-label { font-size: 13px; }
+.cycle-figure .plane-figure-hint { text-align: left; }
+.cycle-figure [data-cycle-svg] * { pointer-events: none; }
+.cycle-history-note {
+  margin-top: 16px;
+  font-size: 13px;
+  color: var(--muted);
+}
+@media (max-width: 560px) {
+  .cycle-figure .cycle-label { font-size: 17px; }
+}

@@ -25,7 +25,7 @@ from browser_p5 import (  # noqa: E402
     ROOT, CheckSkipped, Driver, EnvironmentBlocked, QuietHandler, WebDriverError, free_port, wait_for,
 )
 
-PAGES = ['/', '/atlas/', '/bibliotheque/', '/cours/groupes-rotations/', '/cours/mediatrices-reflexions/', '/cours/suites-geometriques-sommes-infinies/', '/cours/sous-groupes-entiers/', '/experiences/p5/', '/404.html']
+PAGES = ['/', '/atlas/', '/bibliotheque/', '/cours/groupes-rotations/', '/cours/mediatrices-reflexions/', '/cours/suites-geometriques-sommes-infinies/', '/cours/sous-groupes-entiers/', '/cours/groupes-cycliques/', '/cours/morphismes-isomorphismes/', '/cours/groupes-quotients/', '/cours/permutations-cycles/', '/cours/actions-orbites-stabilisateurs/', '/cours/lagrange-conjugaison/', '/experiences/p5/', '/404.html']
 # --drafts: serve the build that includes draft lessons (ATELIER_DRAFTS=1) and
 # run the site-wide accessibility checks on every lesson, plus the figures.
 DRAFTS = '--drafts' in sys.argv
@@ -35,12 +35,12 @@ PLAN = [
     'atlas-cleanup', 'three-not-loaded-elsewhere', 'skip-link', 'keyboard-focus', 'reflow-320',
     'text-zoom-200', 'target-size', 'contrast', 'square-rotation', 'square-reset-history', 'proof-progressive',
     'companion', 'library-filters', 'security-policy', 'figures-static', 'figures-keyboard', 'figures-buttons', 'figures-drag',
-    'series-static', 'series-keyboard', 'series-buttons', 'steps-static', 'steps-keyboard', 'steps-buttons', 'atlas-reduced-motion', 'square-reduced-motion', 'page-errors',
+    'series-static', 'series-keyboard', 'series-buttons', 'steps-static', 'steps-keyboard', 'steps-buttons', 'cycle-static', 'cycle-keyboard', 'cycle-buttons', 'morphism-static', 'morphism-keyboard', 'morphism-buttons', 'quotient-static', 'quotient-keyboard', 'quotient-buttons', 'perm-static', 'perm-keyboard', 'perm-buttons', 'action-static', 'action-keyboard', 'action-buttons', 'lagrange-static', 'lagrange-keyboard', 'lagrange-buttons', 'atlas-reduced-motion', 'square-reduced-motion', 'page-errors',
 ]
 DRAFT_PLAN = [
     'skip-link', 'keyboard-focus', 'reflow-320', 'text-zoom-200', 'target-size', 'contrast',
     'figures-static', 'figures-keyboard', 'figures-buttons', 'figures-drag',
-    'series-static', 'series-keyboard', 'series-buttons', 'steps-static', 'steps-keyboard', 'steps-buttons', 'page-errors',
+    'series-static', 'series-keyboard', 'series-buttons', 'steps-static', 'steps-keyboard', 'steps-buttons', 'cycle-static', 'cycle-keyboard', 'cycle-buttons', 'morphism-static', 'morphism-keyboard', 'morphism-buttons', 'quotient-static', 'quotient-keyboard', 'quotient-buttons', 'perm-static', 'perm-keyboard', 'perm-buttons', 'action-static', 'action-keyboard', 'action-buttons', 'lagrange-static', 'lagrange-keyboard', 'lagrange-buttons', 'page-errors',
 ]
 
 # Screen position of vertex A (the orange marker) relative to the rotation centre, in SVG units.
@@ -717,6 +717,401 @@ class SiteChecks:
             return {'bound': True, 'zero': True}
         self.case('steps-buttons', buttons)
 
+    # ---------- Cycle figure (lesson « Groupes cycliques ») ----------
+    def cycle(self):
+        d = self.d
+        page = '/cours/groupes-cycliques/'
+        fig = '#figure-cadran'
+        status = lambda: d.js(f"return document.querySelector('{fig} [data-cycle-status]').textContent;")
+        rows = lambda: d.js(f"return Object.fromEntries([...document.querySelectorAll('{fig} [data-cycle-rows] > div')].map(r=>[r.children[0].textContent,r.children[1].textContent]));")
+        set_field = lambda name, value: d.js(f"const f=document.querySelector('{fig} [data-param={name}]');f.value='{value}';f.dispatchEvent(new Event('input'));")
+        action = lambda name: d.js(f"document.querySelector('{fig} [data-action={name}]').click();")
+        note = lambda: d.js(f"return document.querySelector('{fig} [data-cycle-note]').textContent;")
+
+        def static():
+            html = (self.root / page.strip('/') / 'index.html').read_text(encoding='utf-8')
+            for expected in ('Nombre signé de pas : 0 ; position : 0', 'Plage finie : n entre 2 et 24', 'elle ne prouve rien', 'Historique complet : 0 geste sur 48 au plus.'):
+                assert expected in html, f'Texte initial absent du HTML compilé : {expected}'
+            self.open(page)
+            state = d.js(f"""const f=document.querySelector('{fig}');return {{
+              enabled:[...f.querySelectorAll('input,button')].every(e=>!e.disabled),
+              label:f.querySelector('svg').getAttribute('aria-labelledby'),
+              dots:f.querySelectorAll('svg .fig-dot').length,
+              table:f.querySelectorAll('[data-cycle-table] tr').length}};""")
+            assert state['enabled'], state
+            assert state['dots'] == 12 and state['table'] == 1, state
+            assert all(d.js('return !!document.getElementById(arguments[0]);', ref) for ref in state['label'].split()), state
+            return {'dots': state['dots']}
+        self.case('cycle-static', static)
+
+        def keyboard():
+            self.open(page)
+            d.js(f"document.querySelector('{fig} [data-param=k]').focus();")
+            d.key('\ue013'); time.sleep(0.1)  # Arrow up: k = 5
+            assert rows()['Dispositif'] == '12 positions numérotées de 0 à 11 ; pas k = 5', rows()
+            d.js(f"document.querySelector('{fig} [data-param=n]').focus();")
+            d.key('\ue015'); time.sleep(0.1)  # Arrow down: n = 11
+            assert rows()['Dispositif'] == '11 positions numérotées de 0 à 10 ; pas k = 5', rows()
+            # Out-of-range values are clamped when the field is left.
+            d.js(f"const f=document.querySelector('{fig} [data-param=k]');f.focus();f.select();")
+            for ch in '99':
+                d.key(ch)
+            d.key('\ue004'); time.sleep(0.1)
+            k = d.js(f"return document.querySelector('{fig} [data-param=k]').value;")
+            assert k == '24' and rows()['Dispositif'].endswith('pas k = 24'), (k, rows())
+            return {'arrowKeys': True, 'clamped': k}
+        self.case('cycle-keyboard', keyboard)
+
+        def buttons():
+            self.open(page)
+            fwd = f"document.querySelector('{fig} [data-action=forward]')"
+            d.js(fwd + ".focus();")
+            for _ in range(3):
+                d.key('\ue007')  # Enter: three gestures forward
+            time.sleep(0.1)
+            r = rows()
+            assert r['Nombre signé de pas'] == '3' and r['Calcul'] == '3 × 4 = 12 = 1 × 12 + 0', r
+            assert r['Position (reste entre 0 et 11)'] == '0', r
+            assert d.js(f"return document.querySelectorAll('{fig} [data-cycle-table] tr').length;") == 4
+            action('backward'); action('backward'); action('backward'); action('backward')
+            r = rows()
+            assert r['Nombre signé de pas'] == '−1' and r['Calcul'] == '(−1) × 4 = −4 = (−1) × 12 + 8', r
+            assert d.js(f"return document.activeElement === {fwd};"), 'Le focus doit rester sur le bouton'
+            action('reset')
+            assert rows()['Nombre signé de pas'] == '0'
+            assert d.js(f"return document.querySelector('{fig} [data-action=reset]').getAttribute('aria-disabled');") == 'true'
+            set_field('k', '0'); action('forward')
+            assert rows()['Position (reste entre 0 et 11)'] == '0', rows()
+            action('reset'); set_field('k', '2')
+            for _ in range(49):
+                action('forward')
+            assert note() == 'Historique tronqué : seuls les 48 premiers gestes sur 49 sont listés.', note()
+            assert d.js(f"return document.querySelectorAll('{fig} [data-cycle-table] tr').length;") == 49
+            assert 'elle ne prouve rien' in status(), status()
+            return {'history': 48, 'truncated': True}
+        self.case('cycle-buttons', buttons)
+
+    # ---------- Morphism figure (lesson « Morphismes & isomorphismes ») ----------
+    def morphism(self):
+        d = self.d
+        page = '/cours/morphismes-isomorphismes/'
+        fig = '#figure-morphisme'
+        status = lambda: d.js(f"return document.querySelector('{fig} [data-morphism-status]').textContent;")
+        rows = lambda: d.js(f"return Object.fromEntries([...document.querySelectorAll('{fig} [data-morphism-rows] > div')].map(r=>[r.children[0].textContent,r.children[1].textContent]));")
+        set_field = lambda name, value: d.js(f"const f=document.querySelector('{fig} [data-param={name}]');f.value='{value}';f.dispatchEvent(new Event('input'));")
+        action = lambda name: d.js(f"document.querySelector('{fig} [data-action={name}]').click();")
+
+        def static():
+            html = (self.root / page.strip('/') / 'index.html').read_text(encoding='utf-8')
+            for expected in ('Essai avec m = 1 et n = 5 : p(m) = r, p(n) = r', 'ne prouvent pas la propriété générale', 'entre −24 et 24'):
+                assert expected in html, f'Texte initial absent du HTML compilé : {expected}'
+            self.open(page)
+            state = d.js(f"""const f=document.querySelector('{fig}');return {{
+              enabled:[...f.querySelectorAll('input,button')].every(e=>!e.disabled),
+              label:f.querySelector('svg').getAttribute('aria-labelledby'),
+              dots:f.querySelectorAll('svg .fig-dot').length,
+              table:f.querySelectorAll('[data-morphism-table] tr').length}};""")
+            assert state['enabled'], state
+            assert state['dots'] == 25 and state['table'] == 25, state
+            assert all(d.js('return !!document.getElementById(arguments[0]);', ref) for ref in state['label'].split()), state
+            r = rows()
+            assert r['p(m + n)'] == 'p(6) = r²' and r['p(m) ∘ p(n)'] == 'r ∘ r = r²', r
+            return {'integers': state['table']}
+        self.case('morphism-static', static)
+
+        def keyboard():
+            self.open(page)
+            d.js(f"document.querySelector('{fig} [data-param=m]').focus();")
+            d.key('\ue013'); time.sleep(0.1)  # Arrow up: m = 2
+            d.js(f"document.querySelector('{fig} [data-param=n]').focus();")
+            d.key('\ue015'); time.sleep(0.1)  # Arrow down: n = 4
+            r = rows()
+            assert r['p(m)'] == 'p(2) = r²' and r['p(n)'] == 'p(4) = e', r
+            assert r['Différence n − m'] == '4 − 2 = 2', r
+            assert r['p(m) et p(n)'] == 'rotations différentes', r
+            # Out-of-range values are clamped when the field is left.
+            d.js(f"const f=document.querySelector('{fig} [data-param=m]');f.focus();f.select();")
+            for ch in '99':
+                d.key(ch)
+            d.key('\ue004'); time.sleep(0.1)
+            m = d.js(f"return document.querySelector('{fig} [data-param=m]').value;")
+            assert m == '12' and rows()['Entiers choisis'] == 'm = 12 ; n = 4', (m, rows())
+            return {'arrowKeys': True, 'clamped': m}
+        self.case('morphism-keyboard', keyboard)
+
+        def buttons():
+            self.open(page)
+            down = f"document.querySelector('{fig} [data-action=m-down]')"
+            d.js(down + ".focus();")
+            for _ in range(14):
+                d.key('\ue007')  # Enter: stops at the bound m = −12
+            time.sleep(0.1)
+            assert rows()['p(m)'] == 'p(−12) = e', rows()
+            assert d.js('return ' + down + ".getAttribute('aria-disabled');") == 'true'
+            assert d.js(f"return document.activeElement === {down};"), 'Le focus doit rester sur le bouton indisponible'
+            set_field('m', '-12'); set_field('n', '-12')
+            r = rows()
+            assert r['Somme m + n'] == '−12 + (−12) = −24' and r['p(m + n)'] == 'p(−24) = e', r
+            set_field('m', '12'); set_field('n', '12')
+            assert rows()['Somme m + n'] == '12 + 12 = 24', rows()
+            set_field('m', '-3'); set_field('n', '5')
+            r = rows()
+            assert r['Différence n − m'] == '5 − (−3) = 8' and r['p(m) et p(n)'] == 'même rotation', r
+            action('reset')
+            assert rows()['Entiers choisis'] == 'm = 1 ; n = 5', rows()
+            assert d.js(f"return document.querySelector('{fig} [data-action=reset]').getAttribute('aria-disabled');") == 'true'
+            return {'bounds': True, 'negatives': True}
+        self.case('morphism-buttons', buttons)
+
+    # ---------- Quotient figure (lesson « Groupes quotients & classes ») ----------
+    def quotient(self):
+        d = self.d
+        page = '/cours/groupes-quotients/'
+        fig = '#figure-quotient'
+        status = lambda: d.js(f"return document.querySelector('{fig} [data-quotient-status]').textContent;")
+        rows = lambda: d.js(f"return Object.fromEntries([...document.querySelectorAll('{fig} [data-quotient-rows] > div')].map(r=>[r.children[0].textContent,r.children[1].textContent]));")
+        set_field = lambda name, value: d.js(f"const f=document.querySelector('{fig} [data-param={name}]');f.value='{value}';f.dispatchEvent(new Event('input'));")
+        action = lambda name: d.js(f"document.querySelector('{fig} [data-action={name}]').click();")
+
+        def static():
+            html = (self.root / page.strip('/') / 'index.html').read_text(encoding='utf-8')
+            for expected in ('Cas courant dans ℤ/4ℤ : [1] + [2] = [3]', 'elle ne démontre rien'):
+                assert expected in html, f'Texte initial absent du HTML compilé : {expected}'
+            self.open(page)
+            state = d.js(f"""const f=document.querySelector('{fig}');return {{
+              enabled:[...f.querySelectorAll('input,button')].every(e=>!e.disabled),
+              label:f.querySelector('svg').getAttribute('aria-labelledby'),
+              classes:f.querySelectorAll('svg .fig-class').length,
+              rowHeads:f.querySelectorAll('[data-quotient-table] th[scope=row]').length,
+              colHeads:f.querySelectorAll('[data-quotient-head] th[scope=col]').length,
+              current:f.querySelector('[data-quotient-table] td[aria-current=true]').textContent}};""")
+            assert state['enabled'], state
+            assert state['classes'] == 4 and state['rowHeads'] == 4 and state['colHeads'] == 5, state
+            assert state['current'] == '[3]', state
+            assert all(d.js('return !!document.getElementById(arguments[0]);', ref) for ref in state['label'].split()), state
+            return {'classes': state['classes']}
+        self.case('quotient-static', static)
+
+        def keyboard():
+            self.open(page)
+            d.js(f"document.querySelector('{fig} [data-param=n]').focus();")
+            d.key('\ue013'); time.sleep(0.1)  # Arrow up: n = 5
+            r = rows()
+            assert r['Modulo n'].startswith('n = 5 : 5 classes'), r
+            assert r['Somme des classes'].startswith('[1] + [2] = [3]'), r
+            # Out-of-range values are clamped when the field is left.
+            d.js(f"const f=document.querySelector('{fig} [data-param=a]');f.focus();f.select();")
+            for ch in '99':
+                d.key(ch)
+            d.key('\ue004'); time.sleep(0.1)
+            a = d.js(f"return document.querySelector('{fig} [data-param=a]').value;")
+            assert a == '20' and rows()['Représentants'] == 'a = 20 ; b = 2', (a, rows())
+            return {'arrowKeys': True, 'clamped': a}
+        self.case('quotient-keyboard', keyboard)
+
+        def buttons():
+            self.open(page)
+            up = f"document.querySelector('{fig} [data-action=a-up]')"
+            d.js(up + ".focus();")
+            for _ in range(7):
+                d.key('\ue007')  # Enter: 1 + 4k, stops at 17 (21 is out of bounds)
+            time.sleep(0.1)
+            assert rows()['Représentants'] == 'a = 17 ; b = 2', rows()
+            assert d.js('return ' + up + ".getAttribute('aria-disabled');") == 'true'
+            assert d.js(f"return document.activeElement === {up};"), 'Le focus doit rester sur le bouton indisponible'
+            assert rows()['Classe de a'] == '[17] = [1] = 1 + 4ℤ', rows()
+            action('b-down'); action('b-down'); action('b-down')
+            assert rows()['Représentants'] == 'a = 17 ; b = −10', rows()
+            assert rows()['Reste de b'] == '−10 = (−3) × 4 + 2', rows()
+            assert rows()['Somme des classes'].startswith('[1] + [2] = [3]'), rows()
+            action('reset')
+            assert rows()['Représentants'] == 'a = 1 ; b = 2', rows()
+            set_field('n', '8'); set_field('a', '-20'); set_field('b', '-20')
+            assert rows()['Reste de a + b'] == '−40 = (−5) × 8 + 0', rows()
+            assert d.js(f"return document.querySelector('{fig} [data-action=a-down]').getAttribute('aria-disabled');") == 'true'
+            return {'bound': True, 'reset': True}
+        self.case('quotient-buttons', buttons)
+
+    # ---------- Permutation figure (lesson « Permutations & cycles ») ----------
+    def perm(self):
+        d = self.d
+        page = '/cours/permutations-cycles/'
+        fig = '#figure-permutation'
+        status = lambda: d.js(f"return document.querySelector('{fig} [data-perm-status]').textContent;")
+        rows = lambda: d.js(f"return Object.fromEntries([...document.querySelectorAll('{fig} [data-perm-rows] > div')].map(r=>[r.children[0].textContent,r.children[1].textContent]));")
+        choose = lambda which, value: d.js(f"const s=document.querySelector('{fig} [data-perm-image={which}]');s.value='{value}';s.dispatchEvent(new Event('change'));")
+        action = lambda name: d.js(f"document.querySelector('{fig} [data-action={name}]').click();")
+
+        def static():
+            html = (self.root / page.strip('/') / 'index.html').read_text(encoding='utf-8')
+            for expected in ('Les cartes sont à leur position initiale.', 'Décomposition de σ : (1 3 2).', 'ne constituent pas une preuve générale.'):
+                assert expected in html, f'Texte initial absent du HTML compilé : {expected}'
+            self.open(page)
+            state = d.js(f"""const f=document.querySelector('{fig}');return {{
+              enabled:[...f.querySelectorAll('select,button')].every(e=>!e.disabled),
+              label:f.querySelector('svg').getAttribute('aria-labelledby'),
+              cards:f.querySelectorAll('svg .perm-card').length,
+              table:f.querySelectorAll('[data-perm-table] tr').length}};""")
+            assert state['enabled'], state
+            assert state['cards'] == 4 and state['table'] == 4, state
+            assert all(d.js('return !!document.getElementById(arguments[0]);', ref) for ref in state['label'].split()), state
+            r = rows()
+            assert r['Points fixes'] == '4' and r['Applications effectuées'] == '0', r
+            return {'cards': 4}
+        self.case('perm-static', static)
+
+        def keyboard():
+            self.open(page)
+            d.js(f"document.querySelector('{fig} [data-perm-image=b]').focus();")
+            d.key('\ue015'); time.sleep(0.1)  # Arrow down: seconde image = 3
+            assert d.js(f"return document.querySelector('{fig} [data-perm-image=b]').value;") == '3'
+            d.js(f"document.querySelector('{fig} [data-action=swap]').focus();")
+            d.key('\ue007'); time.sleep(0.1)  # Enter: échange les images 1 et 3
+            r = rows()
+            assert r['Images de σ'] == '1 ↦ 1 ; 2 ↦ 3 ; 3 ↦ 2 ; 4 ↦ 4', r
+            assert r['Décomposition en cycles'] == '(2 3)', r
+            assert status().startswith('Images 1 et 3 échangées'), status()
+            return {'swapByKeyboard': True}
+        self.case('perm-keyboard', keyboard)
+
+        def buttons():
+            self.open(page)
+            back = f"document.querySelector('{fig} [data-action=back]')"
+            assert d.js('return ' + back + ".getAttribute('aria-disabled');") == 'true'
+            for _ in range(2):
+                action('apply')
+            r = rows()
+            assert r['Applications effectuées'] == '2' and r['Positions courantes'].startswith('carte 1 en position 2 ;'), r
+            action('apply')
+            assert status().startswith('Permutation appliquée aux positions courantes. Après 3 applications, toutes les cartes sont revenues à leur position initiale.'), status()
+            d.js(back + ".focus();"); d.key('\ue007'); time.sleep(0.1)
+            assert rows()['Applications effectuées'] == '0'
+            assert d.js('return ' + back + ".getAttribute('aria-disabled');") == 'true'
+            assert d.js(f"return document.activeElement === {back};"), 'Le focus doit rester sur le bouton indisponible'
+            choose('b', '1')
+            swap = f"document.querySelector('{fig} [data-action=swap]')"
+            assert d.js('return ' + swap + ".getAttribute('aria-disabled');") == 'true'
+            choose('b', '2')
+            d.js(f"const n=document.querySelector('{fig} [data-perm-n]');n.value='6';n.dispatchEvent(new Event('change'));")
+            r = rows()
+            assert r['Décomposition en cycles'].startswith('e ') and r['Points fixes'] == '1, 2, 3, 4, 5, 6', r
+            assert d.js(f"return document.querySelectorAll('{fig} [data-perm-table] tr').length;") == 6
+            return {'identity': True, 'bound': 6}
+        self.case('perm-buttons', buttons)
+
+    # ---------- Action figure (lesson « Actions de groupes, orbites & stabilisateurs ») ----------
+    def action(self):
+        d = self.d
+        page = '/cours/actions-orbites-stabilisateurs/'   # à confirmer d'après le slug du catalogue
+        fig = '#figure-action'
+        status = lambda: d.js(f"return document.querySelector('{fig} [data-act-status]').textContent;")
+        rows = lambda: d.js(f"return Object.fromEntries([...document.querySelectorAll('{fig} [data-act-rows] > div')].map(r=>[r.children[0].textContent,r.children[1].textContent]));")
+        pick = lambda kind, value: d.js(f"document.querySelector('{fig} [data-act-{kind}][value=\"{value}\"]').click();")
+
+        def static():
+            html = (self.root / page.strip('/') / 'index.html').read_text(encoding='utf-8')
+            assert 'e envoie A sur A. Orbite de A : {A, B, C, D}. Stabilisateur de A : {e}.' in html
+            self.open(page)
+            state = d.js(f"""const f=document.querySelector('{fig}');return {{
+              enabled:[...f.querySelectorAll('input,button')].every(e=>!e.disabled),
+              label:f.querySelector('svg').getAttribute('aria-labelledby'),
+              hidden:[...f.querySelectorAll('[data-act-transform-label][hidden]')].length,
+              images:f.querySelectorAll('[data-act-table] tr').length,
+              groups:f.querySelectorAll('[data-act-groups] tr').length}};""")
+            assert state['enabled'] and state['images'] == 4 and state['groups'] == 4 and state['hidden'] == 4, state
+            assert all(d.js('return !!document.getElementById(arguments[0]);', ref) for ref in state['label'].split()), state
+            return state
+        self.case('action-static', static)
+
+        def keyboard():
+            self.open(page)
+            # Flèche droite dans le groupe de sommets : A -> B.
+            d.js(f"document.querySelector('{fig} [data-act-vertex][value=\"0\"]').focus();")
+            d.key('\ue014'); time.sleep(0.1)
+            assert status() == 'e envoie B sur B. Orbite de B : {A, B, C, D}. Stabilisateur de B : {e}.', status()
+            d.js(f"document.querySelector('{fig} [data-act-transform][value=\"e\"]').focus();")
+            d.key('\ue014'); time.sleep(0.1)  # e -> r
+            assert status().startswith('r envoie B sur C.'), status()
+            return {'arrowKeys': True}
+        self.case('action-keyboard', keyboard)
+
+        def buttons():
+            self.open(page)
+            pick('group', 'symmetries'); pick('transform', 'r2s')
+            assert status() == 'r²s envoie A sur C. Orbite de A : {A, B, C, D}. Stabilisateur de A : {e, s}.', status()
+            assert d.js(f"return document.querySelectorAll('{fig} [data-act-table] tr').length;") == 8
+            assert d.js(f"return [...document.querySelectorAll('{fig} [data-act-groups] tr')][2].textContent;") == 'C{r², r²s}'
+            # Retour aux rotations : r²s n'en fait pas partie, retour à e.
+            pick('group', 'rotations')
+            assert status().startswith('e envoie A sur A.') and d.js(f"return document.querySelectorAll('{fig} [data-act-table] tr').length;") == 4
+            pick('vertex', '2'); pick('transform', 'r')
+            assert rows()['Image'] == 'r(C) = D', rows()
+            reset = f"document.querySelector('{fig} [data-act-reset]')"
+            d.js(reset + '.focus();')
+            d.key('\ue007'); time.sleep(0.1)
+            assert status() == 'e envoie A sur A. Orbite de A : {A, B, C, D}. Stabilisateur de A : {e}.', status()
+            assert d.js('return ' + reset + ".getAttribute('aria-disabled');") == 'true'
+            assert d.js(f"return document.activeElement === {reset};"), 'Le focus doit rester sur le bouton indisponible'
+            return {'reset': True}
+        self.case('action-buttons', buttons)
+
+    # ---------- Lagrange figures (lesson « Lagrange & conjugaison ») ----------
+    def lagrange(self):
+        d = self.d
+        page = '/cours/lagrange-conjugaison/'
+        cls, conj = '#figure-lagrange-classes', '#figure-lagrange-conjugaison'
+        status = lambda fig: d.js(f"return document.querySelector('{fig} [data-lagr-status]').textContent;")
+        rows = lambda fig: d.js(f"return Object.fromEntries([...document.querySelectorAll('{fig} [data-lagr-rows] > div')].map(r=>[r.children[0].textContent,r.children[1].textContent]));")
+        choose = lambda fig, name, value: d.js(f"const f=document.querySelector('{fig} [data-lagr-param={name}]');f.value='{value}';f.dispatchEvent(new Event('change'));")
+
+        def static():
+            html = (self.root / page.strip('/') / 'index.html').read_text(encoding='utf-8')
+            for expected in ('aH = {r, r³} : 2 éléments, ne contient pas e.', 'L’axe vertical devient l’axe horizontal.'):
+                assert expected in html, f'Texte initial absent du HTML compilé : {expected}'
+            self.open(page)
+            state = d.js(f"""const q=s=>document.querySelector(s);return {{
+              enabled:[...document.querySelectorAll('{cls} select,{conj} select')].every(e=>!e.disabled),
+              nodes:q('{cls} svg').querySelectorAll('.lagr-node').length,
+              classes:q('{cls}').querySelectorAll('[data-lagr-table] tr').length,
+              conjRows:q('{conj}').querySelectorAll('[data-lagr-table] tr').length,
+              labels:[q('{cls} svg').getAttribute('aria-labelledby'),q('{conj} svg').getAttribute('aria-labelledby')].join(' ')}};""")
+            assert state['enabled'] and state['nodes'] == 8 and state['classes'] == 4 and state['conjRows'] == 8, state
+            assert all(d.js('return !!document.getElementById(arguments[0]);', ref) for ref in state['labels'].split()), state
+            return state
+        self.case('lagrange-static', static)
+
+        def keyboard():
+            self.open(page)
+            d.js(f"document.querySelector('{cls} [data-lagr-param=sub]').focus();")
+            d.key('\ue015'); time.sleep(0.1)  # Arrow down: next subgroup {e, r, r², r³}
+            r = rows(cls)
+            assert r['Sous-groupe H'].startswith('{e, r, r², r³}, 4 éléments'), r
+            assert r['Indice [D₄ : H]'].startswith('2,'), r
+            d.js(f"document.querySelector('{conj} [data-lagr-param=g]').focus();")
+            d.key('\ue015'); time.sleep(0.1)  # Arrow down: g = r²
+            r = rows(conj)
+            assert r['Conjugué g x g⁻¹'] == 'r² s r² = s', r
+            assert r['Axe obtenu'] == 'l’axe vertical', r
+            return {'arrowKeys': True}
+        self.case('lagrange-keyboard', keyboard)
+
+        def buttons():
+            self.open(page)
+            choose(cls, 'sub', '0'); choose(cls, 'rep', '5')
+            r = rows(cls)
+            assert r['Classe aH'].startswith('{rs} (rs·e = rs)') and r['Classes à gauche distinctes'].startswith('8 :'), r
+            choose(conj, 'x', '1'); choose(conj, 'g', '4')
+            st = status(conj)
+            assert st.startswith('g x g⁻¹ = s r s = r³.') and 'x = r est une rotation, sans axe' in st, st
+            reset = f"document.querySelector('{conj} [data-lagr-action=reset]')"
+            assert d.js('return ' + reset + ".getAttribute('aria-disabled');") == 'false'
+            d.js(reset + ".focus();"); d.key('\ue007'); time.sleep(0.1)
+            assert d.js('return ' + reset + ".getAttribute('aria-disabled');") == 'true'
+            assert d.js(f"return document.activeElement === {reset};"), 'Le focus doit rester sur le bouton indisponible'
+            assert rows(conj)['Conjugué g x g⁻¹'] == 'r s r³ = r²s', rows(conj)
+            return {'reset': True}
+        self.case('lagrange-buttons', buttons)
+
     def reduced(self):
         d = self.d
         self.open('/atlas/')
@@ -803,6 +1198,12 @@ def main():
             checks.figures()
             checks.series()
             checks.steps()
+            checks.cycle()
+            checks.morphism()
+            checks.quotient()
+            checks.perm()
+            checks.action()
+            checks.lagrange()
             checks.collect_errors()
         else:
             checks.atlas()
@@ -811,6 +1212,12 @@ def main():
             checks.figures()
             checks.series()
             checks.steps()
+            checks.cycle()
+            checks.morphism()
+            checks.quotient()
+            checks.perm()
+            checks.action()
+            checks.lagrange()
             checks.collect_errors()
             driver.close()
             driver.start(True)

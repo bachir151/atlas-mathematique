@@ -87,6 +87,12 @@ balise ouvrante et avant la balise fermante pour que le Markdown intérieur
 | `<PlaneFigure>` | `kind` (`mediatrice`, `reflexion`, `deux-reflexions`), `number` | figures planes interactives de la leçon 02 (SVG, clavier, alternative textuelle) |
 | `<SeriesFigure>` | `kind` (`somme-geometrique`, `iteration-affine`), `number` | graphes discrets de la leçon 03, calcul exact en fractions, alternative textuelle |
 | `<StepsFigure>` | `number` | droite graduée de la leçon 04 : positions m·a + n·b (pas a, b de −12 à 12, coefficients de −5 à 5), calcul en entiers, tableau et lecture textuelle |
+| `<CycleFigure>` | `number` | cadran de la leçon 05 : n positions (n de 2 à 24, défaut 12), pas k (de −24 à 24, défaut 4), avancer / reculer / recommencer, nombre signé de pas, position (reste), historique de 48 gestes au plus avec troncature indiquée ; id `figure-cadran` |
+| `<MorphismFigure>` | `number` | figure de la leçon 06 : p(k) = r^k de −12 à 12, deux entiers m, n (−12 à 12, défauts 1 et 5), p(m), p(n), n − m et son reste modulo 4, p(m+n) et p(m)∘p(n) (somme exacte de −24 à 24), tableau des 25 entiers |
+| `<QuotientFigure>` | `number` | classes modulo n de la leçon 07 (n de 2 à 8, représentants a, b de −20 à 20, changements ±n), restes, classes, reste de a + b, table complète des sommes de classes ; calcul en entiers, lecture textuelle et table rendues à la compilation |
+| `<PermutationFigure>` | `number` | cartes de la leçon 08 : n de 2 à 6 (initial 4), échange de deux images, application de la permutation aux positions courantes, compteur, décomposition en cycles calculée, table et lecture textuelle |
+| `<ActionFigure>` | `number` | figure de la leçon 09 : carré et sommets A, B, C, D, quatre rotations ou huit symétries, image, orbite et stabilisateur du sommet choisi, transformations regroupées par image ; tableau des images et lecture textuelle |
+| `<LagrangeFigure>` | `kind` (`classes-gauche`, `conjugaison`), `number` | figures de la leçon 10 sur D₄ (huit symétries du carré) : classes à gauche d'un sous-groupe parmi cinq, conjugaison de x par g avec axes, conjugués distincts et centralisateur ; calcul exact par matrices entières, tableau et lecture textuelle |
 
 Exemple de structure :
 

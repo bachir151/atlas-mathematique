@@ -1,0 +1,265 @@
+---
+title: "Groupes quotients & classes"
+heading:
+  lead: "Groupes quotients &"
+  emphasis: "classes."
+summary: "Regrouper les entiers par restes, puis découvrir à quelle condition des classes héritent d’une opération de groupe."
+domain: "Algèbre"
+number: "07"
+breadcrumb: "Groupes quotients"
+status: "validated"
+validation: "Décision de la direction du projet, 16 novembre 2026 (sujet, niveau, exercices, reconstruction et interaction retenus)"
+companion: false
+sections:
+  - { id: "exploration", label: "Exploration" }
+  - { id: "cours", label: "Le cours" }
+  - { id: "demonstration", label: "Démonstration" }
+  - { id: "preuve-integrale", label: "Preuve intégrale" }
+  - { id: "connexions", label: "Connexions" }
+  - { id: "exercices", label: "Exercices" }
+  - { id: "reconstruction", label: "À reconstruire" }
+---
+
+<CourseSection id="exploration" eyebrow="01 / Exploration" title="Que reste-t-il quand on oublie les tours complets ?">
+
+**Pour commencer :** il faut connaître les entiers relatifs, les multiples, les ensembles et les groupes. La leçon sur les sous-groupes de $\mathbb Z$ et celle sur les rotations du carré fournissent des exemples utiles. Le parcours principal vise le début de licence ; le lien avec les morphismes constitue un approfondissement.
+
+Sur une horloge à quatre positions numérotées $0,1,2,3$, avancer de $1$ ou de $5$ positions conduit au même endroit : les deux nombres diffèrent de $4$. De même, $-3$ et $1$ diffèrent de $4$. Nous décidons de ne retenir que la position finale, pas le nombre de tours effectués.
+
+Sur une feuille, regroupez les entiers qui diffèrent d’un multiple de $4$. À quel groupe appartiennent $-7$, $2$ et $9$ ? Essayez ensuite d’additionner deux groupes en choisissant un nombre dans chacun. Par exemple, $1+2=3$, mais aussi $5+(-2)=3$. Le résultat dépend-il toujours seulement des groupes choisis ?
+
+La division euclidienne montre qu’il y a quatre groupes de nombres, selon le reste $0,1,2$ ou $3$. Les essais suggèrent qu’on peut additionner ces groupes. Ils ne prouvent pas que **tous** les choix de représentants donnent le même résultat. Nous allons formuler cette exigence et voir pourquoi elle devient plus délicate quand l’opération ne commute pas.
+
+</CourseSection>
+
+<CourseSection id="cours" eyebrow="02 / Le cours" title="Des éléments aux classes">
+
+Soit $G$ un groupe, noté multiplicativement, de neutre $e$. Un **sous-groupe** $H$ est une partie de $G$ qui contient $e$, est stable par produit et contient l’inverse de chacun de ses éléments. Pour $a\in G$, on écrit
+
+$$
+aH=\{ah\mid h\in H\},\qquad Ha=\{ha\mid h\in H\}.
+$$
+
+Ce sont respectivement la **classe à gauche** et la **classe à droite** de $a$ modulo $H$. Le nom indique de quel côté est placé le représentant $a$. Dans un groupe non commutatif, ces deux ensembles peuvent différer.
+
+<Definition number="1" name="Classes à gauche et représentants">
+
+Pour $a,b\in G$, on dit que $a$ et $b$ sont équivalents modulo $H$ si $a^{-1}b\in H$. Cette relation est réflexive puisque $a^{-1}a=e\in H$, symétrique puisque $(a^{-1}b)^{-1}=b^{-1}a\in H$, et transitive puisque $(a^{-1}b)(b^{-1}c)=a^{-1}c\in H$.
+
+La classe de $a$ pour cette relation est exactement $aH$ : en effet $a^{-1}b\in H$ équivaut à $b=ah$ pour un $h\in H$. On note $G/H$ l’ensemble de ces classes à gauche, avant même de savoir s’il porte une opération de groupe. Tout élément d’une classe est un **représentant** de cette classe.
+
+</Definition>
+
+Deux classes à gauche sont égales ou disjointes : si elles ont un élément commun, la symétrie et la transitivité de la relation montrent que leurs représentants sont équivalents, donc que leurs éléments sont les mêmes. Elles partitionnent $G$.
+
+<Example name="Les quatre classes d’entiers">
+
+Dans $(\mathbb Z,+)$, le sous-groupe $4\mathbb Z$ est l’ensemble des multiples de $4$. La classe de $a$ est $a+4\mathbb Z=\{a+4k\mid k\in\mathbb Z\}$. Deux entiers appartiennent à la même classe exactement lorsque leur différence est multiple de $4$.
+
+Les quatre classes sont $0+4\mathbb Z$, $1+4\mathbb Z$, $2+4\mathbb Z$ et $3+4\mathbb Z$. Par division euclidienne, chaque entier appartient à l’une d’elles ; elles sont distinctes puisque la différence de deux restes distincts parmi $0,1,2,3$ n’est pas multiple de $4$.
+
+</Example>
+
+Nous voudrions poser $(aH)(bH)=(ab)H$. Pour que cette formule définisse une opération sur les **classes**, il faut que le résultat soit inchangé si l’on remplace $a$ ou $b$ par un autre représentant. Cette propriété est appelée **bonne définition** ; elle ne découle pas du seul fait que $H$ soit un sous-groupe.
+
+<Definition number="2" name="Sous-groupe distingué">
+
+Un sous-groupe $H$ de $G$ est **distingué**, noté $H\triangleleft G$, si pour tout $g\in G$, $gH=Hg$. De façon équivalente, $gHg^{-1}=H$ pour tout $g\in G$, où $gHg^{-1}=\lbrace ghg^{-1}\mid h\in H\rbrace $.
+
+Dans un groupe commutatif, tout sous-groupe est distingué puisque $gh=hg$. En particulier $4\mathbb Z$ est distingué dans $(\mathbb Z,+)$.
+
+</Definition>
+
+L’équivalence des deux formulations se voit en multipliant chaque élément des ensembles $gH=Hg$ à droite par $g^{-1}$, et réciproquement en multipliant $gHg^{-1}=H$ à droite par $g$.
+
+<Theorem kind="Théorème" number="1" name="Quand les classes forment un groupe" id="theoreme-quotient">
+
+Soit $H$ un sous-groupe d’un groupe $G$. La formule
+
+$$
+(aH)(bH)=(ab)H
+$$
+
+définit une opération indépendante des représentants sur $G/H$ **si et seulement si** $H$ est distingué dans $G$. Dans ce cas, cette opération fait de $G/H$ un groupe, appelé **groupe quotient** ; son neutre est $H=eH$ et l’inverse de $aH$ est $a^{-1}H$.
+
+</Theorem>
+
+La preuve progressive et la preuve intégrale établissent les deux sens, puis les axiomes du groupe quotient. La preuve intégrale est accessible immédiatement par la navigation.
+
+<Example name="Additionner les restes modulo quatre">
+
+Dans $\mathbb Z/4\mathbb Z$, on note $[a]=a+4\mathbb Z$. Le théorème autorise $[a]+[b]=[a+b]$. Par exemple $[3]+[2]=[5]=[1]$ et $-[1]=[-1]=[3]$. Les quatre éléments du quotient sont des **ensembles d’entiers**, non les seuls nombres $0,1,2,3$ ; ceux-ci sont des représentants pratiques.
+
+</Example>
+
+<QuotientFigure number="1" />
+
+<Example name="Un sous-groupe qui ne convient pas">
+
+Considérons les bijections de $\{1,2,3\}$, composées de droite à gauche. Soit $s$ l’échange de $1$ et $2$, laissant $3$ fixe, et $t$ l’échange de $2$ et $3$, laissant $1$ fixe. Les six bijections forment un groupe $G$ pour la composition : les composées et inverses de bijections sont des bijections, la composition est associative et l’identité $e$ est neutre. La partie $H=\{e,s\}$ est un sous-groupe car $s^2=e$.
+
+Pourtant $tH\ne Ht$ : $ts\in tH$, mais $ts\ne t$ et $ts\ne st$, car $ts$ envoie $1$ sur $3$, tandis que $t$ et $st$ envoient $1$ respectivement sur $1$ et $2$. Le sous-groupe $H$ n’est donc pas distingué. Concrètement $eH=sH$, mais $tH\ne stH$ : sinon $st\in tH$, ce qui contredirait les mêmes calculs. Les choix $e$ et $s$ pour une même première classe donneraient donc des produits différents avec $tH$.
+
+</Example>
+
+</CourseSection>
+
+<Proof eyebrow="03 / Démonstration" title="Pourquoi la distinction est-elle exactement la bonne condition ?" intro="Nous prouvons le théorème 1 pour un groupe quelconque, sans supposer la commutativité ni la finitude.">
+
+  <ProofStep title="Changer les représentants sans changer la classe" open>
+
+Supposons $H$ distingué. Si $aH=a'H$ et $bH=b'H$, alors $a'=ah_1$ et $b'=bh_2$ pour certains $h_1,h_2\in H$. Comme $b^{-1}H b=H$, on a $b^{-1}h_1b\in H$. Ainsi
+
+$$
+a'b'=ab\,(b^{-1}h_1b)h_2.
+$$
+
+Le facteur après $ab$ appartient à $H$. Pour tout $h\in H$, $hH=H$ : l’inclusion $hH\subseteq H$ vient de la stabilité, et chaque $k\in H$ s’écrit $h(h^{-1}k)$. Donc $a'b'H=abH$. Le produit proposé ne dépend pas des représentants.
+
+  </ProofStep>
+
+  <ProofStep title="Retrouver la distinction à partir de la bonne définition">
+
+Supposons inversement que la formule soit bien définie. Pour $g\in G$ et $h\in H$, on a $hH=eH$. Multiplier ces classes égales par $gH$ donne $hgH=gH$, donc $g^{-1}hg\in H$. Cela vaut pour tous $g,h$, donc $g^{-1}Hg\subseteq H$ pour tout $g$. En appliquant cette inclusion à $g^{-1}$, puis en conjuguant par $g^{-1}$ et $g$, on obtient l’inclusion réciproque. Ainsi $g^{-1}Hg=H$ pour tout $g$, et $H$ est distingué.
+
+  </ProofStep>
+
+  <ProofStep title="Vérifier les axiomes du quotient">
+
+La bonne définition donne une opération sur l’ensemble non vide des classes. L’associativité suit de celle de $G$ :
+
+$$
+((aH)(bH))(cH)=((ab)c)H=(a(bc))H=(aH)((bH)(cH)).
+$$
+
+La classe $H=eH$ est neutre des deux côtés. Enfin $(aH)(a^{-1}H)=H=(a^{-1}H)(aH)$. Chaque classe possède donc l’inverse annoncé et $G/H$ est un groupe.
+
+  </ProofStep>
+
+  <FullProof slot="full">
+
+**Preuve intégrale du théorème 1.** Supposons d’abord $H\triangleleft G$. Si $aH=a'H$ et $bH=b'H$, alors $a'=ah_1$ et $b'=bh_2$ avec $h_1,h_2\in H$. La distinction donne $b^{-1}h_1b\in H$, donc
+
+$$
+a'b'=ab\,(b^{-1}h_1b)h_2=abh
+$$
+
+pour un $h\in H$. Or $hH=H$ : la stabilité donne $hH\subseteq H$ et, pour tout $k\in H$, $k=h(h^{-1}k)\in hH$. Ainsi $a'b'H=abH$. Le produit des classes est donc indépendant des représentants.
+
+Réciproquement, supposons ce produit bien défini. Pour $h\in H$, $hH=eH$. Pour chaque $g\in G$, le produit de ces classes égales par $gH$ donne $hgH=gH$, d’où $g^{-1}hg\in H$. Ainsi $g^{-1}Hg\subseteq H$ pour tout $g\in G$. Appliquée à $g^{-1}$, cette inclusion donne $gHg^{-1}\subseteq H$ ; en conjuguant cette dernière inclusion par $g^{-1}$ et $g$, on obtient $H\subseteq g^{-1}Hg$. L’égalité $g^{-1}Hg=H$ vaut donc pour tout $g$ et $H$ est distingué.
+
+Lorsque ces conditions sont satisfaites, l’opération est stable sur $G/H$ par construction. Pour toutes classes $aH,bH,cH$, l’associativité de $G$ donne
+
+$$
+((aH)(bH))(cH)=((ab)c)H=(a(bc))H=(aH)((bH)(cH)).
+$$
+
+La classe $H=eH$ est neutre à gauche et à droite, et $a^{-1}H$ est inverse de $aH$ des deux côtés. L’ensemble des classes est non vide puisqu’il contient $H$. Il forme donc un groupe, avec le neutre et les inverses annoncés.
+
+  </FullProof>
+
+</Proof>
+
+<CourseSection id="connexions" eyebrow="04 / Connexions" title="Oublier exactement ce qu’un morphisme ne distingue pas">
+
+**Lien mathématique démontré, approfondissement.** Un morphisme de groupes $f\colon G\to K$ vérifie $f(ab)=f(a)f(b)$. Son noyau est $N=\{g\in G\mid f(g)=e_K\}$ et son image est $f(G)=\{f(g)\mid g\in G\}$. La leçon sur les morphismes développe ces notions ; nous justifions ici les faits nécessaires au lien avec les quotients.
+
+On a $f(e)=e_K$ et $f(g^{-1})=f(g)^{-1}$. Ainsi $N$ contient $e$, est stable par produit et par inverse : c’est un sous-groupe. De plus, si $n\in N$ et $g\in G$, alors $f(gng^{-1})=f(g)e_Kf(g)^{-1}=e_K$. Donc $gNg^{-1}\subseteq N$ ; en appliquant cette inclusion à $g^{-1}$, on obtient aussi l’inclusion inverse. Ainsi $N$ est distingué. L’image $f(G)$ est un sous-groupe de $K$ par les mêmes propriétés de produit et d’inverse.
+
+L’application $\overline f\colon G/N\to f(G)$ définie par $\overline f(aN)=f(a)$ est bien définie : si $aN=bN$, alors $a^{-1}b\in N$, donc $f(a)^{-1}f(b)=e_K$ et $f(a)=f(b)$. Réciproquement, cette égalité entraîne $a^{-1}b\in N$ et donc $aN=bN$. L’application est injective, surjective par définition de l’image et respecte les produits. C’est donc un **isomorphisme** : une bijection qui respecte l’opération. Ce résultat est le premier théorème d’isomorphisme : $G/\ker f\cong f(G)$.
+
+Pour les rotations du carré de la leçon 01, soit $r$ le quart de tour et $f(k)=r^k$ pour $k\in\mathbb Z$. Les puissances négatives utilisent $r^{-1}$ et $f(m+n)=f(m)\circ f(n)$. L’image est le groupe des quatre rotations et le noyau est $4\mathbb Z$ : la division euclidienne par $4$, $r^4=e$ et la distinction des quatre rotations le montrent. Ainsi $\mathbb Z/4\mathbb Z$ est isomorphe à ce groupe. Les classes d’entiers et les rotations ne sont pas les mêmes objets ; l’isomorphisme associe leurs opérations sans les identifier littéralement.
+
+</CourseSection>
+
+<CourseSection id="exercices" eyebrow="05 / Exercices" title="Calculer et éprouver les hypothèses">
+
+Chaque exercice possède un indice et une correction. Les trois premiers abordent les classes et leur produit ; le dernier approfondit le lien avec un noyau.
+
+<Exercise number="1" name="Représentants et calculs" level="Découverte" id="exercice-restes">
+
+Dans $\mathbb Z/4\mathbb Z$, déterminer les classes de $-7$ et $10$, puis calculer $[-7]+[10]$ et l’inverse de $[10]$. Justifier les égalités de classes.
+
+  <Hint>
+
+Cherchez les restes dans $\{0,1,2,3\}$ et comparez les différences à des multiples de $4$.
+
+  </Hint>
+
+  <Solution>
+
+$-7-1=-8$ et $10-2=8$ sont des multiples de $4$ : $[-7]=[1]$ et $[10]=[2]$. Ainsi $[-7]+[10]=[3]$. L’inverse de $[10]=[2]$ est $[-10]=[2]$, car $-10-2=-12$ est multiple de $4$ ; on vérifie aussi $[2]+[2]=[0]$.
+
+  </Solution>
+
+</Exercise>
+
+<Exercise number="2" name="Deux quotients extrêmes" level="Raisonnement" id="exercice-extremes">
+
+Pour un groupe $G$ de neutre $e$, décrivez $G/\{e\}$ et $G/G$. Pourquoi ces deux quotients existent-ils ? Que deviennent leurs éléments et leur opération ?
+
+  <Hint>
+
+Calculez $a\{e\}$ et $aG$ pour $a\in G$.
+
+  </Hint>
+
+  <Solution>
+
+Les deux sous-groupes sont distingués : $g\{e\}=\{g\}=\{e\}g$ et $gG=G=Gg$ pour tout $g$. Dans le premier quotient, $a\{e\}=\{a\}$ et $\{a\}\{b\}=\{ab\}$ ; l’application $a\mapsto\{a\}$ est une bijection respectant le produit, donc un isomorphisme. Dans le second, chaque classe $aG$ vaut $G$ : le quotient possède un seul élément, son neutre, et son unique produit est $G\cdot G=G$.
+
+  </Solution>
+
+</Exercise>
+
+<Exercise number="3" name="Un choix de représentant dangereux" level="Raisonnement" id="exercice-non-distingue">
+
+Reprenez les bijections $s,t$ et le sous-groupe $H=\{e,s\}$ du cours. Calculez les images de $1$ par $ts$ et $st$. Expliquez pourquoi la formule $(aH)(bH)=(ab)H$ ne donne pas une opération bien définie dans cet exemple.
+
+  <Hint>
+
+La composition se lit de droite à gauche. Utilisez $eH=sH$ et comparez $tH$ à $stH$.
+
+  </Hint>
+
+  <Solution>
+
+$ts$ envoie $1$ sur $2$ puis sur $3$, tandis que $st$ fixe d’abord $1$ puis l’envoie sur $2$. On a $eH=sH$, mais $tH=\{t,ts\}$ ne contient pas $st$ : $t$, $ts$ et $st$ envoient $1$ respectivement sur $1$, $3$ et $2$. Puisque $st\in stH$, les classes $tH$ et $stH$ diffèrent. Le produit proposé avec $tH$ donnerait $tH$ ou $stH$ selon le représentant choisi pour $H$ ; il n’est donc pas bien défini.
+
+  </Solution>
+
+</Exercise>
+
+<Exercise number="4" name="Un quotient et la parité" level="Approfondissement" id="exercice-parite">
+
+Soit $f\colon\mathbb Z\to\{1,-1\}$ définie par $f(n)=(-1)^n$, le groupe d’arrivée étant muni de la multiplication. Déterminez son noyau et son image, puis décrivez l’isomorphisme donné par le lien de la section précédente. Justifiez que $[3]+[3]=[0]$ dans le quotient correspondant.
+
+  <Hint>
+
+Distinguez les entiers pairs et impairs, y compris les entiers négatifs.
+
+  </Hint>
+
+  <Solution>
+
+L’identité $(-1)^{m+n}=(-1)^m(-1)^n$ vaut pour tous entiers relatifs : $f$ est un morphisme. Son noyau est $2\mathbb Z$, ensemble des entiers pairs, et son image est $\{1,-1\}$ puisque $f(0)=1$ et $f(1)=-1$. L’isomorphisme $\mathbb Z/2\mathbb Z\to\{1,-1\}$ envoie la classe des pairs sur $1$ et celle des impairs sur $-1$. Ici $[3]+[3]=[6]=[0]$ puisque $6$ est multiple de $2$. Cette notation $[a]$ désigne dans cet exercice la classe modulo $2$, et non modulo $4$.
+
+  </Solution>
+
+</Exercise>
+
+</CourseSection>
+
+<CourseSection id="reconstruction" eyebrow="06 / Reconstruction" title="Retrouver le passage au quotient">
+
+Sans consulter la preuve, reconstituez le raisonnement, puis comparez-le à la preuve intégrale.
+
+1. Qu’est-ce que $aH$ ? Pourquoi deux représentants d’une même classe diffèrent-ils par un facteur de $H$ placé à droite ?
+2. Quelle question faut-il résoudre avant d’écrire $(aH)(bH)=(ab)H$ ? Donnez un exemple de choix de représentants dans $\mathbb Z/4\mathbb Z$.
+3. Où utilise-t-on $b^{-1}Hb=H$ pour comparer $ah_1bh_2$ à $ab$ ?
+4. Si le produit est bien défini, comment l’égalité $hH=eH$ impose-t-elle $g^{-1}hg\in H$ ? Pourquoi faut-il ensuite utiliser aussi $g^{-1}$ pour obtenir une égalité d’ensembles ?
+5. Quels sont le neutre et l’inverse dans le quotient ? Pourquoi un sous-groupe quelconque ne suffit-il pas ?
+
+Pour vérifier le point 2, $[1]=[5]$ et $[2]=[-2]$ modulo $4$ ; les sommes $1+2=3$ et $5+(-2)=3$ représentent la même classe. Cet exemple seul ne remplace pas la preuve pour tous les représentants.
+
+</CourseSection>

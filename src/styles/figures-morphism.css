@@ -1,0 +1,12 @@
+/* Styles of <MorphismFigure> (src/components/figures/MorphismFigure.astro). */
+.morphism-figure .morphism-rot-0 { fill: var(--green); }
+.morphism-figure .morphism-rot-1 { fill: var(--orange); }
+.morphism-figure .morphism-rot-2 { fill: #2f5f8a; }
+.morphism-figure .morphism-rot-3 { fill: #7a5a2f; }
+.morphism-figure .morphism-rot-label { font-size: 9px; }
+.morphism-figure .morphism-legend { margin-top: 8px; font-size: 13px; color: var(--muted); }
+.morphism-figure .series-table td { white-space: nowrap; }
+
+@media (max-width: 759px) {
+  .morphism-figure .morphism-rot-label { font-size: 13px; }
+}

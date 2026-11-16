@@ -1,0 +1,41 @@
+/* Own styles of <PermutationFigure> (lesson « Permutations & cycles »). */
+.perm-figure .plane-figure-stage svg { max-width: 460px; }
+.perm-figure .plane-figure-hint { text-align: left; }
+
+.perm-figure .plane-field select {
+  font: inherit;
+  font-size: 16px; /* no zoom on focus in mobile browsers */
+  color: var(--ink);
+  min-height: 44px;
+  padding: 6px 10px;
+  border: 1px solid #b9bcb0;
+  border-radius: 3px;
+  background: #fff;
+}
+.perm-figure .plane-field select:focus-visible {
+  outline: 3px solid var(--orange);
+  outline-offset: 2px;
+}
+.perm-figure .plane-field select:disabled { opacity: .6; }
+.perm-figure .perm-group + .perm-group { margin-top: 14px; }
+.perm-figure .perm-group-title { margin: 0 0 6px; font-size: 13px; color: var(--muted); }
+
+.perm-slot { fill: none; stroke: #33594b; stroke-opacity: .35; stroke-width: 1.2; stroke-dasharray: 4 3; }
+.perm-card { stroke: #fff; stroke-width: 1.5; }
+.perm-card-label { font: 600 17px var(--sans); fill: #fff; }
+.perm-arrow { fill: none; stroke-width: 2; }
+.perm-head { stroke: none; }
+.perm-card.perm-c0, .perm-head.perm-c0 { fill: var(--green); }
+.perm-card.perm-c1, .perm-head.perm-c1 { fill: #8a4a29; }
+.perm-card.perm-c2, .perm-head.perm-c2 { fill: #2f5f8a; }
+.perm-card.perm-c3, .perm-head.perm-c3 { fill: #6b4f8a; }
+.perm-card.perm-c4, .perm-head.perm-c4 { fill: #4b5a52; }
+.perm-arrow.perm-c0 { stroke: var(--green); }
+.perm-arrow.perm-c1 { stroke: #8a4a29; }
+.perm-arrow.perm-c2 { stroke: #2f5f8a; }
+.perm-arrow.perm-c3 { stroke: #6b4f8a; }
+.perm-arrow.perm-c4 { stroke: #4b5a52; }
+
+@media (max-width: 520px) {
+  .perm-card-label { font-size: 24px; }
+}

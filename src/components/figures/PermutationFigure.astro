@@ -1,0 +1,89 @@
+---
+/**
+ * Interactive figure of the lesson « Permutations & cycles »: n cards, the
+ * table of images, swap of two images, application of σ to the current
+ * positions. The drawing, the text reading and the table are rendered at build
+ * time; src/scripts/perm-figures.ts makes the controls live.
+ * Usage in MDX: <PermutationFigure number="1" />
+ */
+import { N_LIMITS, initialState, permText } from '../../figures/perm';
+import { permSvg, HEIGHT, WIDTH } from '../../figures/perm-svg';
+import '../../styles/figures.css';
+import '../../styles/figures-perm.css';
+
+interface Props { number?: string }
+const { number } = Astro.props;
+const id = 'figure-permutation';
+const state = initialState();
+const text = permText(state);
+const range = (n: number) => Array.from({ length: n }, (_, i) => i + 1);
+const nValues = range(N_LIMITS[1] - N_LIMITS[0] + 1).map(i => i + N_LIMITS[0] - 1);
+---
+<figure class="plane-figure series-figure perm-figure" id={id} data-perm-figure aria-labelledby={`${id}-title`}>
+  <figcaption class="plane-figure-caption">
+    <span class="eyebrow">Figure{number && ` ${number}`} · interactive</span>
+    <span class="plane-figure-title" id={`${id}-title`}>Réordonner des cartes</span>
+  </figcaption>
+  <div class="plane-figure-layout">
+    <div class="plane-figure-stage">
+      <svg viewBox={`0 0 ${WIDTH} ${HEIGHT}`} role="img" aria-labelledby={`${id}-title ${id}-status`} data-perm-svg set:html={permSvg(state)} />
+      <p class="plane-figure-hint">
+        Chaque carte porte sa position initiale ; elle est dessinée à sa position courante. Une flèche va de x vers σ(x) : au-dessus pour une image plus grande, au-dessous pour une image plus petite, en boucle pour un point fixe. Une même couleur marque un même cycle.
+      </p>
+    </div>
+    <div class="plane-figure-side">
+      <div class="perm-group" role="group" aria-label="Nombre de cartes">
+        <div class="plane-controls">
+          <label class="plane-field">
+            <span>Nombre de cartes n ({N_LIMITS[0]} à {N_LIMITS[1]})</span>
+            <select data-perm-n disabled>
+              {nValues.map(v => <option value={v} selected={v === state.n}>{v}</option>)}
+            </select>
+          </label>
+        </div>
+      </div>
+      <div class="perm-group" role="group" aria-label="Échanger deux images">
+        <div class="plane-controls">
+          <label class="plane-field">
+            <span>Première image</span>
+            <select data-perm-image="a" disabled>
+              {range(state.n).map(v => <option value={v} selected={v === 1}>{v}</option>)}
+            </select>
+          </label>
+          <label class="plane-field">
+            <span>Seconde image</span>
+            <select data-perm-image="b" disabled>
+              {range(state.n).map(v => <option value={v} selected={v === 2}>{v}</option>)}
+            </select>
+          </label>
+        </div>
+        <div class="plane-actions">
+          <button type="button" class="button secondary" data-action="swap" disabled>Échanger ces deux images</button>
+        </div>
+      </div>
+      <div class="plane-actions">
+        <button type="button" class="button primary" data-action="apply" disabled>Appliquer la permutation</button>
+        <button type="button" class="button secondary" data-action="back" disabled>Remettre les cartes en place</button>
+      </div>
+      <dl class="plane-reading" data-perm-rows>
+        {text.rows.map(([term, value]) => <div><dt>{term}</dt><dd>{value}</dd></div>)}
+      </dl>
+      <p class="plane-status" id={`${id}-status`} role="status" aria-live="polite" data-perm-status>{text.status}</p>
+    </div>
+  </div>
+  <p class="series-table-caption" id={`${id}-table-caption`}>Positions initiales, images par σ et positions courantes des cartes</p>
+  <div class="table-scroll series-table" tabindex="0" role="region" aria-labelledby={`${id}-table-caption`}>
+    <table aria-labelledby={`${id}-table-caption`}>
+      <thead><tr><th scope="col">Position initiale</th><th scope="col">Image par σ</th><th scope="col">Position courante</th></tr></thead>
+      <tbody data-perm-table>
+        {text.table.map(row => <tr>{row.map(cell => <td>{cell}</td>)}</tr>)}
+      </tbody>
+    </table>
+  </div>
+  <p class="technical-note">Les calculs sont exacts (entiers). La figure explore des exemples : elle ne démontre rien et ne remplace pas les démonstrations de la leçon.</p>
+  <noscript><p class="technical-note">Activez JavaScript pour modifier la figure. La figure, ses valeurs initiales et le tableau restent lisibles.</p></noscript>
+</figure>
+<script>
+  import { initPermFigure } from '../../scripts/perm-figures';
+  document.querySelectorAll<HTMLElement>('[data-perm-figure]').forEach(initPermFigure);
+</script>
