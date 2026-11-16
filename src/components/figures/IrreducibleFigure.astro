@@ -1,0 +1,82 @@
+---
+/**
+ * Interactive figure of the lesson « Polynômes irréductibles & racines » :
+ * the monic polynomials X² + bX + c and X³ + bX + c over ℤ/2ℤ (degree 2 or 3,
+ * b and c equal to 0 or 1) evaluated at 0 and 1, roots and conclusion read off
+ * theorem 1 of the lesson, with the table of the 8 polynomials. The drawing,
+ * the text reading and the table are rendered at build time;
+ * src/scripts/irred-figures.ts makes the controls live.
+ * Usage in MDX: <IrreducibleFigure number="1" />
+ */
+import { DEGREES, BITS, IRRED_PRESET, TABLE_CAPTION, TABLE_HEAD, SCOPE, irredReading, irredText, rowKey, tableRows } from '../../figures/irred';
+import { irredSvg, HEIGHT, WIDTH } from '../../figures/irred-svg';
+import '../../styles/figures.css';
+import '../../styles/figures-irred.css';
+
+interface Props { number?: string }
+const { number } = Astro.props;
+const id = 'figure-irreductible';
+const state = { ...IRRED_PRESET };
+const reading = irredReading(state);
+const text = irredText(reading);
+const current = rowKey(state);
+const bitGroups = [['b', 'Coefficient b'], ['c', 'Coefficient c']] as const;
+---
+<figure class="plane-figure series-figure irred-figure" id={id} data-irred-figure aria-labelledby={`${id}-title`}>
+  <figcaption class="plane-figure-caption">
+    <span class="eyebrow">Figure{number && ` ${number}`} · interactive</span>
+    <span class="plane-figure-title" id={`${id}-title`}>Racines et irréductibilité sur ℤ/2ℤ</span>
+  </figcaption>
+  <div class="plane-figure-layout">
+    <div class="plane-figure-stage">
+      <svg viewBox={`0 0 ${WIDTH} ${HEIGHT}`} role="img" aria-labelledby={`${id}-title ${id}-status`} data-irred-svg set:html={irredSvg(reading)} />
+      <p class="plane-figure-hint">
+        Chaque case donne la valeur du polynôme en un élément de ℤ/2ℤ, calculée modulo 2 ; une case verte est une racine. La figure couvre seulement les 8 polynômes de degré 2 ou 3 avec b et c égaux à 0 ou 1.
+      </p>
+    </div>
+    <div class="plane-figure-side">
+      <div class="plane-controls irred-controls">
+        <fieldset class="plane-order">
+          <legend>Degré</legend>
+          {DEGREES.map(degree => (
+            <label><input type="radio" name={`${id}-degree`} value={String(degree)} checked={degree === state.degree} disabled data-irred-choice="degree" /> {degree}</label>
+          ))}
+        </fieldset>
+        {bitGroups.map(([name, legend]) => (
+          <fieldset class="plane-order">
+            <legend>{legend}</legend>
+            {BITS.map(bit => (
+              <label><input type="radio" name={`${id}-${name}`} value={String(bit)} checked={bit === state[name]} disabled data-irred-choice={name} /> {bit}</label>
+            ))}
+          </fieldset>
+        ))}
+      </div>
+      <div class="plane-actions">
+        <button type="button" class="button primary" data-irred-reset aria-disabled="true" disabled>Remettre les valeurs initiales</button>
+      </div>
+      <dl class="plane-reading" data-irred-rows>
+        {text.rows.map(([term, value]) => <div><dt>{term}</dt><dd>{value}</dd></div>)}
+      </dl>
+      <p class="plane-status" id={`${id}-status`} role="status" aria-live="polite" data-irred-status>{text.status}</p>
+    </div>
+  </div>
+  <p class="series-table-caption" id={`${id}-table-caption`}>{TABLE_CAPTION}</p>
+  <div class="table-scroll series-table irred-table" tabindex="0" role="region" aria-labelledby={`${id}-table-caption`}>
+    <table aria-labelledby={`${id}-table-caption`}>
+      <thead><tr>{TABLE_HEAD.map(label => <th scope="col">{label}</th>)}</tr></thead>
+      <tbody data-irred-table>
+        {tableRows().map(row => (
+          <tr data-irred-row={row.key} aria-current={row.key === current ? 'true' : undefined}>
+            <th scope="row">{row.cells[0]}</th>{row.cells.slice(1).map(cell => <td>{cell}</td>)}
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+  <p class="technical-note">Les calculs sont exacts (entiers, modulo 2). {SCOPE}</p>
+  <noscript><p class="technical-note">Activez JavaScript pour modifier la figure. La figure, ses valeurs initiales et le tableau des 8 polynômes restent lisibles.</p></noscript>
+</figure>
+<script>
+  import { initIrredFigure } from '../../scripts/irred-figures';
+  document.querySelectorAll<HTMLElement>('[data-irred-figure]').forEach(initIrredFigure);
+</script>

@@ -1,0 +1,220 @@
+---
+title: "Polynômes irréductibles & racines"
+heading:
+  lead: "Polynômes irréductibles"
+  emphasis: "& racines."
+summary: "Chercher des facteurs, comprendre le rôle du corps de coefficients et éprouver le critère des racines."
+domain: "Algèbre"
+number: "15"
+breadcrumb: "Irréductibilité"
+status: "validated"
+validation: "Décision de la direction du projet, 16 novembre 2026 (sujet, niveau, exercices, reconstruction et interaction retenus)"
+companion: false
+sections:
+  - { id: "exploration", label: "Exploration" }
+  - { id: "cours", label: "Le cours" }
+  - { id: "demonstration", label: "Démonstration" }
+  - { id: "preuve-integrale", label: "Preuve intégrale" }
+  - { id: "connexions", label: "Connexions" }
+  - { id: "exercices", label: "Exercices" }
+  - { id: "reconstruction", label: "À reconstruire" }
+---
+
+<CourseSection id="exploration" eyebrow="01 / Exploration" title="Un polynôme peut-il résister à la décomposition ?">
+
+**Pour commencer :** nous utilisons les corps, les opérations sur les polynômes, leur degré, l’évaluation et la division euclidienne par un polynôme non nul ; voir les leçons sur les anneaux et corps et sur les polynômes à une indéterminée. Le parcours principal vise la fin du lycée et le début de licence.
+
+Dans les entiers, $7$ ne se décompose pas en produit de deux entiers strictement supérieurs à $1$. Peut-on poser une question analogue pour les polynômes ? Essayons $P=X^2+1$.
+
+Sur les réels, chercher une racine revient à résoudre $x^2=-1$ : aucun carré réel n’est négatif. Sur les complexes, en revanche, $i^2=-1$ et
+
+$$
+X^2+1=(X-i)(X+i).
+$$
+
+La même expression se décompose donc si l’on autorise les coefficients complexes. L’absence de racine réelle suffit-elle à exclure une décomposition à coefficients réels ? Et cette méthode fonctionne-t-elle pour tous les degrés ? Ces questions appellent une preuve : tester quelques valeurs ne suffit pas à exclure toutes les racines possibles.
+
+<IrreducibleFigure number="1" />
+
+</CourseSection>
+
+<CourseSection id="cours" eyebrow="02 / Le cours" title="Facteurs, racines et corps de coefficients">
+
+Dans toute la leçon, $K$ désigne un corps commutatif et $K[X]$ l’anneau des polynômes à une indéterminée sur $K$. Une racine de $P$ **dans $K$** est un élément $a$ de $K$ tel que $P(a)=0$. Les degrés mentionnés sont ceux de polynômes non nuls. Pour deux polynômes non nuls sur un corps, le degré de leur produit est la somme de leurs degrés : leurs coefficients dominants ont un produit non nul.
+
+<Definition number="1" name="Irréductibilité sur un corps">
+
+Un polynôme $P\in K[X]$ est **irréductible sur $K$** s’il est non constant et si, dans toute écriture $P=AB$ avec $A,B\in K[X]$, l’un des deux facteurs est constant. Un polynôme non constant qui n’est pas irréductible est dit **réductible** sur $K$ : il est alors produit de deux polynômes de degrés strictement positifs.
+
+Les constantes, y compris le polynôme nul, ne sont donc pas irréductibles selon cette définition. Les constantes non nulles sont précisément les éléments inversibles de $K[X]$ : leur inverse est constant, et la formule des degrés exclut tout autre inverse.
+
+</Definition>
+
+<Example name="Les polynômes de degré un">
+
+Tout polynôme $aX+b$ avec $a\ne 0$ est irréductible sur $K$. En effet, une décomposition en facteurs non constants aurait un degré au moins égal à $2$. Sa racine $-b/a$ appartient pourtant à $K$ : avoir une racine n’empêche donc pas un polynôme de degré un d’être irréductible.
+
+</Example>
+
+<Theorem kind="Théorème" number="1" name="Racines et irréductibilité en petits degrés" id="theoreme-racines">
+
+Soient $P\in K[X]$ et $a\in K$.
+
+1. $P(a)=0$ si et seulement si $X-a$ divise $P$ dans $K[X]$.
+2. Si $P$ est de degré $2$ ou $3$, il est irréductible sur $K$ si et seulement s’il n’a aucune racine dans $K$.
+
+</Theorem>
+
+La démonstration progressive et la preuve intégrale suivent. Pour un polynôme de degré au moins $2$, une racine fournit toujours une décomposition en deux facteurs non constants. La réciproque demande davantage : en degrés $2$ et $3$, toute décomposition non triviale comporte un facteur de degré un.
+
+<Example name="Changer de corps change la réponse">
+
+Sur $\mathbb R$, $X^2+1$ n’a pas de racine, car $x^2+1>0$ pour tout réel $x$. Le théorème le rend irréductible sur $\mathbb R$. Sur $\mathbb C$, la factorisation de l’exploration montre qu’il est réductible. Le corps fait partie de la question.
+
+Sur $\mathbb Q$, $X^2-2$ n’a pas de racine : si une fraction d’entiers premiers entre eux $p/q$, avec $q\ne 0$, vérifiait $p^2=2q^2$, alors $p$ serait pair, puis $q$ aussi, contradiction. Il est donc irréductible sur $\mathbb Q$. Sur $\mathbb R$, il se factorise en $(X-\sqrt 2)(X+\sqrt 2)$.
+
+</Example>
+
+<Remark name="La limite du critère">
+
+Sur $\mathbb R$, le polynôme $P=(X^2+1)^2$ est strictement positif en tout réel : il n’a aucune racine réelle. Il est pourtant réductible, produit de deux facteurs de degré $2$. L’absence de racine ne suffit donc pas en degré $4$.
+
+</Remark>
+
+</CourseSection>
+
+<Proof eyebrow="03 / Démonstration" title="Pourquoi les degrés deux et trois sont-ils particuliers ?" intro="Nous démontrons les deux parties du théorème 1 sur un corps quelconque K.">
+
+  <ProofStep title="Diviser par le facteur proposé" open>
+
+La division euclidienne de $P$ par le polynôme non nul $X-a$ donne $P=(X-a)Q+r$, où $Q\in K[X]$ et où le reste $r$ est constant, éventuellement nul. En évaluant en $a$, on obtient $P(a)=r$. Ainsi $P(a)=0$ exactement lorsque le reste est nul, c’est-à-dire lorsque $X-a$ divise $P$.
+
+  </ProofStep>
+
+  <ProofStep title="Une racine donne deux facteurs non constants">
+
+Supposons $\deg P=n$ avec $n=2$ ou $3$. Si $a$ est une racine dans $K$, la première partie donne $P=(X-a)Q$. La formule des degrés donne $\deg Q=n-1\geq 1$. Les deux facteurs sont non constants : $P$ est réductible.
+
+  </ProofStep>
+
+  <ProofStep title="Une décomposition impose un facteur linéaire">
+
+Réciproquement, si $P=AB$ avec $A$ et $B$ non constants, leurs degrés sont des entiers positifs dont la somme vaut $2$ ou $3$. L’un vaut donc $1$. Ce facteur s’écrit $uX+v$, avec $u\ne 0$, et s’annule en $a=-v/u\in K$. Alors $P(a)=0$. Par contraposée, sans racine dans $K$, $P$ est irréductible.
+
+  </ProofStep>
+
+  <FullProof slot="full">
+
+**Preuve intégrale du théorème 1.** Soient $P\in K[X]$ et $a\in K$. Par division euclidienne par $X-a$, il existe $Q\in K[X]$ et une constante $r\in K$ tels que $P=(X-a)Q+r$. L’évaluation en $a$ donne $P(a)=r$. Par conséquent $P(a)=0$ si et seulement si $r=0$, ce qui équivaut à la divisibilité de $P$ par $X-a$.
+
+Supposons maintenant $\deg P=n\in\lbrace 2,3\rbrace$. Si $P$ a une racine $a\in K$, alors $P=(X-a)Q$. Comme les degrés s’additionnent, $\deg Q=n-1\geq 1$. Cette décomposition a deux facteurs non constants : $P$ est réductible.
+
+Inversement, si $P$ est réductible, il s’écrit $P=AB$ avec $\deg A,\deg B\geq 1$ et $\deg A+\deg B=n$. Pour $n=2$ ou $3$, l’un de ces degrés vaut $1$. Ce facteur est de la forme $uX+v$, $u\ne 0$, et possède la racine $a=-v/u$ dans $K$. Alors $P(a)=A(a)B(a)=0$. Ainsi tout polynôme réductible de degré $2$ ou $3$ possède une racine dans $K$. Les deux implications prouvent le critère annoncé.
+
+  </FullProof>
+
+</Proof>
+
+<CourseSection id="connexions" eyebrow="04 / Connexions" title="Une racine fabrique un quotient">
+
+**Lien mathématique démontré.** Si $P$ possède une racine $a\in K$ et $\deg P\geq 2$, écrivons $P=(X-a)Q$ avec $\deg Q\geq 1$. Dans l’anneau quotient $K[X]/(P)$, les classes de $X-a$ et de $Q$ sont non nulles, car aucun de ces polynômes de degré inférieur à $\deg P$ n’est multiple non nul de $P$. Leur produit est pourtant nul, puisque $P$ représente la classe nulle. Le quotient possède donc des diviseurs de zéro et ne peut être un corps.
+
+Ici $(P)$ désigne l’ensemble des multiples de $P$ et les opérations sur les classes sont celles du quotient d’anneaux ; voir les leçons sur les idéaux et les anneaux quotients. Ce raisonnement établit une implication pour une racine donnée ; il ne démontre pas ici la caractérisation générale des quotients par un polynôme irréductible.
+
+</CourseSection>
+
+<CourseSection id="exercices" eyebrow="05 / Exercices" title="Chercher, prouver, puis tester les limites">
+
+Chaque indice et chaque correction peut être ouvert directement. Dans les calculs modulo $2$, les éléments de $\mathbb Z/2\mathbb Z$ sont notés $0$ et $1$.
+
+<Exercise number="1" name="Une racine et sa factorisation" level="Découverte" id="exercice-racine">
+
+Dans $\mathbb Q[X]$, vérifiez que $2$ est racine de $P=X^3-3X+2$, puis factorisez $P$ complètement en facteurs de degré un.
+
+<Hint>
+
+Divisez par $X-2$, puis cherchez une racine du quotient.
+
+</Hint>
+
+<Solution>
+
+$P(2)=8-6+2=0$. La division donne $P=(X-2)(X^2+2X+1)=(X-2)(X+1)^2$. Tous les facteurs écrits sont de degré un et donc irréductibles sur $\mathbb Q$.
+
+</Solution>
+
+</Exercise>
+
+<Exercise number="2" name="Deux corps, deux conclusions" level="Application" id="exercice-corps">
+
+Décidez si $X^2+X+1$ est irréductible sur $\mathbb Z/2\mathbb Z$, puis sur $\mathbb R$.
+
+<Hint>
+
+Dans le premier corps, examinez les deux éléments. Dans le second, complétez le carré.
+
+</Hint>
+
+<Solution>
+
+Modulo $2$, les valeurs en $0$ et $1$ sont toutes deux égales à $1$. Le polynôme n’a donc aucune racine dans ce corps à deux éléments ; de degré deux, il y est irréductible. Sur $\mathbb R$, $x^2+x+1=(x+1/2)^2+3/4>0$ pour tout $x$. Il n’a pas de racine réelle et y est aussi irréductible.
+
+</Solution>
+
+</Exercise>
+
+<Exercise number="3" name="Un cube modulo deux" level="Raisonnement" id="exercice-cube">
+
+Le polynôme $X^3+X+1$ est-il irréductible sur $\mathbb Z/2\mathbb Z$ ? Justifiez sans supposer qu’un essai sur quelques valeurs suffirait dans un corps quelconque.
+
+<Hint>
+
+Combien d’éléments le corps considéré possède-t-il exactement ?
+
+</Hint>
+
+<Solution>
+
+En $0$, la valeur est $1$ ; en $1$, elle est $1+1+1=1$ modulo $2$. Ces deux essais épuisent le corps, qui possède exactement deux éléments. Il n’y a donc aucune racine dans ce corps et le critère du degré trois prouve l’irréductibilité.
+
+</Solution>
+
+</Exercise>
+
+<Exercise number="4" name="Une fausse réciproque" level="Approfondissement" id="exercice-degre-quatre">
+
+Sur $\mathbb Z/2\mathbb Z$, montrez que $P=X^4+X^2+1$ n’a pas de racine, puis déterminez s’il est irréductible.
+
+<Hint>
+
+Calculez le carré de $X^2+X+1$ en caractéristique $2$.
+
+</Hint>
+
+<Solution>
+
+$P(0)=1$ et $P(1)=1+1+1=1$ modulo $2$ : aucune des deux valeurs possibles n’est racine. Cependant, comme les doubles coefficients sont nuls modulo $2$,
+
+$$
+X^4+X^2+1=(X^2+X+1)^2.
+$$
+
+Les deux facteurs sont non constants : $P$ est réductible. Ce contre-exemple montre que même sur un corps fini, l’absence de racine ne suffit pas en degré quatre.
+
+</Solution>
+
+</Exercise>
+
+</CourseSection>
+
+<CourseSection id="reconstruction" eyebrow="06 / Reconstruction" title="Retrouver la portée du critère">
+
+Sans consulter la preuve, reprenez ces questions :
+
+1. Pourquoi les constantes sont-elles exclues de la définition, et pourquoi doit-on préciser le corps des coefficients ?
+2. Comment la division par $X-a$ relie-t-elle la valeur $P(a)$ à un facteur ?
+3. Pourquoi une décomposition de degré deux ou trois contient-elle un facteur de degré un ?
+4. Construisez un polynôme réductible de degré quatre sans racine réelle. Quel pas de la preuve précédente cesse de fonctionner ?
+5. Pour un corps fini, quand une liste de valeurs prouve-t-elle l’absence de racine ? Pourquoi cela ne prouve-t-il pas toujours l’irréductibilité ?
+
+</CourseSection>

@@ -1,0 +1,221 @@
+---
+title: "Anneaux quotients & morphismes"
+heading:
+  lead: "Anneaux quotients"
+  emphasis: "& morphismes."
+summary: "Calculer avec des classes, comprendre le rôle des idéaux et décrire la perte d’information d’un morphisme d’anneaux."
+domain: "Algèbre"
+number: "13"
+breadcrumb: "Anneaux quotients"
+status: "validated"
+validation: "Décision de la direction du projet, 16 novembre 2026 (sujet, niveau, exercices, reconstruction et interaction retenus)"
+companion: false
+sections:
+  - { id: "exploration", label: "Exploration" }
+  - { id: "cours", label: "Le cours" }
+  - { id: "demonstration", label: "Démonstration" }
+  - { id: "preuve-integrale", label: "Preuve intégrale" }
+  - { id: "connexions", label: "Connexions" }
+  - { id: "exercices", label: "Exercices" }
+  - { id: "reconstruction", label: "À reconstruire" }
+---
+
+<CourseSection id="exploration" eyebrow="01 / Exploration" title="Peut-on multiplier des restes ?">
+
+**Pour commencer :** connaître les entiers, la divisibilité, les applications et les groupes quotients additifs. Nous rappelons les propriétés des anneaux et des idéaux utilisées ici ; voir les leçons sur les anneaux et corps et sur les idéaux pour leur étude. Le parcours vise le début de licence.
+
+Modulo $4$, les entiers $1$ et $5$ représentent une même classe, tout comme $2$ et $-2$. Multipliez les représentants : $1\times2=2$, tandis que $5\times(-2)=-10$. Ces résultats représentent encore la même classe, car leur différence est un multiple de $4$. Essayez d’autres représentants. Est-ce toujours vrai ?
+
+<RingQuotientFigure number="1" />
+
+Ces calculs suggèrent une multiplication des classes, mais ne suffisent pas à justifier tous les choix possibles. Pour construire cette opération, il faudra comprendre pourquoi les différences produites restent dans l’ensemble que l’on décide d’oublier.
+
+</CourseSection>
+
+<CourseSection id="cours" eyebrow="02 / Le cours" title="Faire passer deux opérations aux classes">
+
+Dans cette leçon, un **anneau** $A$ est muni d’une addition qui en fait un groupe commutatif, d’une multiplication associative et distributive des deux côtés sur l’addition, et d’une unité $1_A$. La multiplication n’est pas nécessairement commutative. Nous admettons l’anneau nul, où $1_A=0_A$. Un **idéal bilatère** $I$ est un sous-groupe additif de $A$ tel que $ai$ et $ia$ appartiennent à $I$ pour tous $a\in A$ et $i\in I$. Dans un anneau commutatif, ces deux conditions coïncident. Voir les leçons sur les anneaux et corps et sur les idéaux.
+
+<Definition number="1" name="Classes modulo un idéal">
+
+Pour $a,b\in A$, on écrit $a\equiv b\pmod I$ si $a-b\in I$. C’est une relation d’équivalence : $0\in I$ donne la réflexivité, la stabilité par opposé donne la symétrie, et la stabilité par addition donne la transitivité. La classe de $a$ est $a+I$, l’ensemble des $a+i$ avec $i\in I$. Deux classes sont égales exactement lorsque leurs représentants sont équivalents. L’ensemble des classes est noté $A/I$.
+
+</Definition>
+
+<Theorem kind="Théorème" number="1" name="Construction de l’anneau quotient">
+
+Soit $I$ un idéal bilatère de l’anneau $A$. Les règles
+
+$$
+(a+I)+(b+I)=(a+b)+I,\qquad (a+I)(b+I)=ab+I
+$$
+
+définissent deux opérations sur $A/I$, indépendantes des représentants. Elles font de $A/I$ un anneau, d’élément nul $0_A+I$ et d’unité $1_A+I$. L’application $\pi\colon A\to A/I$, $a\mapsto a+I$, est surjective et respecte les deux opérations et les unités. Son noyau, c’est-à-dire l’ensemble des éléments envoyés sur $0_A+I$, est $I$.
+
+</Theorem>
+
+La preuve progressive et la preuve intégrale suivent le cours. L’hypothèse bilatère permet d’absorber les facteurs aussi bien à gauche qu’à droite. Si $I=A$, le quotient est l’anneau nul ; si $I=\{0_A\}$, chaque classe est un singleton et le quotient reproduit $A$.
+
+<Example name="Les entiers modulo n">
+
+Pour un entier $n\geq 2$, $n\mathbb Z$ est un idéal de $\mathbb Z$ : une différence de multiples et le produit d’un multiple par un entier sont encore des multiples de $n$. Le quotient $\mathbb Z/n\mathbb Z$ possède exactement les classes $\overline 0,\ldots,\overline{n-1}$ par division euclidienne, où $\overline a=a+n\mathbb Z$. On calcule $\overline a+\overline b=\overline{a+b}$ et $\overline a\,\overline b=\overline{ab}$.
+
+Pour $n=4$, $\overline 2\ne\overline 0$ mais $\overline 2\,\overline 2=\overline 0$. Un quotient d’un anneau sans diviseurs de zéro peut donc en avoir ; en particulier, $\mathbb Z/4\mathbb Z$ n’est pas un corps.
+
+</Example>
+
+<Definition number="2" name="Morphisme, noyau et image">
+
+Un **morphisme d’anneaux unitaires** $f\colon A\to B$ respecte, pour tous $a,b\in A$, l’addition, la multiplication et l’unité :
+
+$$
+f(a+b)=f(a)+f(b),\quad f(ab)=f(a)f(b),\quad f(1_A)=1_B.
+$$
+
+Son **noyau** est $\ker f=\{a\in A\mid f(a)=0_B\}$ et son **image** est l’ensemble $f(A)$ des valeurs prises. Un isomorphisme est un morphisme bijectif. Certaines conventions n’imposent pas la conservation de l’unité ; ce n’est pas celle adoptée ici.
+
+</Definition>
+
+Le noyau est un idéal bilatère : $f(0_A)=0_B$ et $f(a-b)=f(a)-f(b)$ par les propriétés additives ; si $i\in\ker f$ et $a\in A$, alors $f(ai)=f(a)f(i)=0_B$ et $f(ia)=0_B$. L’image est un sous-anneau unitaire de $B$ : elle contient $0_B,1_B$ et est stable par différence et produit. Enfin $f(a)=f(b)$ équivaut à $a-b\in\ker f$ : le noyau mesure exactement les différences que $f$ efface.
+
+<Theorem kind="Proposition" number="2" name="Factorisation par le noyau">
+
+Pour tout morphisme unitaire $f\colon A\to B$, l’application $\widetilde f\colon A/\ker f\to f(A)$ définie par $\widetilde f(a+\ker f)=f(a)$ est un isomorphisme d’anneaux. Ainsi $f$ est injectif si et seulement si $\ker f=\{0_A\}$.
+
+</Theorem>
+
+**Preuve.** L’équivalence précédente montre que la valeur $f(a)$ ne dépend pas du représentant, et que deux classes de même image sont égales. Les règles du quotient montrent que $\widetilde f$ préserve somme, produit et unité. Elle est surjective sur $f(A)$ par définition, et injective par l’équivalence : c’est un isomorphisme. De plus, $f$ est injectif exactement lorsque $f(a)=f(0_A)$ impose $a=0_A$, donc lorsque son noyau est réduit à $\{0_A\}$.
+
+</CourseSection>
+
+<Proof eyebrow="03 / Démonstration" title="Pourquoi les classes héritent-elles d’un anneau ?" intro="Nous démontrons le théorème 1, y compris l’indépendance des représentants et les propriétés de la projection.">
+
+  <ProofStep title="Changer les représentants" open>
+
+Si $a'=a+i$ et $b'=b+j$ avec $i,j\in I$, alors $(a'+b')-(a+b)=i+j\in I$. Pour le produit,
+
+$$
+a'b'-ab=aj+ib+ij\in I.
+$$
+
+Les trois termes appartiennent à $I$ par absorption et stabilité additive. Les deux résultats ne dépendent donc que des classes choisies.
+
+  </ProofStep>
+
+  <ProofStep title="Transmettre les propriétés de l’anneau">
+
+L’addition des classes est associative et commutative, avec neutre $0_A+I$ et opposé de $a+I$ égal à $-a+I$. La multiplication est associative et distributive des deux côtés, car ces égalités valent pour les représentants dans $A$. La classe $1_A+I$ est une unité à gauche et à droite. Les opérations sont bien définies grâce à l’étape précédente : ces vérifications valent donc pour toutes les classes.
+
+  </ProofStep>
+
+  <ProofStep title="Identifier la projection et son noyau">
+
+Chaque classe est l’image d’un représentant, donc $\pi$ est surjective. Les règles définissant les opérations donnent $\pi(a+b)=\pi(a)+\pi(b)$, $\pi(ab)=\pi(a)\pi(b)$ et $\pi(1_A)=1_A+I$. Enfin $\pi(a)=0_A+I$ équivaut à $a\in I$ : son noyau est exactement $I$.
+
+  </ProofStep>
+
+  <FullProof slot="full">
+
+**Preuve intégrale du théorème 1.** Soient $a'=a+i$ et $b'=b+j$, avec $i,j\in I$. Alors $(a'+b')-(a+b)=i+j\in I$. Par distributivité, $a'b'-ab=aj+ib+ij$. L’idéal étant bilatère, chacun des termes $aj,ib,ij$ appartient à $I$, et leur somme aussi. Les classes de $a+b$ et de $ab$ sont donc indépendantes des représentants : les deux opérations sont bien définies.
+
+Chaque classe possède un représentant dans $A$. L’associativité et la commutativité de l’addition, l’associativité de la multiplication et les deux distributivités dans $A$ passent aux classes par les règles ci-dessus. La classe $0_A+I$ est neutre pour l’addition et $-a+I$ est l’opposé de $a+I$. La classe $1_A+I$ est neutre pour la multiplication des deux côtés. Ainsi $A/I$ est un anneau au sens adopté, y compris lorsque $I=A$.
+
+Par définition, $\pi(a)=a+I$ atteint chaque classe et respecte addition, multiplication et unité. Enfin $\pi(a)=0_A+I$ si et seulement si $a-0_A\in I$, soit $a\in I$. Son noyau est donc $I$.
+
+  </FullProof>
+
+</Proof>
+
+<CourseSection id="connexions" eyebrow="04 / Connexions" title="Du quotient de groupes au quotient d’anneaux">
+
+**Lien mathématique démontré.** Le groupe additif de $A/I$ est le quotient du groupe additif de $A$ par son sous-groupe $I$, comme dans la leçon sur les groupes quotients. Puisque ce groupe est commutatif, ses sous-groupes sont distingués. La multiplication ajoute une exigence : l’absorption par les éléments de $A$ garantit qu’elle passe elle aussi aux classes.
+
+Par exemple, dans $\mathbb Q$, $\mathbb Z$ est un sous-groupe additif, mais pas un idéal : $1\in\mathbb Z$ et $(1/2)1\notin\mathbb Z$. Les classes de $0$ et $1$ modulo $\mathbb Z$ coïncident, mais en les multipliant par la classe de $1/2$, les représentants donnent $0$ et $1/2$, de classes distinctes. La multiplication proposée n’est donc pas bien définie.
+
+</CourseSection>
+
+<CourseSection id="exercices" eyebrow="05 / Exercices" title="Calculer et contrôler les hypothèses">
+
+<Exercise number="1" name="Calculs modulo six" level="Découverte">
+
+Dans $\mathbb Z/6\mathbb Z$, calculez $\overline{-8}+\overline 5$ et $\overline{-8}\,\overline 5$. Trouvez deux classes non nulles dont le produit est nul.
+
+<Hint>
+
+Réduisez chaque résultat modulo $6$ ; essayez $2$ et $3$.
+
+</Hint>
+
+<Solution>
+
+$-8+5=-3\equiv3\pmod 6$ et $-8\times5=-40\equiv2\pmod 6$. Les résultats sont $\overline 3$ et $\overline 2$. Les classes $\overline 2$ et $\overline 3$ sont non nulles et leur produit est $\overline 6=\overline 0$.
+
+</Solution>
+
+</Exercise>
+
+<Exercise number="2" name="Une réduction possible ?" level="Raisonnement">
+
+La règle $\overline a$ modulo $6\mapsto\overline a$ modulo $3$ définit-elle un morphisme unitaire $\mathbb Z/6\mathbb Z\to\mathbb Z/3\mathbb Z$ ? Décrivez son noyau. Que se passe-t-il en inversant les rôles de $3$ et $6$ ?
+
+<Hint>
+
+Comparez les représentants dont la différence est un multiple de $6$, puis comparez $0$ et $3$ pour la règle inverse.
+
+</Hint>
+
+<Solution>
+
+Deux représentants égaux modulo $6$ diffèrent d’un multiple de $6$, donc aussi de $3$ : la règle est bien définie. Les calculs sur les représentants montrent qu’elle préserve somme, produit et unité. Son noyau comprend les classes modulo $6$ représentées par les multiples de $3$, soit exactement $\overline 0$ et $\overline 3$. La règle inverse n’est pas bien définie : $0$ et $3$ représentent la même classe modulo $3$, mais des classes différentes modulo $6$.
+
+</Solution>
+
+</Exercise>
+
+<Exercise number="3" name="Une application qui oublie une coordonnée" level="Application">
+
+Dans l’anneau produit $\mathbb Z\times\mathbb Z$, dont les opérations sont coordonnées par coordonnées et l’unité $(1,1)$, considérez $p(a,b)=a$. Montrez que $p$ est un morphisme unitaire surjectif, trouvez son noyau et décrivez le quotient correspondant.
+
+<Hint>
+
+Calculez l’image d’une somme et d’un produit, puis cherchez les couples de première coordonnée nulle.
+
+</Hint>
+
+<Solution>
+
+$p((a,b)+(c,d))=a+c=p(a,b)+p(c,d)$ et $p((a,b)(c,d))=ac=p(a,b)p(c,d)$ ; enfin $p(1,1)=1$. Chaque entier $a$ est l’image de $(a,0)$, donc $p$ est surjective. Son noyau est l’ensemble des $(0,b)$, pour $b\in\mathbb Z$. La proposition 2 donne un isomorphisme de $(\mathbb Z\times\mathbb Z)/\ker p$ sur $\mathbb Z$ : la classe de $(a,b)$ correspond à $a$.
+
+</Solution>
+
+</Exercise>
+
+<Exercise number="4" name="Factoriser à travers un quotient" level="Approfondissement">
+
+Soient $f\colon A\to B$ un morphisme unitaire et $I$ un idéal bilatère de $A$. Montrez qu’il existe un unique morphisme unitaire $g\colon A/I\to B$ tel que $f=g\circ\pi$ si et seulement si $I\subseteq\ker f$.
+
+<Hint>
+
+Si $g$ existe, appliquez l’égalité à $i\in I$. Réciproquement, essayez $g(a+I)=f(a)$.
+
+</Hint>
+
+<Solution>
+
+Si $f=g\circ\pi$ et $i\in I$, alors $\pi(i)=0_A+I$ et $f(i)=g(0_A+I)=0_B$ : $I\subseteq\ker f$. Réciproquement, sous cette inclusion, deux représentants d’une même classe ont une différence dans le noyau et donc la même image par $f$. La règle $g(a+I)=f(a)$ est ainsi bien définie et respecte somme, produit et unité. Elle satisfait $g\circ\pi=f$. Elle est unique : chaque classe est $\pi(a)$, donc l’égalité impose sa valeur $f(a)$.
+
+</Solution>
+
+</Exercise>
+
+</CourseSection>
+
+<CourseSection id="reconstruction" eyebrow="06 / Reconstruction" title="Retrouver les étapes sans les corrections">
+
+1. Dans $\mathbb Z/4\mathbb Z$, pourquoi $1$ et $5$ désignent-ils la même classe ? Calculez le produit de leurs classes par celle de $2$.
+2. En changeant les deux représentants par $i,j\in I$, développez la différence des produits. Où chaque hypothèse sur l’idéal intervient-elle ?
+3. Construisez l’unité et l’opposé d’une classe, puis expliquez pourquoi la projection est surjective et a pour noyau $I$.
+4. Pourquoi deux éléments ayant la même image par un morphisme définissent-ils une même classe modulo son noyau ? Retrouvez l’isomorphisme sur l’image.
+5. Expliquez avec $\mathbb Q/\mathbb Z$ pourquoi un quotient additif ne fournit pas automatiquement une multiplication des classes.
+
+</CourseSection>

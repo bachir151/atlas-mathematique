@@ -1,0 +1,76 @@
+---
+/**
+ * Interactive figure of the lesson « Polynômes, division & racines »:
+ * division of X³ + c₂X² + c₁X + c₀ by X − a in ℚ. The discrete graph of P, its
+ * text reading and the table of values are rendered at build time;
+ * src/scripts/poly-figures.ts makes the controls live.
+ * Usage in MDX: <PolyFigure number="1" />
+ */
+import { FIELDS, GRAPH_MAX, GRAPH_MIN, LIMITS, POLY_PRESET, int, polyReading, polyText, type PolyField } from '../../figures/poly';
+import { polySvg, HEIGHT, WIDTH } from '../../figures/poly-svg';
+import '../../styles/figures.css';
+import '../../styles/figures-poly.css';
+
+interface Props { number?: string }
+const { number } = Astro.props;
+const id = 'figure-polynome';
+const state = { ...POLY_PRESET };
+const reading = polyReading(state);
+const text = polyText(state, reading);
+const labels: Record<PolyField, string> = { c2: 'Coefficient c₂', c1: 'Coefficient c₁', c0: 'Coefficient c₀', a: 'Racine essayée a' };
+const names: Record<PolyField, string> = { c2: 'c₂', c1: 'c₁', c0: 'c₀', a: 'a' };
+---
+<figure class="plane-figure series-figure poly-figure" id={id} data-poly-figure aria-labelledby={`${id}-title`}>
+  <figcaption class="plane-figure-caption">
+    <span class="eyebrow">Figure{number && ` ${number}`} · interactive</span>
+    <span class="plane-figure-title" id={`${id}-title`}>Diviser P par X − a</span>
+  </figcaption>
+  <div class="plane-figure-layout">
+    <div class="plane-figure-stage">
+      <svg viewBox={`0 0 ${WIDTH} ${HEIGHT}`} role="img" aria-labelledby={`${id}-title ${id}-status`} data-poly-svg set:html={polySvg(state, reading)} />
+      <p class="plane-figure-hint">
+        Graphe discret de P aux entiers de {int(GRAPH_MIN)} à {GRAPH_MAX} ; le point orange est (a, P(a)). Les points à fond blanc sont ceux où P s’annule.
+      </p>
+    </div>
+    <div class="plane-figure-side">
+      <div class="plane-controls poly-controls" role="group" aria-label="Coefficients et valeur a">
+        {FIELDS.map(name => (
+          <label class="plane-field">
+            <span>{labels[name]} (entier de {int(LIMITS[name][0])} à {LIMITS[name][1]})</span>
+            <input type="number" inputmode="numeric" step="1" min={LIMITS[name][0]} max={LIMITS[name][1]} value={state[name]} data-poly-param={name} disabled />
+          </label>
+        ))}
+      </div>
+      <div class="plane-actions">
+        {FIELDS.map(name => (
+          <>
+            <button type="button" class="button secondary" data-poly-action={`${name}-up`} disabled>{names[name]} + 1</button>
+            <button type="button" class="button secondary" data-poly-action={`${name}-down`} disabled>{names[name]} − 1</button>
+          </>
+        ))}
+        <button type="button" class="button primary" data-poly-action="reset" disabled>Remettre les valeurs initiales</button>
+      </div>
+      <dl class="plane-reading" data-poly-rows>
+        {text.rows.map(([term, value]) => <div><dt>{term}</dt><dd>{value}</dd></div>)}
+      </dl>
+      <p class="plane-status" id={`${id}-status`} role="status" aria-live="polite" data-poly-status>{text.status}</p>
+    </div>
+  </div>
+  <p class="series-table-caption" id={`${id}-table-caption`}>Valeurs P(x) aux entiers de {int(GRAPH_MIN)} à {GRAPH_MAX} (la ligne de a est repérée)</p>
+  <div class="table-scroll series-table poly-table" tabindex="0" role="region" aria-labelledby={`${id}-table-caption`}>
+    <table aria-labelledby={`${id}-table-caption`}>
+      <thead><tr><th scope="col">x</th><th scope="col">P(x)</th></tr></thead>
+      <tbody data-poly-table>
+        {text.table.map(([x, y]) => (
+          <tr><th scope="row" aria-current={x === int(state.a) ? 'true' : undefined}>{x}</th><td aria-current={x === int(state.a) ? 'true' : undefined}>{y}</td></tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+  <p class="technical-note">Les calculs sont exacts (division euclidienne dans ℚ). La figure explore des exemples sur une plage finie : elle ne démontre rien et ne remplace pas les démonstrations de la leçon.</p>
+  <noscript><p class="technical-note">Activez JavaScript pour modifier la figure. La figure, ses valeurs initiales et le tableau restent lisibles.</p></noscript>
+</figure>
+<script>
+  import { initPolyFigure } from '../../scripts/poly-figures';
+  document.querySelectorAll<HTMLElement>('[data-poly-figure]').forEach(initPolyFigure);
+</script>

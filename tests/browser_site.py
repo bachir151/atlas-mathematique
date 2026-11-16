@@ -25,7 +25,7 @@ from browser_p5 import (  # noqa: E402
     ROOT, CheckSkipped, Driver, EnvironmentBlocked, QuietHandler, WebDriverError, free_port, wait_for,
 )
 
-PAGES = ['/', '/atlas/', '/bibliotheque/', '/cours/groupes-rotations/', '/cours/mediatrices-reflexions/', '/cours/suites-geometriques-sommes-infinies/', '/cours/sous-groupes-entiers/', '/cours/groupes-cycliques/', '/cours/morphismes-isomorphismes/', '/cours/groupes-quotients/', '/cours/permutations-cycles/', '/cours/actions-orbites-stabilisateurs/', '/cours/lagrange-conjugaison/', '/experiences/p5/', '/404.html']
+PAGES = ['/', '/atlas/', '/bibliotheque/', '/cours/groupes-rotations/', '/cours/mediatrices-reflexions/', '/cours/suites-geometriques-sommes-infinies/', '/cours/sous-groupes-entiers/', '/cours/groupes-cycliques/', '/cours/morphismes-isomorphismes/', '/cours/groupes-quotients/', '/cours/permutations-cycles/', '/cours/actions-orbites-stabilisateurs/', '/cours/lagrange-conjugaison/', '/cours/anneaux-corps/', '/cours/ideaux-multiples/', '/cours/anneaux-quotients-morphismes/', '/cours/polynomes-division-racines/', '/cours/irreductibilite-polynomes/', '/cours/corps-finis/', '/experiences/p5/', '/404.html']
 # --drafts: serve the build that includes draft lessons (ATELIER_DRAFTS=1) and
 # run the site-wide accessibility checks on every lesson, plus the figures.
 DRAFTS = '--drafts' in sys.argv
@@ -35,12 +35,12 @@ PLAN = [
     'atlas-cleanup', 'three-not-loaded-elsewhere', 'skip-link', 'keyboard-focus', 'reflow-320',
     'text-zoom-200', 'target-size', 'contrast', 'square-rotation', 'square-reset-history', 'proof-progressive',
     'companion', 'library-filters', 'security-policy', 'figures-static', 'figures-keyboard', 'figures-buttons', 'figures-drag',
-    'series-static', 'series-keyboard', 'series-buttons', 'steps-static', 'steps-keyboard', 'steps-buttons', 'cycle-static', 'cycle-keyboard', 'cycle-buttons', 'morphism-static', 'morphism-keyboard', 'morphism-buttons', 'quotient-static', 'quotient-keyboard', 'quotient-buttons', 'perm-static', 'perm-keyboard', 'perm-buttons', 'action-static', 'action-keyboard', 'action-buttons', 'lagrange-static', 'lagrange-keyboard', 'lagrange-buttons', 'atlas-reduced-motion', 'square-reduced-motion', 'page-errors',
+    'series-static', 'series-keyboard', 'series-buttons', 'steps-static', 'steps-keyboard', 'steps-buttons', 'cycle-static', 'cycle-keyboard', 'cycle-buttons', 'morphism-static', 'morphism-keyboard', 'morphism-buttons', 'quotient-static', 'quotient-keyboard', 'quotient-buttons', 'perm-static', 'perm-keyboard', 'perm-buttons', 'action-static', 'action-keyboard', 'action-buttons', 'lagrange-static', 'lagrange-keyboard', 'lagrange-buttons', 'ring-static', 'ring-keyboard', 'ring-buttons', 'ideal-static', 'ideal-keyboard', 'ideal-buttons', 'rquot-static', 'rquot-keyboard', 'rquot-buttons', 'poly-static', 'poly-keyboard', 'poly-buttons', 'irred-static', 'irred-keyboard', 'irred-buttons', 'field-static', 'field-keyboard', 'field-buttons', 'atlas-reduced-motion', 'square-reduced-motion', 'page-errors',
 ]
 DRAFT_PLAN = [
     'skip-link', 'keyboard-focus', 'reflow-320', 'text-zoom-200', 'target-size', 'contrast',
     'figures-static', 'figures-keyboard', 'figures-buttons', 'figures-drag',
-    'series-static', 'series-keyboard', 'series-buttons', 'steps-static', 'steps-keyboard', 'steps-buttons', 'cycle-static', 'cycle-keyboard', 'cycle-buttons', 'morphism-static', 'morphism-keyboard', 'morphism-buttons', 'quotient-static', 'quotient-keyboard', 'quotient-buttons', 'perm-static', 'perm-keyboard', 'perm-buttons', 'action-static', 'action-keyboard', 'action-buttons', 'lagrange-static', 'lagrange-keyboard', 'lagrange-buttons', 'page-errors',
+    'series-static', 'series-keyboard', 'series-buttons', 'steps-static', 'steps-keyboard', 'steps-buttons', 'cycle-static', 'cycle-keyboard', 'cycle-buttons', 'morphism-static', 'morphism-keyboard', 'morphism-buttons', 'quotient-static', 'quotient-keyboard', 'quotient-buttons', 'perm-static', 'perm-keyboard', 'perm-buttons', 'action-static', 'action-keyboard', 'action-buttons', 'lagrange-static', 'lagrange-keyboard', 'lagrange-buttons', 'ring-static', 'ring-keyboard', 'ring-buttons', 'ideal-static', 'ideal-keyboard', 'ideal-buttons', 'rquot-static', 'rquot-keyboard', 'rquot-buttons', 'poly-static', 'poly-keyboard', 'poly-buttons', 'irred-static', 'irred-keyboard', 'irred-buttons', 'field-static', 'field-keyboard', 'field-buttons', 'page-errors',
 ]
 
 # Screen position of vertex A (the orange marker) relative to the rotation centre, in SVG units.
@@ -1112,6 +1112,392 @@ class SiteChecks:
             return {'reset': True}
         self.case('lagrange-buttons', buttons)
 
+    # ---------- Ring figure (lesson « Anneaux & corps ») ----------
+    def ring(self):
+        d = self.d
+        page = '/cours/anneaux-corps/'
+        fig = '#figure-anneau'
+        rows = lambda: d.js(f"return Object.fromEntries([...document.querySelectorAll('{fig} [data-ring-rows] > div')].map(r=>[r.children[0].textContent,r.children[1].textContent]));")
+        set_field = lambda name, value: d.js(f"const f=document.querySelector('{fig} [data-ring-param={name}]');f.value='{value}';f.dispatchEvent(new Event('input'));")
+        action = lambda name: d.js(f"document.querySelector('{fig} [data-ring-action={name}]').click();")
+
+        def static():
+            html = (self.root / page.strip('/') / 'index.html').read_text(encoding='utf-8')
+            for expected in ('Cas courant dans ℤ/6ℤ : [2] × [3] = [0]', 'ne démontre aucun critère général'):
+                assert expected in html, f'Texte initial absent du HTML compilé : {expected}'
+            self.open(page)
+            state = d.js(f"""const f=document.querySelector('{fig}');return {{
+              enabled:[...f.querySelectorAll('input,button')].every(e=>!e.disabled),
+              label:f.querySelector('svg').getAttribute('aria-labelledby'),
+              cells:f.querySelectorAll('svg .ring-cell').length,
+              rowHeads:f.querySelectorAll('[data-ring-table] th[scope=row]').length,
+              colHeads:f.querySelectorAll('[data-ring-head] th[scope=col]').length,
+              current:f.querySelector('[data-ring-table] td[aria-current=true]').textContent}};""")
+            assert state['enabled'], state
+            assert state['cells'] == 36 and state['rowHeads'] == 6 and state['colHeads'] == 7, state
+            assert state['current'] == '[0]', state
+            assert all(d.js('return !!document.getElementById(arguments[0]);', ref) for ref in state['label'].split()), state
+            return {'cells': state['cells']}
+        self.case('ring-static', static)
+
+        def keyboard():
+            self.open(page)
+            d.js(f"document.querySelector('{fig} [data-ring-param=a]').focus();")
+            d.key('\ue013'); time.sleep(0.1)  # Arrow up: a = 3
+            r = rows()
+            assert r['Produit des classes'] == '[3] × [3] = [3]', r
+            d.js(f"document.querySelector('{fig} [data-ring-param=n]').focus();")
+            for _ in range(3):
+                d.key('\ue015'); time.sleep(0.1)  # Arrow down: n = 5, 4, 3
+            r = rows()
+            assert r['Modulo n'].startswith('n = 3 : 3 classes'), r
+            assert r['Restes choisis'] == 'a = 0 ; b = 0', r  # 3 mod 3 = 0
+            # Out-of-range values are clamped when the field is left.
+            d.js(f"const f=document.querySelector('{fig} [data-ring-param=a]');f.focus();f.select();")
+            for ch in '99':
+                d.key(ch)
+            d.key('\ue004'); time.sleep(0.1)
+            a = d.js(f"return document.querySelector('{fig} [data-ring-param=a]').value;")
+            assert a == '2' and rows()['Restes choisis'] == 'a = 2 ; b = 0', (a, rows())
+            return {'arrowKeys': True, 'clamped': a}
+        self.case('ring-keyboard', keyboard)
+
+        def buttons():
+            self.open(page)
+            up = f"document.querySelector('{fig} [data-ring-action=n-up]')"
+            d.js(up + ".focus();")
+            for _ in range(7):
+                d.key('\ue007')  # Enter: n = 7 … 12, stops at 12
+            time.sleep(0.1)
+            assert rows()['Modulo n'].startswith('n = 12 : 12 classes'), rows()
+            assert d.js('return ' + up + ".getAttribute('aria-disabled');") == 'true'
+            assert d.js(f"return document.activeElement === {up};"), 'Le focus doit rester sur le bouton indisponible'
+            set_field('a', '11'); set_field('b', '8')
+            assert rows()['Produit des classes'] == '[11] × [8] = [4]', rows()
+            action('n-down')
+            assert rows()['Restes choisis'] == 'a = 0 ; b = 8', rows()  # 11 mod 11 = 0
+            action('reset')
+            assert rows()['Restes choisis'] == 'a = 2 ; b = 3', rows()
+            assert rows()['Modulo n'].startswith('n = 6 : 6 classes'), rows()
+            set_field('n', '5')
+            assert rows()['Produits nuls de facteurs non nuls'] == 'aucun couple de restes non nuls de produit nul modulo 5', rows()
+            assert rows()['Inverse de a'].startswith('[2] a pour inverse [3]'), rows()
+            return {'bound': True, 'reset': True}
+        self.case('ring-buttons', buttons)
+
+    # ---------- Ideal figure (lesson « Idéaux & multiples ») ----------
+    def ideal(self):
+        d = self.d
+        page = '/cours/ideaux-multiples/'
+        fig = '#figure-ideal'
+        status = lambda: d.js(f"return document.querySelector('{fig} [data-ideal-status]').textContent;")
+        rows = lambda: d.js(f"return Object.fromEntries([...document.querySelectorAll('{fig} [data-ideal-rows] > div')].map(r=>[r.children[0].textContent,r.children[1].textContent]));")
+        set_field = lambda name, value: d.js(f"const f=document.querySelector('{fig} [data-ideal-param={name}]');f.value='{value}';f.dispatchEvent(new Event('input'));")
+
+        def static():
+            html = (self.root / page.strip('/') / 'index.html').read_text(encoding='utf-8')
+            for expected in ('Calcul sélectionné : 1 × 6 + (−1) × 4 = 2.', 'combinaisons calculées seulement pour u et v entre −5 et 5'):
+                assert expected in html, f'Texte initial absent du HTML compilé : {expected}'
+            self.open(page)
+            state = d.js(f"""const f=document.querySelector('{fig}');return {{
+              enabled:[...f.querySelectorAll('input,button')].every(e=>!e.disabled),
+              label:f.querySelector('svg').getAttribute('aria-labelledby'),
+              multiplesA:f.querySelectorAll('svg .ideal-mark-a').length,
+              table:f.querySelectorAll('[data-ideal-table] tr').length}};""")
+            assert state['enabled'], state
+            assert state['table'] == 49 and state['multiplesA'] == 9, state
+            assert all(d.js('return !!document.getElementById(arguments[0]);', ref) for ref in state['label'].split()), state
+            return {'integers': state['table']}
+        self.case('ideal-static', static)
+
+        def keyboard():
+            self.open(page)
+            d.js(f"document.querySelector('{fig} [data-ideal-param=u]').focus();")
+            d.key('\ue013'); time.sleep(0.1)  # Arrow up: u = 2
+            d.js(f"document.querySelector('{fig} [data-ideal-param=v]').focus();")
+            d.key('\ue015'); time.sleep(0.1)  # Arrow down: v = −2
+            r = rows()
+            assert r['Calcul sélectionné u a + v b'] == '2 × 6 + (−2) × 4 = 4', r
+            assert r['Multiple de a'] == 'non' and r['Multiple de b'] == 'oui', r
+            # Out-of-range values are clamped when the field is left.
+            d.js(f"const f=document.querySelector('{fig} [data-ideal-param=a]');f.focus();f.select();")
+            for ch in '99':
+                d.key(ch)
+            d.key('\ue004'); time.sleep(0.1)
+            a = d.js(f"return document.querySelector('{fig} [data-ideal-param=a]').value;")
+            assert a == '12' and rows()['Générateurs et coefficients'].startswith('a = 12 ;'), (a, rows())
+            return {'arrowKeys': True, 'clamped': a}
+        self.case('ideal-keyboard', keyboard)
+
+        def buttons():
+            self.open(page)
+            set_field('a', '0')
+            st = status()
+            assert 'a = 0 : les multiples de 0 se réduisent à 0.' in st, st
+            assert rows()['Multiples de a affichés'] == '1 (seulement 0)', rows()
+            set_field('b', '0')
+            assert 'a = b = 0 : les multiples de 0 se réduisent à 0 et toute combinaison' in status(), status()
+            assert rows()['Plus petit entier strictement positif affiché comme combinaison'] == 'aucun', rows()
+            reset = f"document.querySelector('{fig} [data-ideal-action=reset]')"
+            assert d.js('return ' + reset + ".getAttribute('aria-disabled');") == 'false'
+            d.js(reset + ".focus();"); d.key('\ue007'); time.sleep(0.1)
+            assert d.js('return ' + reset + ".getAttribute('aria-disabled');") == 'true'
+            assert d.js(f"return document.activeElement === {reset};"), 'Le focus doit rester sur le bouton indisponible'
+            assert rows()['Calcul sélectionné u a + v b'] == '1 × 6 + (−1) × 4 = 2', rows()
+            return {'reset': True}
+        self.case('ideal-buttons', buttons)
+
+    def rquot(self):
+        d = self.d
+        page = '/cours/anneaux-quotients-morphismes/'
+        fig = '#figure-anneau-quotient'
+        rows = lambda: d.js(f"return Object.fromEntries([...document.querySelectorAll('{fig} [data-rquot-rows] > div')].map(r=>[r.children[0].textContent,r.children[1].textContent]));")
+        set_field = lambda name, value: d.js(f"const f=document.querySelector('{fig} [data-rquot-param={name}]');f.value='{value}';f.dispatchEvent(new Event('input'));")
+        action = lambda name: d.js(f"document.querySelector('{fig} [data-rquot-action={name}]').click();")
+
+        def static():
+            html = (self.root / page.strip('/') / 'index.html').read_text(encoding='utf-8')
+            for expected in ('Cas courant dans ℤ/4ℤ : [1] + [2] = [3] et [1] × [2] = [2]', 'elle ne démontre rien'):
+                assert expected in html, f'Texte initial absent du HTML compilé : {expected}'
+            self.open(page)
+            state = d.js(f"""const f=document.querySelector('{fig}');return {{
+              enabled:[...f.querySelectorAll('input,button')].every(e=>!e.disabled),
+              label:f.querySelector('svg').getAttribute('aria-labelledby'),
+              classes:f.querySelectorAll('svg .rquot-class').length,
+              addRows:f.querySelectorAll('[data-rquot-table=add] th[scope=row]').length,
+              mulRows:f.querySelectorAll('[data-rquot-table=mul] th[scope=row]').length,
+              addCurrent:f.querySelector('[data-rquot-table=add] td[aria-current=true]').textContent,
+              mulCurrent:f.querySelector('[data-rquot-table=mul] td[aria-current=true]').textContent}};""")
+            assert state['enabled'], state
+            assert state['classes'] == 4 and state['addRows'] == 4 and state['mulRows'] == 4, state
+            assert state['addCurrent'] == '[3]' and state['mulCurrent'] == '[2]', state
+            assert all(d.js('return !!document.getElementById(arguments[0]);', ref) for ref in state['label'].split()), state
+            return {'classes': state['classes']}
+        self.case('rquot-static', static)
+
+        def keyboard():
+            self.open(page)
+            d.js(f"document.querySelector('{fig} [data-rquot-param=n]').focus();")
+            d.key('\ue013'); time.sleep(0.1)  # Arrow up: n = 5
+            r = rows()
+            assert r['Modulo n'].startswith('n = 5 : 5 classes'), r
+            assert r['Produit des classes'].startswith('[1] × [2] = [2]'), r
+            assert r['Produits nuls'].startswith('aucun produit'), r
+            # Out-of-range values are clamped when the field is left.
+            d.js(f"const f=document.querySelector('{fig} [data-rquot-param=a]');f.focus();f.select();")
+            for ch in '99':
+                d.key(ch)
+            d.key('\ue004'); time.sleep(0.1)
+            a = d.js(f"return document.querySelector('{fig} [data-rquot-param=a]').value;")
+            assert a == '20' and rows()['Représentants'] == 'a = 20 ; b = 2', (a, rows())
+            return {'arrowKeys': True, 'clamped': a}
+        self.case('rquot-keyboard', keyboard)
+
+        def buttons():
+            self.open(page)
+            up = f"document.querySelector('{fig} [data-rquot-action=a-up]')"
+            d.js(up + ".focus();")
+            for _ in range(7):
+                d.key('\ue007')  # Enter: 1 + 4k, stops at 17 (21 is out of bounds)
+            time.sleep(0.1)
+            assert rows()['Représentants'] == 'a = 17 ; b = 2', rows()
+            assert d.js('return ' + up + ".getAttribute('aria-disabled');") == 'true'
+            assert d.js(f"return document.activeElement === {up};"), 'Le focus doit rester sur le bouton indisponible'
+            action('b-down'); action('b-down'); action('b-down')
+            assert rows()['Représentants'] == 'a = 17 ; b = −10', rows()
+            assert rows()['Produit avant réduction'] == 'a × b = 17 × (−10) = −170', rows()
+            assert rows()['Reste de ab'] == '−170 = (−43) × 4 + 2', rows()
+            assert rows()['Produit des classes'].startswith('[1] × [2] = [2]'), rows()
+            assert rows()['Produits nuls'].startswith('[2] × [2] = [0]'), rows()
+            action('reset')
+            assert rows()['Représentants'] == 'a = 1 ; b = 2', rows()
+            set_field('n', '8'); set_field('a', '-20'); set_field('b', '-20')
+            assert rows()['Reste de ab'] == '400 = 50 × 8 + 0', rows()
+            assert d.js(f"return document.querySelector('{fig} [data-rquot-action=a-down]').getAttribute('aria-disabled');") == 'true'
+            return {'bound': True, 'reset': True}
+        self.case('rquot-buttons', buttons)
+
+    # ---------- Polynomial figure (lesson « Polynômes, division & racines ») ----------
+    def poly(self):
+        d = self.d
+        page = '/cours/polynomes-division-racines/'
+        fig = '#figure-polynome'
+        status = lambda: d.js(f"return document.querySelector('{fig} [data-poly-status]').textContent;")
+        rows = lambda: d.js(f"return Object.fromEntries([...document.querySelectorAll('{fig} [data-poly-rows] > div')].map(r=>[r.children[0].textContent,r.children[1].textContent]));")
+        set_field = lambda name, value: d.js(f"const f=document.querySelector('{fig} [data-poly-param={name}]');f.value='{value}';f.dispatchEvent(new Event('input'));")
+        action = lambda name: d.js(f"document.querySelector('{fig} [data-poly-action={name}]').click();")
+
+        def static():
+            html = (self.root / page.strip('/') / 'index.html').read_text(encoding='utf-8')
+            for expected in ('X³ − 1 = (X − 1) × (X² + X + 1) + 0', 'ces essais ne démontrent rien'):
+                assert expected in html, f'Texte initial absent du HTML compilé : {expected}'
+            self.open(page)
+            state = d.js(f"""const f=document.querySelector('{fig}');return {{
+              enabled:[...f.querySelectorAll('input,button')].every(e=>!e.disabled),
+              label:f.querySelector('svg').getAttribute('aria-labelledby'),
+              dots:f.querySelectorAll('svg .fig-dot').length,
+              table:f.querySelectorAll('[data-poly-table] tr').length}};""")
+            assert state['enabled'], state
+            assert state['dots'] == 9 and state['table'] == 9, state
+            assert all(d.js('return !!document.getElementById(arguments[0]);', ref) for ref in state['label'].split()), state
+            return {'dots': state['dots']}
+        self.case('poly-static', static)
+
+        def keyboard():
+            self.open(page)
+            d.js(f"document.querySelector('{fig} [data-poly-param=c2]').focus();")
+            d.key('\ue013'); time.sleep(0.1)  # Arrow up: c2 = 1, P = X³ + X² − 1
+            r = rows()
+            assert r['Reste R'] == '1' and r['Valeur P(1)'] == '1', r
+            d.js(f"document.querySelector('{fig} [data-poly-param=a]').focus();")
+            d.key('\ue015'); time.sleep(0.1)  # Arrow down: a = 0
+            r = rows()
+            assert r['Quotient Q'] == 'X² + X' and r['Reste R'] == '−1' and r['Valeur P(0)'] == '−1', r
+            # Out-of-range values are clamped when the field is left.
+            d.js(f"const f=document.querySelector('{fig} [data-poly-param=a]');f.focus();f.select();")
+            for ch in '99':
+                d.key(ch)
+            d.key('\ue004'); time.sleep(0.1)
+            a = d.js(f"return document.querySelector('{fig} [data-poly-param=a]').value;")
+            assert a == '3' and rows()['Paramètres'].endswith('a = 3'), (a, rows())
+            return {'arrowKeys': True, 'clamped': a}
+        self.case('poly-keyboard', keyboard)
+
+        def buttons():
+            self.open(page)
+            up = f"document.querySelector('{fig} [data-poly-action=c0-up]')"
+            d.js(up + ".focus();")
+            for _ in range(7):
+                d.key('\ue007')  # Enter: stops at the bound c0 = 3
+            time.sleep(0.1)
+            assert rows()['Polynôme P'] == 'X³ + 3', rows()
+            assert d.js('return ' + up + ".getAttribute('aria-disabled');") == 'true'
+            assert d.js(f"return document.activeElement === {up};"), 'Le focus doit rester sur le bouton indisponible'
+            action('a-down'); action('a-down')  # a = −1: P(−1) = 2
+            assert rows()['Reste R'] == '2', rows()
+            action('reset')
+            assert rows()['Reste R'] == '0' and rows()['Polynôme P'] == 'X³ − 1', rows()
+            set_field('c0', '2'); set_field('a', '-1')
+            assert 'ne démontrent rien' in status(), status()
+            return {'reset': True}
+        self.case('poly-buttons', buttons)
+
+    # ---------- Irreducible figure (lesson « Polynômes irréductibles & racines ») ----------
+    def irred(self):
+        d = self.d
+        page = '/cours/irreductibilite-polynomes/'
+        fig = '#figure-irreductible'
+        status = lambda: d.js(f"return document.querySelector('{fig} [data-irred-status]').textContent;")
+        rows = lambda: d.js(f"return Object.fromEntries([...document.querySelectorAll('{fig} [data-irred-rows] > div')].map(r=>[r.children[0].textContent,r.children[1].textContent]));")
+        pick = lambda name, value: d.js(f"document.querySelector('{fig} [data-irred-choice={name}][value=\"{value}\"]').click();")
+
+        def static():
+            html = (self.root / page.strip('/') / 'index.html').read_text(encoding='utf-8')
+            for expected in ('X² + X + 1 sur ℤ/2ℤ : P(0) = 1, P(1) = 1', 'ne démontre rien'):
+                assert expected in html, f'Texte initial absent du HTML compilé : {expected}'
+            self.open(page)
+            state = d.js(f"""const f=document.querySelector('{fig}');return {{
+              enabled:[...f.querySelectorAll('input,button')].every(e=>!e.disabled),
+              label:f.querySelector('svg').getAttribute('aria-labelledby'),
+              radios:f.querySelectorAll('input[type=radio]').length,
+              rowHeads:f.querySelectorAll('[data-irred-table] th[scope=row]').length,
+              current:f.querySelector('[data-irred-table] tr[aria-current=true]').getAttribute('data-irred-row')}};""")
+            assert state['enabled'], state
+            assert state['radios'] == 6 and state['rowHeads'] == 8, state
+            assert state['current'] == '2-1-1', state
+            assert all(d.js('return !!document.getElementById(arguments[0]);', ref) for ref in state['label'].split()), state
+            return {'radios': state['radios']}
+        self.case('irred-static', static)
+
+        def keyboard():
+            self.open(page)
+            d.js(f"document.querySelector('{fig} [data-irred-choice=degree][value=\"2\"]').focus();")
+            d.key('\ue014'); time.sleep(0.1)  # Arrow right: degree 3
+            r = rows()
+            assert r['Degré'] == '3', r
+            assert 'X³ + X + 1' in r['Polynôme'], r
+            d.js(f"document.querySelector('{fig} [data-irred-choice=c][value=\"1\"]').focus();")
+            d.key('\ue012'); time.sleep(0.1)  # Arrow left: c = 0
+            r = rows()
+            # X³ + X sur ℤ/2ℤ : P(0) = 0 et P(1) = 1 + 1 = 0 (les deux éléments sont racines).
+            assert r['Racines dans ℤ/2ℤ'] == '0 et 1', r
+            assert 'réductible' in status(), status()
+            return {'arrowKeys': True}
+        self.case('irred-keyboard', keyboard)
+
+        def buttons():
+            self.open(page)
+            reset = f"document.querySelector('{fig} [data-irred-reset]')"
+            assert d.js('return ' + reset + ".getAttribute('aria-disabled');") == 'true'
+            pick('b', 0)
+            assert rows()['Évaluation en 1'].endswith('= 2, soit 0 modulo 2'), rows()
+            assert rows()['Racines dans ℤ/2ℤ'] == '1', rows()
+            assert d.js('return ' + reset + ".getAttribute('aria-disabled');") == 'false'
+            pick('c', 0)
+            # X² sur ℤ/2ℤ : P(0) = 0 et P(1) = 1 (0 seul est racine).
+            assert rows()['Racines dans ℤ/2ℤ'] == '0', rows()
+            d.js(reset + '.click();')
+            assert 'est irréductible' in status(), status()
+            assert d.js('return ' + reset + ".getAttribute('aria-disabled');") == 'true'
+            return {'reset': True}
+        self.case('irred-buttons', buttons)
+
+    # ---------- Field figure (lesson « Corps finis & polynômes irréductibles ») ----------
+    def field(self):
+        d = self.d
+        page = '/cours/corps-finis/'
+        fig = '#figure-corps-fini'
+        status = lambda: d.js(f"return document.querySelector('{fig} [data-field-status]').textContent;")
+        rows = lambda: d.js(f"return Object.fromEntries([...document.querySelectorAll('{fig} [data-field-rows] > div')].map(r=>[r.children[0].textContent,r.children[1].textContent]));")
+        choose = lambda name, value: d.js(f"const s=document.querySelector('{fig} [data-field-select={name}]');s.value='{value}';s.dispatchEvent(new Event('change'));")
+
+        def static():
+            html = (self.root / page.strip('/') / 'index.html').read_text(encoding='utf-8')
+            for expected in ('α × (α + 1) = 1', 'elle ne démontre rien'):
+                assert expected in html, f'Texte initial absent du HTML compilé : {expected}'
+            self.open(page)
+            state = d.js(f"""const f=document.querySelector('{fig}');return {{
+              enabled:[...f.querySelectorAll('select,button')].every(e=>!e.disabled),
+              label:f.querySelector('svg').getAttribute('aria-labelledby'),
+              boxes:f.querySelectorAll('svg .fig-class').length,
+              tables:f.querySelectorAll('[data-field-table]').length,
+              rowHeads:f.querySelectorAll('[data-field-table] th[scope=row]').length,
+              current:[...f.querySelectorAll('td[aria-current=true]')].map(c=>c.textContent)}};""")
+            assert state['enabled'], state
+            assert state['boxes'] == 4 and state['tables'] == 2 and state['rowHeads'] == 8, state
+            assert state['current'] == ['1', '1'], state
+            assert all(d.js('return !!document.getElementById(arguments[0]);', ref) for ref in state['label'].split()), state
+            return {'boxes': state['boxes']}
+        self.case('field-static', static)
+
+        def keyboard():
+            self.open(page)
+            d.js(f"document.querySelector('{fig} [data-field-select=op]').focus();")
+            d.key('\ue015'); time.sleep(0.1)  # Arrow down: multiplication -> addition
+            r = rows()
+            assert r['Résultat'] == 'α + (α + 1) = 1', r
+            d.js(f"document.querySelector('{fig} [data-field-select=x]').focus();")
+            d.key('\ue013'); time.sleep(0.1)  # Arrow up: x = α -> 1
+            assert rows()['Opérandes'] == 'x = 1 ; y = α + 1', rows()
+            return {'arrowKeys': True}
+        self.case('field-keyboard', keyboard)
+
+        def buttons():
+            self.open(page)
+            reset = f"document.querySelector('{fig} [data-field-reset]')"
+            assert d.js('return ' + reset + ".getAttribute('aria-disabled');") == 'true'
+            choose('op', 'mul'); choose('x', '11'); choose('y', '11')
+            r = rows()
+            assert r['Résultat'] == '(α + 1) × (α + 1) = α', r
+            assert r['Réduction par α² = α + 1'] == 'α² est remplacé par α + 1 : α² + 2α + 1 = 3α + 2', r
+            assert d.js('return ' + reset + ".getAttribute('aria-disabled');") == 'false'
+            d.js(reset + ".focus();"); d.key('\ue007'); time.sleep(0.1)  # Enter
+            assert rows()['Opérandes'] == 'x = α ; y = α + 1', rows()
+            assert d.js('return ' + reset + ".getAttribute('aria-disabled');") == 'true'
+            assert d.js(f"return document.activeElement === {reset};"), 'Le focus doit rester sur le bouton'
+            return {'reset': True}
+        self.case('field-buttons', buttons)
+
     def reduced(self):
         d = self.d
         self.open('/atlas/')
@@ -1204,6 +1590,12 @@ def main():
             checks.perm()
             checks.action()
             checks.lagrange()
+            checks.ring()
+            checks.ideal()
+            checks.rquot()
+            checks.poly()
+            checks.irred()
+            checks.field()
             checks.collect_errors()
         else:
             checks.atlas()
@@ -1218,6 +1610,12 @@ def main():
             checks.perm()
             checks.action()
             checks.lagrange()
+            checks.ring()
+            checks.ideal()
+            checks.rquot()
+            checks.poly()
+            checks.irred()
+            checks.field()
             checks.collect_errors()
             driver.close()
             driver.start(True)

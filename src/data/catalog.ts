@@ -20,6 +20,12 @@ export const lessons: readonly LessonEntry[] = [
   { id: 'permutations-cycles', title: 'Permutations & cycles', domain: 'Algèbre', status: 'validated', href: '/cours/permutations-cycles/', number: '08', visual: 'orbit' },
   { id: 'actions-orbites-stabilisateurs', title: 'Actions de groupes, orbites & stabilisateurs', domain: 'Algèbre', status: 'validated', href: '/cours/actions-orbites-stabilisateurs/', number: '09', visual: 'square' },
   { id: 'lagrange-conjugaison', title: 'Lagrange & conjugaison', domain: 'Algèbre', status: 'validated', href: '/cours/lagrange-conjugaison/', number: '10', visual: 'wave' },
+  { id: 'anneaux-corps', title: 'Anneaux & corps : deux opérations à la fois', domain: 'Algèbre', status: 'validated', href: '/cours/anneaux-corps/', number: '11', visual: 'orbit' },
+  { id: 'ideaux-multiples', title: 'Idéaux & multiples', domain: 'Algèbre', status: 'validated', href: '/cours/ideaux-multiples/', number: '12', visual: 'square' },
+  { id: 'anneaux-quotients-morphismes', title: 'Anneaux quotients & morphismes', domain: 'Algèbre', status: 'validated', href: '/cours/anneaux-quotients-morphismes/', number: '13', visual: 'wave' },
+  { id: 'polynomes-division-racines', title: 'Polynômes, division & racines', domain: 'Algèbre', status: 'validated', href: '/cours/polynomes-division-racines/', number: '14', visual: 'orbit' },
+  { id: 'irreductibilite-polynomes', title: 'Polynômes irréductibles & racines', domain: 'Algèbre', status: 'validated', href: '/cours/irreductibilite-polynomes/', number: '15', visual: 'square' },
+  { id: 'corps-finis', title: 'Corps finis & polynômes irréductibles', domain: 'Algèbre', status: 'validated', href: '/cours/corps-finis/', number: '16', visual: 'wave' },
 ];
 
 export function filterLessons(query: string, domain: string): readonly LessonEntry[] {

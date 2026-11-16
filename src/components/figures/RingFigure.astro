@@ -1,0 +1,76 @@
+---
+/**
+ * Interactive figure of the lesson « Anneaux & corps »: multiplication table
+ * of the classes modulo n (n from 2 to 12), two chosen remainders a and b, the
+ * selected cell, the invertible classes with their inverse and the pairs of
+ * non-zero classes with a zero product. The drawing, its text reading and the
+ * table are rendered at build time; src/scripts/ring-figures.ts makes the
+ * controls live. Usage in MDX: <RingFigure number="1" />
+ */
+import { RING_PRESET, LIMITS, ringReading, ringText } from '../../figures/ring';
+import { ringSvg, HEIGHT, WIDTH } from '../../figures/ring-svg';
+import '../../styles/figures.css';
+import '../../styles/figures-ring.css';
+
+interface Props { number?: string }
+const { number } = Astro.props;
+const id = 'figure-anneau';
+const state = { ...RING_PRESET };
+const reading = ringReading(state);
+const text = ringText(reading);
+const fields: [string, string, number, number][] = [
+  ['n', 'Modulo n (de 2 à 12)', LIMITS.n[0], LIMITS.n[1]],
+  ['a', `Reste a (de 0 à n − 1)`, 0, state.n - 1],
+  ['b', `Reste b (de 0 à n − 1)`, 0, state.n - 1],
+];
+---
+<figure class="plane-figure series-figure ring-figure" id={id} data-ring-figure aria-labelledby={`${id}-title`}>
+  <figcaption class="plane-figure-caption">
+    <span class="eyebrow">Figure{number && ` ${number}`} · interactive</span>
+    <span class="plane-figure-title" id={`${id}-title`}>Table de multiplication modulo n</span>
+  </figcaption>
+  <div class="plane-figure-layout">
+    <div class="plane-figure-stage">
+      <svg viewBox={`0 0 ${WIDTH} ${HEIGHT}`} role="img" aria-labelledby={`${id}-title ${id}-summary`} data-ring-svg set:html={ringSvg(reading)} />
+      <p class="plane-figure-hint" id={`${id}-summary`} data-ring-summary>
+        {text.summary} Cases orange : produit nul de deux restes non nuls ; cases vertes : produit égal à 1. Ligne de a et colonne de b légèrement teintées. La figure couvre seulement n de 2 à 12.
+      </p>
+    </div>
+    <div class="plane-figure-side">
+      <div class="plane-controls" role="group" aria-label="Modulo et restes">
+        {fields.map(([name, label, min, max]) => (
+          <label class="plane-field">
+            <span data-ring-label={name}>{label}</span>
+            <input type="number" inputmode="numeric" step="1" min={min} max={max} value={state[name as 'n' | 'a' | 'b']} data-ring-param={name} disabled />
+          </label>
+        ))}
+      </div>
+      <div class="plane-actions">
+        <button type="button" class="button secondary" data-ring-action="n-down" disabled>n − 1</button>
+        <button type="button" class="button secondary" data-ring-action="n-up" disabled>n + 1</button>
+        <button type="button" class="button primary" data-ring-action="reset" disabled>Remettre les valeurs initiales</button>
+      </div>
+      <dl class="plane-reading" data-ring-rows>
+        {text.rows.map(([term, value]) => <div><dt>{term}</dt><dd>{value}</dd></div>)}
+      </dl>
+      <p class="plane-status" id={`${id}-status`} role="status" aria-live="polite" data-ring-status>{text.status}</p>
+    </div>
+  </div>
+  <p class="series-table-caption" id={`${id}-table-caption`} data-ring-caption>{text.caption}</p>
+  <div class="table-scroll series-table ring-table" tabindex="0" role="region" aria-labelledby={`${id}-table-caption`}>
+    <table aria-labelledby={`${id}-table-caption`}>
+      <thead data-ring-head><tr><th scope="col">×</th>{text.head.map(label => <th scope="col">{label}</th>)}</tr></thead>
+      <tbody data-ring-table>
+        {text.body.map(({ header, cells }, i) => (
+          <tr><th scope="row">{header}</th>{cells.map((cell, j) => <td aria-current={i === text.current.row && j === text.current.col ? 'true' : undefined}>{cell}</td>)}</tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+  <p class="technical-note">Les calculs sont exacts (entiers). La figure illustre des cas finis, avec n de 2 à 12 : elle ne démontre rien et ne remplace pas les démonstrations de la leçon.</p>
+  <noscript><p class="technical-note">Activez JavaScript pour modifier la figure. La figure, ses valeurs initiales et la table restent lisibles.</p></noscript>
+</figure>
+<script>
+  import { initRingFigure } from '../../scripts/ring-figures';
+  document.querySelectorAll<HTMLElement>('[data-ring-figure]').forEach(initRingFigure);
+</script>

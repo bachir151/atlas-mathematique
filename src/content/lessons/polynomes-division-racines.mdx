@@ -1,0 +1,255 @@
+---
+title: "Polynômes, division & racines"
+heading:
+  lead: "Polynômes, division"
+  emphasis: "& racines."
+summary: "Construire les polynômes sur un corps, diviser avec reste et comprendre ce que révèle une racine."
+domain: "Algèbre"
+number: "14"
+breadcrumb: "Polynômes & racines"
+status: "validated"
+validation: "Décision de la direction du projet, 16 novembre 2026 (sujet, niveau, exercices, reconstruction et interaction retenus)"
+companion: false
+sections:
+  - { id: "exploration", label: "Exploration" }
+  - { id: "cours", label: "Le cours" }
+  - { id: "demonstration", label: "Démonstration" }
+  - { id: "preuve-integrale", label: "Preuve intégrale" }
+  - { id: "connexions", label: "Connexions" }
+  - { id: "exercices", label: "Exercices" }
+  - { id: "reconstruction", label: "À reconstruire" }
+---
+
+<CourseSection id="exploration" eyebrow="01 / Exploration" title="Que reste-t-il après une division ?">
+
+**Pour commencer :** savoir développer des expressions, calculer avec des fractions et connaître la division euclidienne des entiers. Nous utilisons la notion de corps : ses éléments s’additionnent et se multiplient comme des nombres, et tout élément non nul possède un inverse pour la multiplication. Voir la leçon sur les anneaux et les corps pour les axiomes. Le parcours vise une fin de lycée familière des preuves ou un début de licence.
+
+Divisons $X^3-1$ par $X-1$. L’identité
+
+$$
+X^3-1=(X-1)(X^2+X+1)
+$$
+
+montre que le reste est nul. Si nous remplaçons $X$ par $1$, les deux membres valent zéro. Essayons maintenant $X^2+1$ : en écrivant
+
+$$
+X^2+1=(X-1)(X+1)+2,
+$$
+
+nous trouvons le reste $2$, qui est aussi la valeur de $X^2+1$ en $1$. Est-ce toujours vrai ? Pourquoi peut-on être certain de trouver un quotient et un reste uniques ?
+
+<PolyFigure number="1" />
+
+Ces calculs suggèrent une règle ; ils ne prouvent pas qu’elle fonctionne pour tous les polynômes. Nous allons construire les objets et démontrer cette règle.
+
+</CourseSection>
+
+<CourseSection id="cours" eyebrow="02 / Le cours" title="Des coefficients au calcul formel">
+
+Dans toute la leçon, $K$ désigne un **corps commutatif**, avec $0\ne 1$. On peut penser à $\mathbb Q$ ou à $\mathbb R$. Les opérations et les inverses non nuls sont ceux de $K$.
+
+<Definition number="1" name="Polynôme et degré">
+
+Un **polynôme formel** sur $K$ est une suite de coefficients $(a_0,a_1,\ldots)$ dans $K$ dont seuls un nombre fini sont non nuls. On l’écrit
+
+$$
+P=a_0+a_1X+\cdots+a_nX^n.
+$$
+
+$X$ est une **indéterminée** : cette écriture désigne la suite de coefficients, pas une valeur choisie dans $K$. Deux polynômes sont égaux exactement lorsque tous leurs coefficients correspondants sont égaux. On peut ajouter des coefficients nuls à la fin de l’écriture.
+
+Si $P\ne 0$, son **degré** $\deg P$ est le plus grand indice $n$ tel que $a_n\ne 0$ ; $a_n$ est son coefficient dominant. Le polynôme nul n’a pas de degré entier ; pour simplifier les inégalités, nous convenons que $\deg 0=-\infty$, inférieur à tout entier, avec $-\infty+n=-\infty$.
+
+</Definition>
+
+On additionne coefficient par coefficient et on multiplie en distribuant les termes : le coefficient de $X^k$ dans $PQ$ est la somme des $a_i b_j$ pour $i+j=k$. Ces sommes sont finies. Avec ces opérations, les polynômes forment l’anneau commutatif $K[X]$, dont $1$ est le polynôme constant égal à $1$. Les propriétés d’anneau découlent de celles de $K$ et de la distributivité des sommes finies.
+
+<Theorem kind="Proposition" number="1" name="Degré d’un produit">
+
+Si $P,Q\in K[X]$ sont non nuls, alors $PQ\ne 0$ et $\deg(PQ)=\deg P+\deg Q$. Pour tous $P,Q$, on a aussi $\deg(P+Q)\leq\max(\deg P,\deg Q)$.
+
+</Theorem>
+
+**Preuve.** Si $P$ et $Q$ ont pour degrés $m,n$ et pour coefficients dominants $a_m,b_n$, le coefficient de $X^{m+n}$ dans $PQ$ est $a_m b_n$, non nul dans un corps : multiplier par l’inverse de $a_m$ montre que $a_m b_n=0$ imposerait $b_n=0$. Aucun terme de degré supérieur n’apparaît. Pour la somme, aucun coefficient au-delà du plus grand des deux degrés ne peut être non nul ; l’inégalité reste vraie si une somme ou un terme est nul.
+
+<Example name="Une somme peut perdre son terme dominant">
+
+Dans $\mathbb Q[X]$, $P=X^2+X$ et $Q=-X^2+1$ ont tous deux degré $2$, mais $P+Q=X+1$ est de degré $1$. L’inégalité pour une somme peut donc être stricte.
+
+</Example>
+
+<Theorem kind="Théorème" number="2" name="Division euclidienne dans K[X]">
+
+Pour tous $A,B\in K[X]$ avec $B\ne 0$, il existe un unique couple $(Q,R)$ de polynômes tel que
+
+$$
+A=BQ+R,\qquad R=0\ \text{ou}\ \deg R<\deg B.
+$$
+
+$Q$ est le **quotient** et $R$ le **reste** de la division de $A$ par $B$.
+
+</Theorem>
+
+La démonstration progressive et la preuve intégrale ci-dessous établissent l’existence et l’unicité. Si $B$ est constant non nul, le reste est nécessairement nul ; si $A=0$ ou si $\deg A<\deg B$, on peut prendre respectivement $(Q,R)=(0,0)$ ou $(0,A)$.
+
+<Definition number="2" name="Évaluation et racine">
+
+Pour $a\in K$ et $P=\sum_{i=0}^n a_iX^i$, la **valeur** de $P$ en $a$ est $P(a)=\sum_{i=0}^n a_i a^i$, où $a^0=1$, même si $a=0$. Un élément $a$ est une **racine** de $P$ si $P(a)=0$.
+
+Un polynôme $B$ **divise** $P$ s’il existe $Q\in K[X]$ tel que $P=BQ$.
+
+</Definition>
+
+L’évaluation respecte les sommes et les produits : $(P+Q)(a)=P(a)+Q(a)$ et $(PQ)(a)=P(a)Q(a)$. La première égalité suit de l’addition des coefficients, la seconde de la distributivité des sommes finies et de $a^i a^j=a^{i+j}$.
+
+<Theorem kind="Corollaire" number="3" name="Reste et racines">
+
+Pour $P\in K[X]$ et $a\in K$, le reste de la division de $P$ par $X-a$ est le polynôme constant $P(a)$. Ainsi $a$ est une racine de $P$ si et seulement si $X-a$ divise $P$. Un polynôme non nul de degré $n$ possède au plus $n$ racines distinctes dans $K$.
+
+</Theorem>
+
+**Preuve.** Le reste de la division par $X-a$ est nul ou de degré strictement inférieur à $1$ : c’est donc une constante $c$, éventuellement nulle. L’égalité $P=(X-a)Q+c$, évaluée en $a$, donne $P(a)=c$. Le reste est nul exactement quand $X-a$ divise $P$ : dans un sens c’est immédiat, dans l’autre l’unicité du reste l’impose.
+
+Pour la borne, raisonnons par récurrence sur $n$. Une constante non nulle n’a aucune racine. Si $P$ est de degré $n\geq 1$ et n’a aucune racine, la borne est immédiate. Sinon, choisissons une racine $a$ et écrivons $P=(X-a)Q$. La proposition 1 donne $\deg Q=n-1$. Toute autre racine $b\ne a$ vérifie $(b-a)Q(b)=0$ ; comme $b-a\ne 0$ dans le corps, $Q(b)=0$. Par récurrence $Q$ possède au plus $n-1$ racines distinctes, donc $P$ au plus $n$.
+
+<Remark name="Polynôme et fonction polynomiale">
+
+À $P$ correspond la fonction $a\mapsto P(a)$ sur $K$, mais il ne faut pas confondre les deux objets. Sur $\mathbb Z/2\mathbb Z$, les polynômes $X^2-X$ et $0$ sont distincts par leurs coefficients, alors qu’ils prennent les mêmes valeurs en $0$ et en $1$. Le premier a exactement deux racines dans ce corps et son degré est $2$ : cela ne contredit pas la borne. En revanche, sur un corps infini, deux polynômes qui ont la même fonction sont égaux : leur différence aurait sinon un nombre infini de racines, contraire au corollaire.
+
+</Remark>
+
+</CourseSection>
+
+<Proof eyebrow="03 / Démonstration" title="Pourquoi le procédé de division s’arrête-t-il ?" intro="Nous démontrons le théorème 2 pour un diviseur non nul sur un corps.">
+
+  <ProofStep title="Annuler le terme dominant" open>
+
+Notons $d=\deg B$ et $b$ son coefficient dominant, non nul. Si un reste provisoire $S$ a un degré $m\geq d$ et un coefficient dominant $s$, on soustrait $(s b^{-1})X^{m-d}B$. Son terme de degré $m$ est exactement celui de $S$ ; tous les termes de degré supérieur sont nuls. Le nouveau reste est nul ou de degré strictement inférieur à $m$.
+
+  </ProofStep>
+
+  <ProofStep title="Obtenir un reste assez petit">
+
+Partons de $S=A$ et d’un quotient provisoire nul. À chaque soustraction, ajoutons $(s b^{-1})X^{m-d}$ au quotient provisoire : l’égalité $A=BQ+S$ reste vraie. Les degrés successifs des restes non nuls diminuent strictement parmi les entiers naturels ; on ne peut donc pas poursuivre indéfiniment. On s’arrête avec $S=0$ ou $\deg S<d$. Cela construit le couple cherché, y compris lorsque le procédé ne commence pas.
+
+  </ProofStep>
+
+  <ProofStep title="Prouver que le couple est unique">
+
+Si $A=BQ+R=BQ'+R'$ avec les deux restes de degré inférieur à $d$ ou nuls, alors $B(Q-Q')=R'-R$. Si $Q-Q'\ne 0$, le membre gauche a degré $d+\deg(Q-Q')\geq d$, tandis que le membre droit est nul ou de degré strictement inférieur à $d$. C’est impossible. Donc $Q=Q'$, puis $R=R'$.
+
+  </ProofStep>
+
+  <FullProof slot="full">
+
+**Preuve intégrale du théorème 2.** Soient $A,B\in K[X]$, avec $B\ne 0$. Posons $d=\deg B$ et notons $b\ne 0$ son coefficient dominant. Comme $K$ est un corps, $b$ est inversible.
+
+Initialisons $Q=0$ et $S=A$, de sorte que $A=BQ+S$. Tant que $S\ne 0$ et $\deg S=m\geq d$, notons $s$ son coefficient dominant et posons $T=(s b^{-1})X^{m-d}$. Remplaçons simultanément $Q$ par $Q+T$ et $S$ par $S-TB$. L’égalité $A=BQ+S$ est conservée. Le coefficient de $X^m$ dans $TB$ vaut $s$, et aucun terme de degré supérieur n’apparaît ; le nouveau $S$ est donc nul ou de degré strictement inférieur à $m$.
+
+Les degrés des restes non nuls ainsi obtenus sont des entiers naturels strictement décroissants. Le procédé s’arrête donc après un nombre fini d’étapes, avec un reste nul ou de degré inférieur à $d$. L’égalité conservée fournit l’existence du quotient et du reste. Si le reste initial est déjà nul ou de degré inférieur à $d$, aucune étape n’est nécessaire.
+
+Pour l’unicité, supposons $A=BQ+R=BQ'+R'$, où chaque reste est nul ou de degré inférieur à $d$. Alors $B(Q-Q')=R'-R$. Si $Q-Q'\ne 0$, la proposition 1 donne au membre gauche le degré $d+\deg(Q-Q')$, au moins $d$. Par l’inégalité du degré d’une somme, $R'-R$ est nul ou de degré strictement inférieur à $d$ : contradiction. Ainsi $Q=Q'$, et l’égalité initiale donne $R=R'$. Le couple est unique.
+
+  </FullProof>
+
+</Proof>
+
+<CourseSection id="connexions" eyebrow="04 / Connexions" title="Le choix des coefficients compte">
+
+**Lien mathématique démontré.** La division des polynômes ressemble à celle des entiers : on écrit un dividende comme multiple du diviseur plus un reste plus petit. La mesure qui diminue est ici le degré, et non la valeur absolue. Cette ressemblance ne rend pas les deux algorithmes identiques : dans $K[X]$, l’inverse du coefficient dominant permet d’annuler un terme à chaque étape.
+
+Cette hypothèse intervient réellement. Dans $\mathbb Z[X]$, il n’existe pas de décomposition $X=2Q+R$ avec $R=0$ ou $\deg R<0$ : le reste devrait être nul et le coefficient de $X$ à droite serait pair, alors qu’il vaut $1$ à gauche. L’énoncé sur un corps ne s’étend donc pas ainsi à tous les anneaux de coefficients.
+
+</CourseSection>
+
+<CourseSection id="exercices" eyebrow="05 / Exercices" title="Diviser, évaluer, distinguer">
+
+Chaque correction est accessible directement. Les exercices 1 à 3 travaillent le parcours principal ; le dernier est un approfondissement.
+
+<Exercise number="1" name="Effectuer une division" level="Application">
+
+Dans $\mathbb Q[X]$, divisez $A=X^3+2X^2+1$ par $B=X+1$. Vérifiez votre résultat et calculez $A(-1)$.
+
+<Hint>
+
+Annulez successivement les termes dominants. Le reste est constant ; comparez-le à la valeur en $-1$.
+
+</Hint>
+
+<Solution>
+
+On obtient $Q=X^2+X-1$ et $R=2$. En effet, $(X+1)(X^2+X-1)+2=X^3+2X^2+1$. Le reste a degré $0<1$, donc l’unicité confirme le résultat. Enfin $A(-1)=-1+2+1=2$.
+
+</Solution>
+
+</Exercise>
+
+<Exercise number="2" name="Une racine et les autres" level="Raisonnement">
+
+Dans $\mathbb Q[X]$, montrez que $1$ est racine de $P=X^3-2X^2-X+2$, puis trouvez toutes ses racines rationnelles.
+
+<Hint>
+
+Divisez par $X-1$, puis reconnaissez une différence de carrés dans le quotient.
+
+</Hint>
+
+<Solution>
+
+$P(1)=1-2-1+2=0$. Une division donne $P=(X-1)(X^2-X-2)=(X-1)(X-2)(X+1)$. Les racines $1$, $2$ et $-1$ sont distinctes. Leur liste est complète : un produit dans un corps est nul seulement si l’un de ses facteurs est nul. Elle atteint aussi la borne de trois racines pour un polynôme de degré trois.
+
+</Solution>
+
+</Exercise>
+
+<Exercise number="3" name="Sur un corps à deux éléments" level="Raisonnement">
+
+Dans $K=\mathbb Z/2\mathbb Z$, comparez $P=X^2+X$ et le polynôme nul : sont-ils égaux comme polynômes ? Calculer leurs valeurs sur tous les éléments de $K$ contredit-il la borne sur les racines ?
+
+<Hint>
+
+Le corps comporte les classes $0$ et $1$, et $1+1=0$. Regardez aussi le coefficient de $X^2$.
+
+</Hint>
+
+<Solution>
+
+Les polynômes sont distincts : le coefficient de $X^2$ est $1$ pour $P$ et $0$ pour le polynôme nul. Pourtant $P(0)=0$ et $P(1)=1+1=0$, comme pour le polynôme nul. Le polynôme $P$ est non nul de degré $2$ et a deux racines distinctes : il respecte exactement la borne. Le polynôme nul, lui, a tout élément de $K$ pour racine et n’entre pas dans l’énoncé de la borne.
+
+</Solution>
+
+</Exercise>
+
+<Exercise number="4" name="Racine répétée" level="Approfondissement">
+
+Soient $P\ne 0$ dans $K[X]$ et $a\in K$ une racine. Montrez qu’il existe un unique entier $m\geq 1$ et un unique $Q\in K[X]$ tels que $P=(X-a)^mQ$ et $Q(a)\ne 0$. Calculez $m$ pour $P=(X-1)^2(X+2)$ dans $\mathbb Q[X]$.
+
+<Hint>
+
+Divisez tant que le quotient s’annule en $a$ ; son degré baisse à chaque fois. Pour l’unicité, comparez deux exposants et évaluez en $a$.
+
+</Hint>
+
+<Solution>
+
+La première division est exacte car $a$ est racine. Si le quotient s’annule encore en $a$, on recommence. Les quotients restent non nuls et leur degré diminue d’une unité à chaque division, par la proposition 1. Le procédé s’arrête donc avec $P=(X-a)^mQ$, $m\geq 1$ et $Q(a)\ne 0$.
+
+Supposons aussi $P=(X-a)^nT$ avec $T(a)\ne 0$. Si $m<n$, l’égalité et la règle des degrés impliquent l’intégrité de $K[X]$ ; on peut donc simplifier par $(X-a)^m$ et obtenir $Q=(X-a)^{n-m}T$, d’où $Q(a)=0$, contradiction. Le cas $n<m$ est symétrique. Ainsi $m=n$, et la même simplification donne $Q=T$. Ici, $Q=X+2$ après deux divisions et $Q(1)=3\ne 0$ dans $\mathbb Q$ : $m=2$. Cet entier est la **multiplicité** de la racine.
+
+</Solution>
+
+</Exercise>
+
+</CourseSection>
+
+<CourseSection id="reconstruction" eyebrow="06 / Reconstruction" title="Reconstruire le fil">
+
+Sans consulter les corrections, expliquez à une autre personne :
+
+1. Comment distinguer un polynôme de la fonction qu’il définit ? Donnez un exemple où cette distinction compte.
+2. Pourquoi le coefficient dominant d’un produit de deux polynômes non nuls est-il non nul sur un corps ?
+3. Quelle opération fait baisser le degré dans la division ? Pourquoi l’algorithme s’arrête-t-il et pourquoi le résultat est-il unique ?
+4. Comment passer du reste de la division par $X-a$ à la caractérisation des racines, puis à leur borne ?
+5. Où la preuve utilise-t-elle l’existence d’inverses dans le corps ? Que devient l’exemple de division par $2$ dans $\mathbb Z[X]$ ?
+
+</CourseSection>

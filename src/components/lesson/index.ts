@@ -23,8 +23,14 @@ import QuotientFigure from '../figures/QuotientFigure.astro';
 import PermutationFigure from '../figures/PermutationFigure.astro';
 import ActionFigure from '../figures/ActionFigure.astro';
 import LagrangeFigure from '../figures/LagrangeFigure.astro';
+import RingFigure from '../figures/RingFigure.astro';
+import IdealFigure from '../figures/IdealFigure.astro';
+import RingQuotientFigure from '../figures/RingQuotientFigure.astro';
+import PolyFigure from '../figures/PolyFigure.astro';
+import IrreducibleFigure from '../figures/IrreducibleFigure.astro';
+import FieldFigure from '../figures/FieldFigure.astro';
 
 export const lessonComponents = {
   CourseSection, Definition, Theorem, Example, Remark, Historical, Exercise, Hint, Solution,
-  Proof, ProofStep, FullProof, Formula, SquareExperiment, P5Experience, PlaneFigure, SeriesFigure, StepsFigure, CycleFigure, MorphismFigure, QuotientFigure, PermutationFigure, ActionFigure, LagrangeFigure,
+  Proof, ProofStep, FullProof, Formula, SquareExperiment, P5Experience, PlaneFigure, SeriesFigure, StepsFigure, CycleFigure, MorphismFigure, QuotientFigure, PermutationFigure, ActionFigure, LagrangeFigure, RingFigure, IdealFigure, RingQuotientFigure, PolyFigure, IrreducibleFigure, FieldFigure,
 };

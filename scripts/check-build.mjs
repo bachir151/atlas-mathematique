@@ -5,7 +5,7 @@ import { resolve } from 'node:path';
 import { JSDOM } from 'jsdom';
 
 const output = resolve('dist');
-const pages = ['index.html', 'atlas/index.html', 'bibliotheque/index.html', 'cours/groupes-rotations/index.html', 'cours/mediatrices-reflexions/index.html', 'cours/suites-geometriques-sommes-infinies/index.html', 'cours/sous-groupes-entiers/index.html', 'cours/groupes-cycliques/index.html', 'cours/morphismes-isomorphismes/index.html', 'cours/groupes-quotients/index.html', 'cours/permutations-cycles/index.html', 'cours/actions-orbites-stabilisateurs/index.html', 'cours/lagrange-conjugaison/index.html', 'experiences/p5/index.html', '404.html'];
+const pages = ['index.html', 'atlas/index.html', 'bibliotheque/index.html', 'cours/groupes-rotations/index.html', 'cours/mediatrices-reflexions/index.html', 'cours/suites-geometriques-sommes-infinies/index.html', 'cours/sous-groupes-entiers/index.html', 'cours/groupes-cycliques/index.html', 'cours/morphismes-isomorphismes/index.html', 'cours/groupes-quotients/index.html', 'cours/permutations-cycles/index.html', 'cours/actions-orbites-stabilisateurs/index.html', 'cours/lagrange-conjugaison/index.html', 'cours/anneaux-corps/index.html', 'cours/ideaux-multiples/index.html', 'cours/anneaux-quotients-morphismes/index.html', 'cours/polynomes-division-racines/index.html', 'cours/irreductibilite-polynomes/index.html', 'cours/corps-finis/index.html', 'experiences/p5/index.html', '404.html'];
 let references = 0;
 
 for (const page of pages) {
@@ -101,6 +101,51 @@ if (page.includes('actions-orbites-stabilisateurs')) {
       assert.equal(doc.querySelectorAll('#figure-lagrange-classes [data-lagr-table] tr').length, 4, 'Tableau des classes présent');
       assert.equal(doc.querySelectorAll('#figure-lagrange-conjugaison [data-lagr-table] tr').length, 8, 'Tableau des conjugués présent');
     }
+    if (page.includes('anneaux-corps')) {
+      assert.equal(doc.querySelectorAll('[data-ring-figure]').length, 1, 'Une figure interactive');
+      assert.match(doc.querySelector('[data-ring-status]').textContent, /Cas courant dans ℤ\/6ℤ : \[2\] × \[3\] = \[0\]/, 'Lecture textuelle de la figure sans JavaScript');
+      assert.match(doc.querySelector('[data-ring-status]').textContent, /pour n de 2 à 12 : elle ne démontre aucun critère général/, 'Plage finie annoncée et caractère exploratoire');
+      assert.equal(doc.querySelectorAll('[data-ring-table] tr').length, 6, 'Table de multiplication présente');
+      assert.equal(doc.querySelectorAll('[data-ring-head] th[scope="col"]').length, 7, 'En-têtes de colonnes');
+      assert.equal(doc.querySelectorAll('[data-ring-table] th[scope="row"]').length, 6, 'En-têtes de lignes');
+    }
+    if (page.includes('ideaux-multiples')) {
+      assert.equal(doc.querySelectorAll('[data-ideal-figure]').length, 1, 'Une figure interactive');
+      assert.match(doc.querySelector('[data-ideal-status]').textContent, /^Calcul sélectionné : 1 × 6 \+ \(−1\) × 4 = 2\./, 'Lecture textuelle de la figure sans JavaScript');
+      assert.match(doc.querySelector('[data-ideal-status]').textContent, /de −24 à 24, combinaisons calculées seulement pour u et v entre −5 et 5/, 'Plage finie annoncée');
+      assert.equal(doc.querySelectorAll('[data-ideal-table] tr').length, 49, 'Tableau des entiers présent');
+    }
+    if (page.includes('anneaux-quotients-morphismes')) {
+      assert.equal(doc.querySelectorAll('[data-rquot-figure]').length, 1, 'Une figure interactive');
+      assert.match(doc.querySelector('[data-rquot-status]').textContent, /Cas courant dans ℤ\/4ℤ : \[1\] \+ \[2\] = \[3\] et \[1\] × \[2\] = \[2\]/, 'Lecture textuelle de la figure sans JavaScript');
+      assert.match(doc.querySelector('[data-rquot-status]').textContent, /ne démontre rien/, 'Plage finie et caractère exploratoire annoncés');
+      assert.equal(doc.querySelectorAll('[data-rquot-table="add"] tr').length, 4, 'Table complète d’addition présente');
+      assert.equal(doc.querySelectorAll('[data-rquot-table="mul"] tr').length, 4, 'Table complète de multiplication présente');
+      assert.equal(doc.querySelectorAll('[data-rquot-head] th[scope="col"]').length, 10, 'En-têtes de colonnes des deux tables');
+      assert.equal(doc.querySelectorAll('[data-rquot-table] th[scope="row"]').length, 8, 'En-têtes de lignes des deux tables');
+    }
+    if (page.includes('polynomes-division-racines')) {
+      assert.equal(doc.querySelectorAll('[data-poly-figure]').length, 1, 'Une figure interactive');
+      assert.match(doc.querySelector('[data-poly-status]').textContent, /Quotient X² \+ X \+ 1, reste 0, P\(1\) = 0\./, 'Lecture textuelle de la figure sans JavaScript');
+      assert.match(doc.querySelector('[data-poly-status]').textContent, /entre −3 et 3\u00a0: ces essais ne démontrent rien/, 'Plage finie annoncée');
+      assert.equal(doc.querySelectorAll('[data-poly-table] tr').length, 9, 'Tableau des valeurs présent');
+    }
+    if (page.includes('irreductibilite-polynomes')) {
+      assert.equal(doc.querySelectorAll('[data-irred-figure]').length, 1, 'Une figure interactive');
+      assert.match(doc.querySelector('[data-irred-status]').textContent, /X² \+ X \+ 1 sur ℤ\/2ℤ : P\(0\) = 1, P\(1\) = 1, racines : aucune\./, 'Lecture textuelle de la figure sans JavaScript');
+      assert.match(doc.querySelector('[data-irred-figure]').textContent, /8 polynômes.*ne démontre rien/s, 'Plage finie annoncée');
+      assert.equal(doc.querySelectorAll('[data-irred-table] tr').length, 8, 'Tableau des 8 polynômes présent');
+      assert.equal(doc.querySelectorAll('[data-irred-table] th[scope="row"]').length, 8, 'En-têtes de lignes');
+      assert.equal(doc.querySelectorAll('[data-irred-figure] input[type="radio"]').length, 6, 'Trois groupes de boutons radio');
+    }
+    if (page.includes('corps-finis')) {
+      assert.equal(doc.querySelectorAll('[data-field-figure]').length, 1, 'Une figure interactive');
+      assert.match(doc.querySelector('[data-field-status]').textContent, /Cas courant dans F = 𝔽₂\[X\]\/\(X² \+ X \+ 1\) : α × \(α \+ 1\) = 1\./, 'Lecture textuelle de la figure sans JavaScript');
+      assert.match(doc.querySelector('[data-field-status]').textContent, /une seule opération entre deux des quatre éléments : elle ne démontre rien/, 'Plage finie annoncée');
+      assert.equal(doc.querySelectorAll('[data-field-table] tr').length, 8, 'Tables d’addition et de multiplication présentes');
+      assert.equal(doc.querySelectorAll('[data-field-figure] th[scope="col"]').length, 10, 'En-têtes de colonnes');
+      assert.equal(doc.querySelectorAll('[data-field-figure] th[scope="row"]').length, 8, 'En-têtes de lignes');
+    }
     if (page.includes('suites-geometriques')) {
       assert.equal(doc.querySelectorAll('[data-series-figure]').length, 2, 'Deux figures interactives');
       assert.ok([...doc.querySelectorAll('[data-series-status]')].every(status => status.textContent.trim()), 'Lecture textuelle des figures sans JavaScript');
@@ -108,7 +153,7 @@ if (page.includes('actions-orbites-stabilisateurs')) {
     }
   }
   if (page.startsWith('bibliotheque/')) {
-    assert.equal(doc.querySelectorAll('[data-lesson-id]').length, 10);
+    assert.equal(doc.querySelectorAll('[data-lesson-id]').length, 16);
     assert.deepEqual([...doc.querySelectorAll('select option')].map(option => option.textContent), ['Tous les domaines', 'Algèbre', 'Géométrie', 'Analyse']);
   }
   if (page.startsWith('atlas/')) {

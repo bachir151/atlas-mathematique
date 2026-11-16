@@ -1,0 +1,17 @@
+/* Own styles of <PolyFigure>; the shared figure styles live in figures.css. */
+[data-poly-svg] * { pointer-events: none; }
+
+.poly-figure .poly-stem { stroke: #33594b; stroke-opacity: .4; stroke-width: 1.2; stroke-dasharray: 3 3; }
+.poly-figure .poly-dot-root { fill: #fff; stroke: var(--green); stroke-width: 2; }
+.poly-figure .poly-dot-current { fill: var(--orange); }
+.poly-figure .poly-point-label { font: 600 14px var(--sans); fill: var(--ink); paint-order: stroke; stroke: #f4f6f0; stroke-width: 4px; }
+.poly-figure .plane-reading dd { overflow-wrap: anywhere; }
+.poly-figure .poly-controls { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.poly-figure .poly-table { max-height: none; overflow-x: auto; }
+.poly-figure .poly-table table { width: auto; min-width: 100%; text-align: center; }
+.poly-figure .poly-table th, .poly-figure .poly-table td { text-align: center; white-space: nowrap; padding: 6px 10px; }
+.poly-figure .poly-table td[aria-current="true"], .poly-figure .poly-table th[aria-current="true"] { outline: 2px solid var(--orange); outline-offset: -2px; font-weight: 700; }
+
+@media (max-width: 760px) {
+  .poly-figure .poly-point-label { font-size: 22px; }
+}

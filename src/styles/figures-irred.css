@@ -1,0 +1,33 @@
+/* Own styles of <IrreducibleFigure>; the shared figure styles live in figures.css. */
+[data-irred-svg] * { pointer-events: none; }
+
+.irred-figure .irred-controls { display: grid; grid-template-columns: minmax(0, 1fr); gap: 10px; }
+.irred-figure fieldset.plane-order { display: flex; flex-wrap: wrap; gap: 2px 18px; margin: 0; min-width: 0; }
+.irred-figure fieldset.plane-order legend { flex-basis: 100%; }
+.irred-figure .plane-order label { min-height: 44px; }
+.irred-figure .plane-order input { width: 24px; height: 24px; }
+.irred-figure .plane-order input:focus-visible { outline: 3px solid var(--orange); outline-offset: 2px; }
+.irred-figure .plane-order label:has(input:focus-visible) { outline: 2px solid var(--green); outline-offset: 2px; }
+.irred-figure .plane-figure-stage svg { max-width: 420px; }
+
+.irred-figure .irred-card { stroke-width: 1.6; }
+.irred-figure .irred-card-value { fill: var(--orange); fill-opacity: .12; stroke: var(--orange); }
+.irred-figure .irred-card-root { fill: var(--green); fill-opacity: .16; stroke: var(--green); stroke-width: 2.4; }
+.irred-figure .irred-value { font: 700 20px var(--sans); fill: var(--ink); }
+.irred-figure .irred-title { font-size: 19px; }
+.irred-figure .irred-verdict { font: 700 16px var(--sans); }
+.irred-figure .irred-verdict-yes { fill: var(--green); }
+.irred-figure .irred-verdict-no { fill: #8a4a12; }
+
+.irred-table { max-height: none; overflow-x: auto; overflow-y: auto; }
+.irred-table table { width: auto; min-width: 100%; text-align: center; }
+.irred-table th, .irred-table td { text-align: center; white-space: nowrap; padding: 6px 10px; }
+.irred-table thead th { position: sticky; top: 0; }
+.irred-table tbody tr[aria-current="true"] :is(th, td) { outline: 2px solid var(--orange); outline-offset: -2px; font-weight: 700; }
+
+@media (max-width: 760px) {
+  .irred-figure .irred-value { font-size: 24px; }
+  .irred-figure .irred-verdict { font-size: 20px; }
+  .irred-figure .irred-card + text.fig-axis-title,
+  .irred-figure .fig-axis-title { font-size: 14px; }
+}

@@ -1,0 +1,85 @@
+---
+/**
+ * Interactive figure of the lesson « Corps finis & polynômes irréductibles »:
+ * calculation table in the field with four elements F = 𝔽₂[X]/(X² + X + 1).
+ * The drawing, the text reading and the complete tables are rendered at build
+ * time; src/scripts/field-figures.ts makes the controls live.
+ * Usage in MDX: <FieldFigure number="1" />
+ */
+import { ELEMENTS, EXAMPLE, FIELD_NAME, FIELD_PRESET, OPS, RULE, code, fieldTable, fieldText, headers, name } from '../../figures/field';
+import { fieldSvg, HEIGHT, WIDTH } from '../../figures/field-svg';
+import '../../styles/figures.css';
+import '../../styles/figures-field.css';
+
+interface Props { number?: string }
+const { number } = Astro.props;
+const id = 'figure-corps-fini';
+const state = { ...FIELD_PRESET };
+const text = fieldText(state);
+const tables = (['add', 'mul'] as const).map(op => ({
+  op, title: op === 'add' ? 'Table d’addition' : 'Table de multiplication', symbol: op === 'add' ? '+' : '×', cells: fieldTable(op),
+}));
+const current = [ELEMENTS.findIndex(e => code(e) === code(state.x)), ELEMENTS.findIndex(e => code(e) === code(state.y))];
+---
+<figure class="plane-figure series-figure field-figure" id={id} data-field-figure aria-labelledby={`${id}-title`}>
+  <figcaption class="plane-figure-caption">
+    <span class="eyebrow">Figure{number && ` ${number}`} · interactive</span>
+    <span class="plane-figure-title" id={`${id}-title`}>Calcul dans le corps à quatre éléments</span>
+  </figcaption>
+  <div class="plane-figure-layout">
+    <div class="plane-figure-stage">
+      <svg viewBox={`0 0 ${WIDTH} ${HEIGHT}`} role="img" aria-labelledby={`${id}-title ${id}-status`} data-field-svg set:html={fieldSvg(state)} />
+      <p class="plane-figure-hint">
+        Dans F = {FIELD_NAME}, avec α = [X], les éléments sont 0, 1, α et α + 1 ; on réduit avec {RULE} et on compte les coefficients modulo 2. La figure ne couvre que ces quatre éléments.
+      </p>
+    </div>
+    <div class="plane-figure-side">
+      <div class="plane-controls" role="group" aria-label="Opérandes et opération">
+        {(['x', 'y'] as const).map(which => (
+          <label class="plane-field">
+            <span>{which === 'x' ? 'Opérande x' : 'Opérande y'}</span>
+            <select data-field-select={which} disabled>
+              {ELEMENTS.map(e => <option value={code(e)} selected={code(e) === code(state[which])}>{name(e)}</option>)}
+            </select>
+          </label>
+        ))}
+        <label class="plane-field">
+          <span>Opération</span>
+          <select data-field-select="op" disabled>
+            {OPS.map(op => <option value={op} selected={op === state.op}>{op === 'add' ? 'Addition' : 'Multiplication'}</option>)}
+          </select>
+        </label>
+      </div>
+      <div class="plane-actions">
+        <button type="button" class="button primary" data-field-reset aria-disabled="true" disabled>Remettre les valeurs initiales</button>
+      </div>
+      <dl class="plane-reading" data-field-rows>
+        {text.rows.map(([term, value]) => <div><dt>{term}</dt><dd>{value}</dd></div>)}
+      </dl>
+      <p class="plane-status" id={`${id}-status`} role="status" aria-live="polite" data-field-status>{text.status}</p>
+    </div>
+  </div>
+  <p class="series-table-caption" id={`${id}-tables-title`}>Tables complètes des opérations de F, toujours visibles : à l’intersection de la ligne x et de la colonne y figure le résultat. La case de l’opération courante est repérée.</p>
+  <div class="field-tables">
+    {tables.map(({ op, title, symbol, cells }) => (
+      <div class="table-scroll series-table field-table" tabindex="0" role="region" aria-labelledby={`${id}-table-${op}`}>
+        <table aria-labelledby={`${id}-table-${op}`}>
+          <caption class="series-table-caption" id={`${id}-table-${op}`}>{title}</caption>
+          <thead><tr><th scope="col">{symbol}</th>{headers.map(label => <th scope="col">{label}</th>)}</tr></thead>
+          <tbody data-field-table={op}>
+            {cells.map((line, i) => (
+              <tr><th scope="row">{headers[i]}</th>{line.map((value, j) => <td data-field-cell={`${i}${j}`} aria-current={i === current[0] && j === current[1] ? 'true' : undefined}>{headers[value]}</td>)}</tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    ))}
+  </div>
+  <p class="field-rule"><strong>Règle de réduction :</strong> {RULE}. <strong>Exemple détaillé :</strong> {EXAMPLE}</p>
+  <p class="technical-note">Les calculs sont exacts (entiers, puis coefficients modulo 2). La figure illustre des cas parmi les quatre éléments : elle ne démontre rien et ne remplace pas les démonstrations de la leçon.</p>
+  <noscript><p class="technical-note">Activez JavaScript pour modifier la figure. La figure, ses valeurs initiales et les tables restent lisibles.</p></noscript>
+</figure>
+<script>
+  import { initFieldFigure } from '../../scripts/field-figures';
+  document.querySelectorAll<HTMLElement>('[data-field-figure]').forEach(initFieldFigure);
+</script>

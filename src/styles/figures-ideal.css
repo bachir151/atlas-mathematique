@@ -1,0 +1,16 @@
+/* Own styles of <IdealFigure> (lesson « Idéaux & multiples »). */
+.ideal-figure .ideal-lane-label { font: 11px var(--sans); fill: #5c6158; }
+.ideal-figure .ideal-mark-a { fill: var(--green); }
+.ideal-figure .ideal-mark-b { fill: #2f5f8a; }
+.ideal-figure .ideal-mark-both { fill: var(--orange); stroke: #fff; stroke-width: .8; }
+.ideal-figure .ideal-mark-combo { fill: none; stroke: var(--ink); stroke-width: 1.6; stroke-linecap: round; }
+.ideal-figure .ideal-current { stroke: var(--ink); stroke-width: 1.2; stroke-dasharray: 3 3; }
+.ideal-figure .plane-field input[type="range"] { width: 100%; min-height: 24px; accent-color: var(--green); }
+.ideal-figure .plane-field input[type="range"]:focus-visible { outline: 3px solid var(--orange); outline-offset: 2px; }
+.ideal-figure .ideal-slider-value { font-variant-numeric: tabular-nums; }
+.ideal-figure .ideal-legend { margin-top: 8px; font-size: 13px; color: var(--muted); }
+.ideal-figure .series-table table { min-width: 560px; }
+@media (max-width: 560px) {
+  .ideal-figure .ideal-lane-label { font-size: 15px; }
+  .ideal-figure .fig-tick, .ideal-figure .fig-axis-title { font-size: 16px; }
+}

@@ -1,0 +1,205 @@
+---
+title: "Corps finis & polynômes irréductibles"
+heading:
+  lead: "Corps finis &"
+  emphasis: "polynômes irréductibles."
+summary: "Construire quatre éléments où tout élément non nul s’inverse, puis comprendre le rôle des polynômes irréductibles."
+domain: "Algèbre"
+number: "16"
+breadcrumb: "Corps finis"
+status: "validated"
+validation: "Décision de la direction du projet, 16 novembre 2026 (sujet, niveau, exercices, reconstruction et interaction retenus)"
+companion: false
+sections:
+  - { id: "exploration", label: "Exploration" }
+  - { id: "cours", label: "Le cours" }
+  - { id: "demonstration", label: "Démonstration" }
+  - { id: "preuve-integrale", label: "Preuve intégrale" }
+  - { id: "connexions", label: "Connexions" }
+  - { id: "exercices", label: "Exercices" }
+  - { id: "reconstruction", label: "À reconstruire" }
+---
+
+<CourseSection id="exploration" eyebrow="01 / Exploration" title="Peut-on diviser avec quatre éléments ?">
+
+**Pour commencer :** cette leçon utilise les corps, les polynômes et leur division euclidienne, les idéaux et les anneaux quotients, ainsi que l’irréductibilité et l’identité de Bézout pour les polynômes. Ces outils sont présentés dans les leçons consacrées à ces thèmes. Le théorème de Lagrange de la leçon 10 intervient dans une connexion facultative.
+
+Dans $\mathbb Z/4\mathbb Z$, la classe de $2$ est non nulle mais son carré est nul : elle ne peut donc pas avoir d’inverse. Quatre éléments suffisent-ils malgré tout à former un corps ?
+
+Partons de $\mathbb F_2=\mathbb Z/2\mathbb Z$, où $1+1=0$. Imaginons un nouvel élément $\alpha$ satisfaisant $\alpha^2=\alpha+1$. Alors
+
+$$
+\alpha(\alpha+1)=\alpha^2+\alpha=1.
+$$
+
+Les éléments $1$, $\alpha$ et $\alpha+1$ auraient chacun un inverse. Mais ces calculs ne prouvent pas encore que les quatre écritures $0,1,\alpha,\alpha+1$ désignent des éléments distincts, ni que toutes les règles d’un corps sont satisfaites. Pour construire l’objet, utilisons des classes de polynômes.
+
+</CourseSection>
+
+<CourseSection id="cours" eyebrow="02 / Le cours" title="Imposer une relation par un quotient">
+
+<Definition number="1" name="Corps fini et classe de polynômes">
+
+Un **corps fini** est un corps dont l’ensemble des éléments est fini. Ici les corps sont commutatifs et vérifient $1\ne 0$. Pour un corps $K$ et un polynôme non constant $f\in K[X]$, on note $(f)$ l’idéal des multiples de $f$ et $K[X]/(f)$ l’anneau quotient. La classe de $P\in K[X]$ est notée $[P]$ : deux polynômes ont la même classe exactement lorsque $f$ divise leur différence.
+
+Dans le quotient, $[f]=0$. En particulier, si $\alpha=[X]$, toute relation obtenue en remplaçant $X$ par $\alpha$ dans $f$ vaut zéro. Elle ne signifie pas que $X$ est une racine dans le corps de départ.
+
+</Definition>
+
+<Theorem kind="Théorème" number="1" name="Un quotient par un polynôme irréductible" id="theoreme-quotient-fini">
+
+Soient $K$ un corps fini à $q$ éléments et $f\in K[X]$ irréductible de degré $n\geq 1$. Alors $K[X]/(f)$ est un corps à $q^n$ éléments. Chaque classe possède un unique représentant de degré strictement inférieur à $n$, le polynôme nul étant inclus.
+
+</Theorem>
+
+La preuve ci-dessous construit l’inverse de chaque classe non nulle grâce à Bézout et compte les représentants. Le résultat reste vrai pour un corps $K$ infini, sauf pour l’affirmation de finitude et le comptage $q^n$.
+
+<Example name="Un corps à quatre éléments">
+
+Dans $\mathbb F_2[X]$, posons $f=X^2+X+1$. On a $f(0)=f(1)=1$. Un polynôme de degré deux sur un corps est irréductible s’il n’a pas de racine dans ce corps : en effet, une factorisation non triviale aurait deux facteurs de degré un et fournirait une racine. Ainsi $f$ est irréductible.
+
+Le théorème donne le corps $F=\mathbb F_2[X]/(f)$, à quatre éléments. Avec $\alpha=[X]$, ses éléments distincts sont $0,1,\alpha,\alpha+1$, et $\alpha^2+\alpha+1=0$, soit $\alpha^2=\alpha+1$. Les inverses des trois éléments non nuls sont respectivement $1$, $\alpha+1$ et $\alpha$. En particulier $\alpha^3=1$.
+
+Pour multiplier $(\alpha+1)$ par lui-même, on réduit avec la même relation : $(\alpha+1)^2=\alpha^2+1=\alpha$. L’addition des coefficients se fait modulo deux.
+
+<FieldFigure number="1" />
+
+</Example>
+
+<Remark name="Quatre éléments ne suffisent pas à déterminer les opérations">
+
+Le quotient $\mathbb Z/4\mathbb Z$ et le corps $F$ ont chacun quatre éléments, mais le premier n’est pas un corps : $[2]\ne 0$ et $[2]^2=0$. Dans un corps, si $ab=0$ et $a\ne 0$, multiplier par $a^{-1}$ donne $b=0$. Le nombre d’éléments seul ne permet donc pas de remplacer une table d’opérations par une autre.
+
+</Remark>
+
+<Example name="Ce qui échoue si le polynôme est réductible">
+
+Dans $\mathbb F_2[X]/(X^2+X)$, les classes de $X$ et de $X+1$ sont toutes deux non nulles : aucun de ces polynômes de degré un n’est divisible par $X^2+X$. Pourtant leur produit est nul, car $X(X+1)=X^2+X$. Ce quotient n’est pas un corps, bien qu’il possède lui aussi quatre classes représentées par les polynômes de degré inférieur à deux.
+
+</Example>
+
+</CourseSection>
+
+<Proof eyebrow="03 / Démonstration" title="Pourquoi le quotient est-il un corps ?" intro="Nous démontrons le théorème 1 en utilisant la division euclidienne et Bézout dans K[X].">
+
+  <ProofStep title="Choisir un représentant unique" open>
+
+La division euclidienne de $P$ par $f$ donne $P=Qf+R$ avec $R=0$ ou $\deg R<n$. Donc $[P]=[R]$. Si deux tels restes $R,S$ représentent la même classe, $f$ divise $R-S$. Or $R-S$ est nul ou de degré inférieur à $n$ ; un multiple non nul de $f$ a un degré au moins égal à $n$. Ainsi $R=S$.
+
+  </ProofStep>
+
+  <ProofStep title="Inverser une classe non nulle">
+
+Si $[P]\ne 0$, alors $f$ ne divise pas $P$. Comme $f$ est irréductible, tout diviseur commun de $P$ et $f$ est constant non nul : leur PGCD est $1$ à normalisation près. Bézout fournit $U,V\in K[X]$ tels que $UP+Vf=1$. Dans le quotient, $[U][P]=1$.
+
+  </ProofStep>
+
+  <ProofStep title="Compter les choix">
+
+Le quotient est un anneau commutatif unitaire et $[1]\ne 0$, puisque $f$ est non constant. L’étape précédente prouve que tout élément non nul est inversible : c’est donc un corps. Un représentant est de la forme $a_0+a_1X+\cdots+a_{n-1}X^{n-1}$, avec $q$ choix indépendants pour chacun des $n$ coefficients. Il y en a $q^n$, tous distincts par unicité.
+
+  </ProofStep>
+
+  <FullProof slot="full">
+
+**Preuve intégrale du théorème 1.** La division euclidienne dans $K[X]$ donne, pour chaque polynôme $P$, des polynômes $Q,R$ tels que $P=Qf+R$, avec $R=0$ ou $\deg R<n$. Ainsi $[P]=[R]$. Si $R$ et $S$ sont deux représentants de degré inférieur à $n$ de la même classe, alors $f$ divise $R-S$. Si cette différence était non nulle, son degré serait à la fois inférieur à $n$ et au moins égal à $\deg f=n$, contradiction. Donc $R=S$.
+
+L’anneau quotient est commutatif et unitaire. De plus $[1]\ne 0$, car le polynôme non constant $f$ ne divise pas $1$. Soit une classe non nulle $[P]$. Alors $f$ ne divise pas $P$. L’irréductibilité de $f$ implique que ses seuls diviseurs sont les constantes non nulles et ses associés ; aucun diviseur commun non constant de $f$ et $P$ ne peut donc exister. Leur PGCD unitaire est $1$. Par l’identité de Bézout, il existe $U,V\in K[X]$ tels que $UP+Vf=1$. En passant aux classes, $[U][P]=[1]$. Toute classe non nulle est donc inversible et le quotient est un corps.
+
+Enfin, ses éléments correspondent bijectivement aux $a_0+a_1X+\cdots+a_{n-1}X^{n-1}$, où chaque coefficient appartient à $K$. Les $n$ choix étant indépendants et chacun ayant $q$ possibilités, il y a exactement $q^n$ classes. Cela prouve aussi l’unicité annoncée des représentants.
+
+  </FullProof>
+
+</Proof>
+
+<CourseSection id="connexions" eyebrow="04 / Connexions" title="Du corps fini au groupe multiplicatif">
+
+**Lien mathématique démontré.** Dans tout corps fini $E$ à $q$ éléments, les éléments non nuls forment un groupe pour la multiplication : le produit de deux éléments non nuls est non nul, $1$ est neutre et chacun possède un inverse non nul. Ce groupe a $q-1$ éléments. Par le théorème de Lagrange de la leçon 10, pour tout $a\ne 0$, $a^{q-1}=1$. Pour $a=0$, on a aussi $a^q=a$ ; pour $a\ne 0$, multiplier l’égalité précédente par $a$ donne $a^q=a$.
+
+Dans notre corps à quatre éléments, cela donne $a^4=a$ pour chaque $a$ et $a^3=1$ pour chaque $a\ne 0$. La relation $\alpha^3=1$ calculée plus haut en est un cas particulier. Ce résultat ne dit pas que chaque élément non nul est d’ordre $q-1$.
+
+</CourseSection>
+
+<CourseSection id="exercices" eyebrow="05 / Exercices" title="Calculer, construire et éprouver les hypothèses">
+
+<Exercise number="1" name="Calculer dans le corps à quatre éléments" level="Découverte" id="exercice-quatre">
+
+Dans $F$, calculez $(\alpha+1)+\alpha$, $\alpha(\alpha+1)$ et $(\alpha+1)^2$. Résolvez $\alpha x=1$.
+
+<Hint>
+
+Utilisez $1+1=0$ et $\alpha^2=\alpha+1$.
+
+</Hint>
+
+<Solution>
+
+La somme vaut $1$. Le produit vaut $\alpha^2+\alpha=1$ et le carré vaut $\alpha^2+1=\alpha$. Ainsi $x=\alpha+1$ convient ; il est unique car $\alpha$ est inversible.
+
+</Solution>
+
+</Exercise>
+
+<Exercise number="2" name="Un autre quotient" level="Application" id="exercice-neuf">
+
+Dans $\mathbb F_3=\mathbb Z/3\mathbb Z$, montrez que $X^2+1$ est irréductible. Combien d’éléments possède le quotient correspondant ? Si $\beta=[X]$, calculez l’inverse de $\beta+1$.
+
+<Hint>
+
+Testez les trois racines possibles, puis cherchez un produit constant en utilisant $\beta^2=-1$.
+
+</Hint>
+
+<Solution>
+
+Les valeurs de $X^2+1$ en $0,1,2$ sont respectivement $1,2,2$ dans $\mathbb F_3$. Ce polynôme de degré deux n’a donc pas de racine et est irréductible. Le quotient est un corps à $3^2=9$ éléments. Comme $(\beta+1)(1-\beta)=1-\beta^2=2$ et que l’inverse de $2$ dans $\mathbb F_3$ est $2$, l’inverse cherché est $2(1-\beta)=2+\beta$.
+
+</Solution>
+
+</Exercise>
+
+<Exercise number="3" name="Tester la réciproque dans un cas" level="Raisonnement" id="exercice-reductible">
+
+Soit $f=gh$ dans $K[X]$, où $K$ est un corps et où $g$ et $h$ sont de degré strictement positif. Montrez que $K[X]/(f)$ n’est pas un corps.
+
+<Hint>
+
+Montrez que les classes de $g$ et $h$ sont non nulles, puis multipliez-les.
+
+</Hint>
+
+<Solution>
+
+On a $\deg f=\deg g+\deg h$, donc les degrés de $g$ et $h$ sont strictement inférieurs à celui de $f$. Aucun n’est divisible par $f$ ; leurs classes sont donc non nulles. Leur produit est $[gh]=[f]=0$. Un corps ne possède pas de diviseurs de zéro non nuls, donc ce quotient n’est pas un corps.
+
+</Solution>
+
+</Exercise>
+
+<Exercise number="4" name="Ordre ou simple divisibilité ?" level="Approfondissement" id="exercice-ordre">
+
+Dans le corps $F$ à quatre éléments, déterminez l’ordre multiplicatif de chacun des éléments non nuls. Pourquoi $a^3=1$ ne suffit-il pas à affirmer que chacun est d’ordre trois ?
+
+<Hint>
+
+Examinez séparément l’élément neutre et les puissances de $\alpha$.
+
+</Hint>
+
+<Solution>
+
+L’ordre de $1$ est $1$. Comme $\alpha^2=\alpha+1$ et $\alpha^3=1$, les puissances $\alpha$ et $\alpha^2$ ne sont pas $1$ ; l’ordre de $\alpha$ est donc $3$. Pour $\alpha+1=\alpha^2$, son carré est $\alpha$ et son cube est $1$ ; son ordre est aussi $3$. L’égalité $a^3=1$ permet un ordre qui divise $3$, notamment $1$, comme le montre l’élément neutre.
+
+</Solution>
+
+</Exercise>
+
+</CourseSection>
+
+<CourseSection id="reconstruction" eyebrow="06 / Reconstruction" title="Reconstruire les quatre éléments">
+
+Sans regarder la preuve, expliquez pourquoi chaque classe possède un unique reste de degré inférieur à celui de $f$. Où l’irréductibilité intervient-elle dans la recherche d’un inverse ? Pourquoi le nombre de restes ne suffit-il pas à établir qu’on a un corps ?
+
+Construisez ensuite les quatre éléments de $\mathbb F_2[X]/(X^2+X+1)$, retrouvez leurs inverses et comparez avec $\mathbb Z/4\mathbb Z$. Enfin, expliquez ce que le théorème de Lagrange permet de conclure sur les puissances, sans confondre un exposant qui annule tous les éléments du groupe avec l’ordre de chacun.
+
+</CourseSection>

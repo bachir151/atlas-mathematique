@@ -1,0 +1,72 @@
+---
+/**
+ * Interactive figure of the lesson « Idéaux & multiples »: multiples of a and
+ * of b, common multiples and combinations u·a + v·b on the integers from −24
+ * to 24. The line, its text reading and the table are rendered at build time;
+ * src/scripts/ideal-figures.ts makes the controls live.
+ * Usage in MDX: <IdealFigure number="1" />
+ */
+import { COEFFICIENT_MAX, FIELDS, IDEAL_PRESET, LIMITS, idealReading, idealText, int, type IdealField } from '../../figures/ideal';
+import { idealSvg, HEIGHT, WIDTH } from '../../figures/ideal-svg';
+import '../../styles/figures.css';
+import '../../styles/figures-ideal.css';
+
+interface Props { number?: string }
+const { number } = Astro.props;
+const id = 'figure-ideal';
+const state = { ...IDEAL_PRESET };
+const reading = idealReading(state);
+const text = idealText(state, reading);
+const labels: Record<IdealField, string> = { a: 'Générateur a', b: 'Générateur b', u: 'Coefficient u', v: 'Coefficient v' };
+---
+<figure class="plane-figure series-figure ideal-figure" id={id} data-ideal-figure aria-labelledby={`${id}-title`}>
+  <figcaption class="plane-figure-caption">
+    <span class="eyebrow">Figure{number && ` ${number}`} · interactive</span>
+    <span class="plane-figure-title" id={`${id}-title`}>Multiples de a, multiples de b et combinaisons u a + v b</span>
+  </figcaption>
+  <div class="plane-figure-layout">
+    <div class="plane-figure-stage">
+      <svg viewBox={`0 0 ${WIDTH} ${HEIGHT}`} role="img" aria-labelledby={`${id}-title ${id}-status`} data-ideal-svg set:html={idealSvg(reading)} />
+      <p class="plane-figure-hint">
+        Quatre lignes : multiples de a (cercles), multiples de b (carrés), multiples communs (losanges) et combinaisons u a + v b (croix) pour u et v entiers entre −{COEFFICIENT_MAX} et {COEFFICIENT_MAX}. Seuls les entiers de −24 à 24 sont affichés ; la liste des combinaisons est bornée, elle peut omettre des éléments de l’idéal et ne prouve rien. La réunion des deux listes de multiples et la liste des combinaisons sont deux listes distinctes. Le trait pointillé marque le résultat du calcul sélectionné.
+      </p>
+    </div>
+    <div class="plane-figure-side">
+      <div class="plane-controls" role="group" aria-label="Générateurs et coefficients">
+        {FIELDS.map(name => name === 'a' || name === 'b' ? (
+          <label class="plane-field">
+            <span>{labels[name]}</span>
+            <input type="number" inputmode="numeric" step="1" min={LIMITS[name][0]} max={LIMITS[name][1]} value={state[name]} data-ideal-param={name} disabled />
+          </label>
+        ) : (
+          <label class="plane-field">
+            <span>{labels[name]} : <span class="ideal-slider-value" data-ideal-value={name}>{int(state[name])}</span></span>
+            <input type="range" step="1" min={LIMITS[name][0]} max={LIMITS[name][1]} value={state[name]} aria-valuetext={int(state[name])} data-ideal-param={name} disabled />
+          </label>
+        ))}
+      </div>
+      <div class="plane-actions">
+        <button type="button" class="button primary" data-ideal-action="reset" disabled>Revenir à a = 6, b = 4, u = 1 et v = −1</button>
+      </div>
+      <dl class="plane-reading" data-ideal-rows>
+        {text.rows.map(([term, value]) => <div><dt>{term}</dt><dd>{value}</dd></div>)}
+      </dl>
+      <p class="plane-status" id={`${id}-status`} role="status" aria-live="polite" data-ideal-status>{text.status}</p>
+    </div>
+  </div>
+  <p class="series-table-caption" id={`${id}-table-caption`}>Entiers de −24 à 24 : appartenance aux multiples de a, de b et aux deux, et combinaison u a + v b qui les atteint avec u et v entre −5 et 5 (|u| + |v| minimal)</p>
+  <div class="table-scroll series-table" tabindex="0" role="region" aria-labelledby={`${id}-table-caption`}>
+    <table aria-labelledby={`${id}-table-caption`}>
+      <thead><tr><th scope="col">Entier</th><th scope="col">Multiple de a</th><th scope="col">Multiple de b</th><th scope="col">Multiple des deux</th><th scope="col">Combinaison dans les bornes</th></tr></thead>
+      <tbody data-ideal-table>
+        {text.table.map(row => <tr>{row.map(cell => <td>{cell}</td>)}</tr>)}
+      </tbody>
+    </table>
+  </div>
+  <p class="technical-note">Les calculs sont exacts (entiers) ; les multiples de 0 se réduisent à 0. La figure explore des exemples : elle ne démontre rien et ne remplace pas les démonstrations de la leçon.</p>
+  <noscript><p class="technical-note">Activez JavaScript pour modifier la figure. La figure, ses valeurs initiales et le tableau restent lisibles.</p></noscript>
+</figure>
+<script>
+  import { initIdealFigure } from '../../scripts/ideal-figures';
+  document.querySelectorAll<HTMLElement>('[data-ideal-figure]').forEach(initIdealFigure);
+</script>

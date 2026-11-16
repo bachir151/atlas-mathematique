@@ -1,0 +1,19 @@
+/* Own styles of <RingQuotientFigure>; the shared figure styles live in figures.css. */
+[data-rquot-svg] *  { pointer-events: none; }
+
+.rquot-figure .rquot-class { fill: var(--green); fill-opacity: .06; stroke: var(--green); stroke-opacity: .5; stroke-width: 1.2; }
+.rquot-figure .rquot-class-marked { fill-opacity: .16; stroke-opacity: 1; stroke-width: 1.8; }
+.rquot-figure .rquot-class-result { fill: var(--orange); fill-opacity: .2; stroke: var(--orange); stroke-opacity: 1; stroke-width: 2.2; }
+.rquot-figure .rquot-label { font-size: 15px; }
+
+.rquot-tables { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr)); gap: 1rem; }
+.rquot-table { max-height: none; overflow-x: auto; overflow-y: auto; }
+.rquot-table table { width: auto; min-width: 100%; text-align: center; }
+.rquot-table th, .rquot-table td { text-align: center; white-space: nowrap; padding: 6px 10px; }
+.rquot-table thead th { position: sticky; top: 0; }
+.rquot-table tbody th { position: sticky; left: 0; background: var(--paper, #f4f6f0); }
+.rquot-table td[aria-current="true"] { outline: 2px solid var(--orange); outline-offset: -2px; font-weight: 700; }
+
+@media (max-width: 760px) {
+  .rquot-figure .rquot-label { font-size: 24px; }
+}

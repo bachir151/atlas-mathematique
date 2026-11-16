@@ -1,0 +1,188 @@
+---
+title: "Anneaux & corps : deux opérations à la fois"
+heading:
+  lead: "Anneaux & corps"
+  emphasis: "deux opérations à la fois."
+summary: "Additionner, multiplier et comprendre quand une division est possible, notamment dans les classes de restes."
+domain: "Algèbre"
+number: "11"
+breadcrumb: "Anneaux & corps"
+status: "validated"
+validation: "Décision de la direction du projet, 16 novembre 2026 (sujet, niveau, exercices, reconstruction et interaction retenus)"
+companion: false
+sections:
+  - { id: "exploration", label: "Exploration" }
+  - { id: "cours", label: "Le cours" }
+  - { id: "demonstration", label: "Démonstration" }
+  - { id: "preuve-integrale", label: "Preuve intégrale" }
+  - { id: "exercices", label: "Exercices" }
+  - { id: "reconstruction", label: "À reconstruire" }
+---
+
+<CourseSection id="exploration" eyebrow="01 / Exploration" title="Peut-on toujours diviser ?">
+
+**Pour commencer :** connaître les entiers, la divisibilité, les groupes et les classes de restes de la leçon sur les groupes quotients. Nous utilisons aussi le théorème de Bézout pour les entiers : deux entiers $a$ et $n$ ont un plus grand diviseur commun égal à $1$ si et seulement s’il existe des entiers $u,v$ tels que $au+nv=1$.
+
+Sur un cadran à six positions, additionner $4$ deux fois donne $2$, puis une troisième fois donne $0$. Ainsi, modulo $6$, multiplier la classe de $4$ par celle de $3$ donne $0$, bien que ni $4$ ni $3$ ne représente la classe de $0$. Essayez aussi de résoudre $2x=1$ et $5x=1$ modulo $6$. La seconde équation a la solution $x=5$ ; la première n’en a aucune parmi les six restes.
+
+<RingFigure number="1" />
+
+Ces essais suggèrent que les règles de calcul familières ont des limites. Un tableau fini permet de trouver des exemples, mais ne prouve pas à lui seul un critère valable pour tous les modules. Cherchons quelles propriétés distinguent les deux opérations et quand la multiplication peut être inversée.
+
+</CourseSection>
+
+<CourseSection id="cours" eyebrow="02 / Le cours" title="Additionner et multiplier dans un même ensemble">
+
+<Definition number="1" name="Anneau commutatif unitaire">
+
+Un **anneau commutatif unitaire** est un ensemble $A$ muni de deux lois internes, notées $+$ et $\cdot$, telles que :
+
+1. $(A,+)$ est un groupe commutatif, de neutre $0$ ;
+2. la multiplication est associative et commutative, et possède un neutre $1$ ;
+3. la multiplication est distributive sur l’addition : pour tous $a,b,c\in A$, $a(b+c)=ab+ac$.
+
+Nous écrivons souvent $ab$ pour $a\cdot b$. La distributivité à droite découle ici de la commutativité. Nous autorisons l’anneau réduit à un élément, où $0=1$ ; certaines conventions l’excluent. Dans cette leçon, le mot **anneau** signifie toujours anneau commutatif unitaire. Il existe aussi des anneaux non commutatifs, hors de ce cadre.
+
+</Definition>
+
+L’opposé additif de $a$ est noté $-a$ et $a-b$ signifie $a+(-b)$. Par distributivité, $a0=a(0+0)=a0+a0$ ; en ajoutant l’opposé de $a0$, on obtient $a0=0$. De même, $ab+a(-b)=a(b-b)=0$, donc $a(-b)=-(ab)$. Enfin $(-a)(-b)=ab$. Ces identités restent valables même en présence de diviseurs de zéro.
+
+<Definition number="2" name="Inverse et diviseur de zéro">
+
+Un élément $a\in A$ est **inversible** s’il existe $b\in A$ tel que $ab=1$. Cet élément $b$ est unique : si $ab=ac=1$, alors $b=b(ac)=(ba)c=c$. On le note $a^{-1}$. Un **diviseur de zéro** est un élément non nul $a$ pour lequel il existe un élément non nul $b$ tel que $ab=0$.
+
+Si $0\ne 1$, un élément inversible ne peut être un diviseur de zéro : de $ab=0$, multiplier par $a^{-1}$ donne $b=0$. Être non nul n’implique cependant pas être inversible : $2$ dans $\mathbb Z$ en est un exemple.
+
+</Definition>
+
+<Definition number="3" name="Anneau intègre et corps">
+
+Un anneau est **intègre** si $0\ne 1$ et s’il ne possède aucun diviseur de zéro. Un **corps** est ici un anneau tel que $0\ne 1$ et que chaque élément non nul soit inversible. Dans d’autres conventions, un corps peut désigner une structure dont la multiplication n’est pas commutative ; ici elle l’est toujours.
+
+Tout corps est intègre, puisque ses éléments non nuls sont inversibles. Dans un anneau intègre, $ab=ac$ et $a\ne 0$ impliquent $b=c$ : en effet $a(b-c)=0$, donc $b-c=0$. Dans un anneau quelconque, cette simplification peut échouer.
+
+</Definition>
+
+<Example name="Entiers et rationnels">
+
+Avec leurs opérations usuelles, $\mathbb Z$ et $\mathbb Q$ sont des anneaux ; leurs propriétés de calcul usuelles assurent les axiomes. L’anneau $\mathbb Z$ est intègre : un produit de deux entiers non nuls est non nul. Ses seuls éléments inversibles sont $1$ et $-1$, car $ab=1$ dans les entiers impose $|a||b|=1$. Il n’est donc pas un corps. En revanche $\mathbb Q$ est un corps : l’inverse du rationnel non nul $p/q$, avec $p,q\in\mathbb Z$ et $pq\ne 0$, est $q/p$.
+
+</Example>
+
+<Example name="Deux opérations sur les classes de restes">
+
+Pour un entier $n\geq 2$, notons $\overline a$ la classe de $a$ dans $\mathbb Z/n\mathbb Z$. La leçon sur les groupes quotients construit l’addition $\overline a+\overline b=\overline{a+b}$. Définissons aussi $\overline a\,\overline b=\overline{ab}$. Cette formule ne dépend pas des représentants : si $a'=a+kn$ et $b'=b+\ell n$, alors $a'b'-ab=n(kb+\ell a+k\ell n)$. Les propriétés des opérations entières passent aux classes, et les neutres sont $\overline 0$ et $\overline 1$, distincts puisque $n\geq 2$. Nous obtenons un anneau.
+
+Dans $\mathbb Z/6\mathbb Z$, $\overline 2\,\overline 3=\overline 0$ : les deux facteurs sont des diviseurs de zéro. On ne peut donc pas simplifier $\overline 2\,\overline 3=\overline 2\,\overline 0$ par $\overline 2$. En revanche $\overline 5^2=\overline 1$, donc $\overline 5$ est inversible et son inverse est lui-même.
+
+</Example>
+
+<Theorem kind="Théorème" number="1" name="Inversibilité modulo un entier">
+
+Soient $n\geq 2$ et $a\in\mathbb Z$. La classe $\overline a$ est inversible dans $\mathbb Z/n\mathbb Z$ si et seulement si $\gcd(a,n)=1$. En conséquence, $\mathbb Z/n\mathbb Z$ est un corps si et seulement si $n$ est premier.
+
+</Theorem>
+
+Un entier $n\geq 2$ est premier si ses seuls diviseurs positifs sont $1$ et $n$. La preuve ci-dessous établit aussi la conséquence ; les essais de l’exploration ne constituent pas cette preuve.
+
+</CourseSection>
+
+<Proof eyebrow="03 / Démonstration" title="De l’inverse à Bézout, et retour" intro="Nous prouvons le critère et caractérisons les modules premiers.">
+
+  <ProofStep title="Un inverse fournit une combinaison égale à un" open>
+
+Si $\overline a$ est inversible, il existe un entier $b$ tel que $\overline{ab}=\overline 1$. Ainsi $n$ divise $ab-1$ : pour un entier $k$, $ab-1=kn$, soit $ab-kn=1$. Tout diviseur commun de $a$ et $n$ divise donc $1$ ; leur plus grand diviseur commun est $1$.
+
+  </ProofStep>
+
+  <ProofStep title="Bézout fournit un inverse">
+
+Si $\gcd(a,n)=1$, le théorème de Bézout fournit des entiers $u,v$ tels que $au+nv=1$. En passant aux classes, $\overline a\,\overline u=\overline 1$. La classe de $u$ est donc l’inverse cherché. Les deux implications donnent le critère.
+
+  </ProofStep>
+
+  <ProofStep title="Distinguer les modules premiers">
+
+Si $n$ est premier, chaque reste $a$ entre $1$ et $n-1$ est premier avec $n$ : un diviseur commun positif divise $n$ et ne peut être $n$. Chaque classe non nulle est donc inversible, et l’anneau est un corps.
+
+Si $n$ n’est pas premier, il possède un diviseur $d$ avec $1<d<n$. La classe $\overline d$ est non nulle, mais $\gcd(d,n)=d>1$ : elle n’est pas inversible. L’anneau n’est donc pas un corps.
+
+  </ProofStep>
+
+  <FullProof slot="full">
+
+**Preuve intégrale du théorème 1.** Soient $n\geq 2$ et $a\in\mathbb Z$. Si $\overline a$ est inversible, il existe un entier $b$ tel que $\overline{ab}=\overline 1$. Il existe donc $k\in\mathbb Z$ tel que $ab-1=kn$, soit $ab-kn=1$. Tout diviseur commun de $a$ et $n$ divise $1$, d’où $\gcd(a,n)=1$.
+
+Réciproquement, si $\gcd(a,n)=1$, le théorème de Bézout donne $u,v\in\mathbb Z$ tels que $au+nv=1$. Alors $\overline a\,\overline u=\overline 1$, donc $\overline a$ est inversible. Cela prouve l’équivalence.
+
+Si $n$ est premier, chaque classe non nulle possède un représentant $a$ entre $1$ et $n-1$. Tout diviseur commun positif de $a$ et $n$ est un diviseur de $n$, donc vaut $1$ ou $n$ ; il ne peut valoir $n$ puisque $0<a<n$. Ainsi $\gcd(a,n)=1$ et toute classe non nulle est inversible. Comme $\overline 0\ne\overline 1$, c’est un corps.
+
+Si $n$ n’est pas premier, il existe un diviseur positif $d$ de $n$ tel que $1<d<n$. La classe $\overline d$ est non nulle et $\gcd(d,n)=d>1$. Le critère montre qu’elle n’est pas inversible ; l’anneau n’est donc pas un corps. Les deux implications sont établies.
+
+  </FullProof>
+
+</Proof>
+
+<CourseSection id="exercices" eyebrow="04 / Exercices" title="Tester les règles et leurs limites">
+
+<Exercise number="1" name="Inverses modulo huit" level="Application" id="exercice-huit">
+
+Dans $\mathbb Z/8\mathbb Z$, trouvez tous les éléments inversibles et leur inverse. Donnez un produit nul de deux éléments non nuls.
+
+<Hint>
+
+Utilisez le critère, puis calculez les carrés des restes impairs modulo $8$.
+
+</Hint>
+
+<Solution>
+
+Les restes premiers avec $8$ sont $1,3,5,7$. Leurs carrés valent respectivement $1,9,25,49$, tous congrus à $1$ modulo $8$ : chacun est son propre inverse. Par ailleurs $\overline 2\,\overline 4=\overline 0$, avec deux facteurs non nuls.
+
+</Solution>
+
+</Exercise>
+
+<Exercise number="2" name="Résoudre sans simplification abusive" level="Raisonnement" id="exercice-equation">
+
+Résolvez $\overline 2x=\overline 4$ dans $\mathbb Z/6\mathbb Z$. Pourquoi ne peut-on pas multiplier par l’inverse de $\overline 2$ ?
+
+<Hint>
+
+Testez les six représentants, ou traduisez l’équation par une divisibilité dans $\mathbb Z$.
+
+</Hint>
+
+<Solution>
+
+Pour $x=\overline k$, l’équation équivaut à $6\mid 2k-4$, donc à $3\mid k-2$. Parmi $0,1,2,3,4,5$, cela donne $k=2$ ou $k=5$. Les solutions sont $\overline 2$ et $\overline 5$. Or $\gcd(2,6)=2$, donc $\overline 2$ n’a pas d’inverse ; ses deux solutions illustrent aussi l’échec de la simplification.
+
+</Solution>
+
+</Exercise>
+
+<Exercise number="3" name="Un anneau intègre fini" level="Approfondissement — début de licence" id="exercice-fini">
+
+Montrez que tout anneau intègre fini est un corps. Où utilisez-vous la finitude ?
+
+<Hint>
+
+Pour $a\ne 0$, étudiez l’application $x\mapsto ax$ et utilisez la simplification dans un anneau intègre.
+
+</Hint>
+
+<Solution>
+
+Soit $a\ne 0$. Si $ax=ay$, la simplification donne $x=y$ : l’application $x\mapsto ax$ de l’anneau dans lui-même est injective. Comme l’ensemble est fini, elle est surjective : ses images sont aussi nombreuses que ses éléments et appartiennent toutes à cet ensemble. Il existe donc $b$ tel que $ab=1$. Tout élément non nul est inversible et $0\ne 1$ par définition d’un anneau intègre : c’est un corps. La finitude intervient dans le passage de l’injectivité à la surjectivité. Sans elle, $\mathbb Z$ est un contre-exemple.
+
+</Solution>
+
+</Exercise>
+
+</CourseSection>
+
+<CourseSection id="reconstruction" eyebrow="05 / Reconstruction" title="Reconstruire les distinctions">
+
+Sans consulter les définitions, expliquez quelles propriétés chaque opération doit vérifier et où intervient la distributivité. Retrouvez ensuite pourquoi $a0=0$, puis distinguez élément non nul, élément inversible et diviseur de zéro. Construisez un exemple où la simplification échoue. Enfin, partez de Bézout pour retrouver le critère modulo $n$, et expliquez pourquoi les nombres premiers donnent exactement les corps de cette forme.
+
+</CourseSection>
