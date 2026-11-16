@@ -1,0 +1,272 @@
+---
+title: "Endomorphismes, matrices & valeurs propres"
+heading:
+  lead: "Endomorphismes & matrices"
+  emphasis: "des directions qui résistent."
+summary: "Décrire une transformation linéaire dans une base, puis chercher les vecteurs dont elle conserve la direction."
+domain: "Algèbre"
+number: "19"
+breadcrumb: "Endomorphismes"
+status: "draft"
+companion: false
+sections:
+  - { id: "exploration", label: "Exploration" }
+  - { id: "cours", label: "Le cours" }
+  - { id: "demonstration", label: "Démonstration" }
+  - { id: "preuve-integrale", label: "Preuve intégrale" }
+  - { id: "connexions", label: "Connexions" }
+  - { id: "exercices", label: "Exercices" }
+  - { id: "reconstruction", label: "À reconstruire" }
+---
+
+<CourseSection id="exploration" eyebrow="01 / Exploration" title="Quelles directions une transformation conserve-t-elle ?">
+
+**Pour commencer :** nous utilisons les corps, les espaces vectoriels, les bases et les coordonnées ; voir les leçons sur les corps et sur les espaces vectoriels abstraits. Le parcours vise le début de licence. Une base permet d’écrire chaque vecteur de façon unique comme combinaison linéaire de ses éléments. Les calculs initiaux se font dans $\mathbb R^2$.
+
+Considérons la transformation $u(x,y)=(2x+y,y)$. Elle envoie $(1,0)$ sur $(2,0)$, mais $(0,1)$ sur $(1,1)$. Pour le premier vecteur, seule la longueur orientée change ; pour le second, la direction change aussi. Existe-t-il d’autres vecteurs non nuls dont l’image est un multiple d’eux-mêmes ?
+
+Sur une feuille, calculez les images de $(1,1)$, $(-1,1)$ et $(3,0)$. Puis cherchez les réels $\lambda,x,y$ tels que $(x,y)\ne(0,0)$ et $(2x+y,y)=\lambda(x,y)$. Les essais suggèrent des réponses ; ils ne suffisent pas à exclure toutes les autres possibilités.
+
+</CourseSection>
+
+<CourseSection id="cours" eyebrow="02 / Le cours" title="Une application, plusieurs écritures">
+
+Dans toute la leçon, $K$ est un corps commutatif, et $E$ un espace vectoriel sur $K$. Les exemples précisent leur corps. Une base finie est ordonnée pour former les colonnes de coordonnées.
+
+<Definition number="1" name="Endomorphisme">
+
+Un **endomorphisme** de $E$ est une application $u\colon E\to E$ linéaire : pour tous $v,w\in E$ et $a,b\in K$,
+
+$$
+u(av+bw)=a u(v)+b u(w).
+$$
+
+En particulier $u(0)=0$. Un endomorphisme bijectif est appelé **automorphisme**. La composition $u\circ v$ signifie qu’on applique d’abord $v$, puis $u$.
+
+</Definition>
+
+<Example name="Linéaire ou non ?">
+
+Sur $\mathbb R^2$, l’application $u(x,y)=(2x+y,y)$ est linéaire : chacune de ses coordonnées respecte les sommes et les produits par un réel. En revanche, $t(x,y)=(x+1,y)$ ne l’est pas, car $t(0,0)=(1,0)\ne(0,0)$. Fixer l’origine est nécessaire pour être linéaire, mais pas suffisant : $(x,y)\mapsto(x^2,y)$ fixe l’origine et n’est pas linéaire, puisque l’image de $(2,0)$ n’est pas le double de celle de $(1,0)$.
+
+</Example>
+
+<Definition number="2" name="Matrice dans une base">
+
+Supposons $E$ de dimension finie $n\geq 1$, muni d’une base ordonnée $B=(e_1,\ldots,e_n)$. La **matrice** $A$ de $u$ dans $B$ a pour $j$-ième colonne les coordonnées de $u(e_j)$ dans $B$. Si $[v]_B$ est la colonne des coordonnées de $v$, alors
+
+$$
+[u(v)]_B=A[v]_B.
+$$
+
+En effet, si $v=\sum_j x_j e_j$, la linéarité donne $u(v)=\sum_j x_j u(e_j)$ : le produit matriciel effectue précisément cette combinaison de colonnes. Une application linéaire est donc déterminée par les images des vecteurs d’une base.
+
+</Definition>
+
+<Example name="Colonnes et composition">
+
+Dans la base usuelle de $\mathbb R^2$, $u(1,0)=(2,0)$ et $u(0,1)=(1,1)$, donc
+
+$$
+A=\begin{pmatrix}2&1\\0&1\end{pmatrix},\qquad
+A\begin{pmatrix}x\\y\end{pmatrix}=\begin{pmatrix}2x+y\\y\end{pmatrix}.
+$$
+
+Si $v$ a pour matrice $C$ dans la même base, la matrice de $u\circ v$ est $AC$ : on applique d’abord $C$ à la colonne de coordonnées, puis $A$. L’ordre est essentiel.
+
+</Example>
+
+<Definition number="3" name="Valeur propre, vecteur propre, espace propre">
+
+Un scalaire $\lambda\in K$ est une **valeur propre** de $u$ s’il existe un vecteur **non nul** $v\in E$ tel que $u(v)=\lambda v$. Un tel vecteur est un **vecteur propre** associé à $\lambda$. L’ensemble
+
+$$
+E_\lambda=\lbrace v\in E\mid u(v)=\lambda v\rbrace=\ker(u-\lambda\operatorname{Id})
+$$
+
+est son **espace propre**, où $\operatorname{Id}(v)=v$. C’est un sous-espace : il contient $0$, et l’équation est préservée par combinaison linéaire. Une valeur propre est précisément un scalaire pour lequel cet espace contient un vecteur non nul. Le vecteur nul appartient à chaque espace propre, mais n’est jamais un vecteur propre.
+
+</Definition>
+
+<Theorem kind="Théorème" number="1" name="Valeurs propres de deux matrices semblables">
+
+Soient $E$ de dimension finie $n\geq 1$, $B$ et $B'$ deux bases ordonnées, et $A$, $A'$ les matrices d’un même endomorphisme $u$ dans ces bases. Soit $P$ la matrice dont les colonnes sont les coordonnées dans $B$ des vecteurs de $B'$. Alors $P$ est inversible et
+
+$$
+A'=P^{-1}AP.
+$$
+
+Pour tout $\lambda\in K$, les solutions colonnes de $A'X=\lambda X$ correspondent bijectivement, par $X\mapsto PX$, à celles de $AY=\lambda Y$. Les solutions non nulles se correspondent donc aussi. Les valeurs propres de $u$ ne dépendent pas de la base, même si sa matrice et les coordonnées de ses vecteurs propres changent.
+
+</Theorem>
+
+Les matrices reliées par $A'=P^{-1}AP$ sont dites **semblables**. La preuve suit, par étapes et en version intégrale. La leçon sur la diagonalisation étudie la question supplémentaire de savoir si une base de vecteurs propres existe.
+
+<Example name="Résoudre sans déterminant">
+
+Pour $u(x,y)=(2x+y,y)$ sur $\mathbb R^2$, l’équation $u(x,y)=\lambda(x,y)$ donne
+
+$$
+(2-\lambda)x+y=0,\qquad (1-\lambda)y=0.
+$$
+
+Si $y=0$, le vecteur est non nul seulement si $x\ne0$, et alors $\lambda=2$. Si $y\ne0$, la seconde équation impose $\lambda=1$, puis la première donne $x=-y$. Réciproquement, tous ces vecteurs vérifient l’équation. Les seules valeurs propres réelles sont donc $2$ et $1$, avec
+
+$$
+E_2=\lbrace(x,0)\mid x\in\mathbb R\rbrace,\qquad
+E_1=\lbrace(-y,y)\mid y\in\mathbb R\rbrace.
+$$
+
+Les images de $(1,1)$, $(-1,1)$ et $(3,0)$ sont respectivement $(3,1)$, $(-1,1)$ et $(6,0)$. Les deux derniers sont propres, associés respectivement à $1$ et $2$.
+
+</Example>
+
+<Remark name="Le corps compte">
+
+Sur $\mathbb R^2$, l’application $r(x,y)=(-y,x)$ n’a aucune valeur propre réelle. En effet, $(-y,x)=\lambda(x,y)$ impose $-y=\lambda x$ et $x=\lambda y$, donc $(1+\lambda^2)y=0$. Comme $1+\lambda^2$ est non nul pour tout réel $\lambda$, on obtient $y=x=0$. Sur $\mathbb C^2$, la même formule admet la valeur propre $i$ et le vecteur propre $(1,-i)$, car $i^2=-1$. Le corps fait partie des données de la question.
+
+</Remark>
+
+</CourseSection>
+
+<Proof eyebrow="03 / Démonstration" title="Pourquoi les valeurs propres survivent-elles au changement de base ?" intro="Nous prouvons le théorème 1 en suivant les coordonnées d’un même vecteur dans les deux bases.">
+
+  <ProofStep title="Passer des nouvelles coordonnées aux anciennes" open>
+
+Écrivons $B'=(e'_1,\ldots,e'_n)$. Par définition, la colonne $j$ de $P$ est $[e'_j]_B$. Si $X=[v]_{B'}$, alors $v=\sum_j X_j e'_j$, donc $[v]_B=PX$. Cette correspondance est bijective : chaque vecteur possède des coordonnées uniques dans chaque base. Ainsi $P$ est inversible et $[v]_{B'}=P^{-1}[v]_B$.
+
+  </ProofStep>
+
+  <ProofStep title="Transporter l’action de l’endomorphisme">
+
+Pour tout $v$, on a $[u(v)]_B=A[v]_B=AP[v]_{B'}$. En revenant aux coordonnées dans $B'$, il vient $[u(v)]_{B'}=P^{-1}AP[v]_{B'}$. Comme cela vaut pour toutes les colonnes de coordonnées, la matrice de $u$ dans $B'$ est $A'=P^{-1}AP$.
+
+  </ProofStep>
+
+  <ProofStep title="Transporter l’équation propre">
+
+L’égalité $A'X=\lambda X$ équivaut, en multipliant par $P$, à $APX=\lambda PX$. L’inversibilité de $P$ assure la réciproque et garantit que $X$ est non nul exactement lorsque $PX$ est non nul. Les solutions se correspondent bijectivement, et l’existence d’un vecteur propre ne dépend pas de la base.
+
+  </ProofStep>
+
+  <FullProof slot="full">
+
+Notons $B'=(e'_1,\ldots,e'_n)$ et $P$ la matrice dont la colonne $j$ est $[e'_j]_B$. Pour tout $v=\sum_j X_j e'_j$, avec $X=[v]_{B'}$, la combinaison des colonnes donne $[v]_B=PX$. Les coordonnées étant uniques dans les deux bases, cette application des colonnes est bijective ; $P$ est donc inversible, et $[v]_{B'}=P^{-1}[v]_B$.
+
+Pour tout $v$, $[u(v)]_{B'}=P^{-1}[u(v)]_B=P^{-1}AP[v]_{B'}$. Cette égalité pour toutes les colonnes donne $A'=P^{-1}AP$.
+
+Enfin, pour tout $\lambda\in K$, $A'X=\lambda X$ équivaut à $APX=\lambda PX$, car $P$ est inversible. L’application $X\mapsto PX$ est une bijection entre les ensembles de solutions et préserve leur caractère non nul. Ainsi l’existence d’un vecteur propre pour $\lambda$ est indépendante de la base, comme annoncé.
+
+  </FullProof>
+
+</Proof>
+
+<CourseSection id="connexions" eyebrow="04 / Connexions" title="Composer et conserver une structure">
+
+**Lien mathématique démontré.** Les automorphismes de $E$ forment un groupe pour la composition, comme les transformations inversibles rencontrées dans la leçon sur les groupes. L’identité est linéaire et bijective ; la composée de deux applications linéaires bijectives l’est aussi ; la composition est associative. Enfin, si $u$ est un automorphisme et $x=u(v)$, $y=u(w)$, alors
+
+$$
+u^{-1}(ax+by)=u^{-1}(u(av+bw))=av+bw=au^{-1}(x)+bu^{-1}(y).
+$$
+
+Son inverse est donc linéaire. Un endomorphisme quelconque ne fait pas forcément partie de ce groupe : l’application nulle n’est pas bijective lorsque $E$ contient un vecteur non nul.
+
+</CourseSection>
+
+<CourseSection id="exercices" eyebrow="05 / Exercices" title="Calculer, distinguer, justifier">
+
+<Exercise number="1" name="Une projection" level="Découverte">
+
+Sur $\mathbb R^2$, soit $p(x,y)=(x,0)$. Justifiez sa linéarité, donnez sa matrice dans la base usuelle et ses valeurs et espaces propres. Est-elle inversible ?
+
+<Hint>
+
+Résolvez $(x,0)=\lambda(x,y)$ en distinguant $x=0$ et $x\ne0$.
+
+</Hint>
+
+<Solution>
+
+La formule respecte les combinaisons linéaires. Les images de $(1,0)$ et $(0,1)$ donnent la matrice $\begin{pmatrix}1&0\\0&0\end{pmatrix}$. Si $x\ne0$, l’équation impose $\lambda=1$ puis $y=0$ ; si $x=0$, un vecteur non nul a $y\ne0$ et impose $\lambda=0$. Réciproquement, ces deux axes vérifient les équations. Ainsi $E_1=\lbrace(x,0)\mid x\in\mathbb R\rbrace$ et $E_0=\lbrace(0,y)\mid y\in\mathbb R\rbrace$. L’application n’est pas injective, car $p(0,1)=p(0,0)$ ; elle n’est donc pas inversible.
+
+</Solution>
+
+</Exercise>
+
+<Exercise number="2" name="Changer de base" level="Application">
+
+Pour $u(x,y)=(2x+y,y)$, prenez $B'=((1,0),(-1,1))$. Vérifiez que c’est une base, calculez $P$, $P^{-1}$ et la matrice de $u$ dans $B'$. Retrouvez le résultat à partir des images des vecteurs de $B'$.
+
+<Hint>
+
+Écrivez $(x,y)=(x+y)(1,0)+y(-1,1)$, puis utilisez les colonnes.
+
+</Hint>
+
+<Solution>
+
+L’écriture donnée est unique, donc $B'$ est une base. On a
+
+$$
+P=\begin{pmatrix}1&-1\\0&1\end{pmatrix},\qquad
+P^{-1}=\begin{pmatrix}1&1\\0&1\end{pmatrix},\qquad
+P^{-1}AP=\begin{pmatrix}2&0\\0&1\end{pmatrix}.
+$$
+
+Directement, $u(1,0)=2(1,0)$ et $u(-1,1)=(-1,1)$ ; leurs coordonnées dans $B'$ sont les colonnes $(2,0)$ et $(0,1)$. Les deux calculs concordent.
+
+</Solution>
+
+</Exercise>
+
+<Exercise number="3" name="Une seule direction propre" level="Raisonnement">
+
+Sur $\mathbb R^2$, soit $s(x,y)=(x+y,y)$. Cherchez toutes ses valeurs et tous ses vecteurs propres. Peut-on former une base de $\mathbb R^2$ avec des vecteurs propres de $s$ ?
+
+<Hint>
+
+La seconde coordonnée de $s(x,y)=\lambda(x,y)$ donne $(1-\lambda)y=0$.
+
+</Hint>
+
+<Solution>
+
+Si $y\ne0$, la seconde équation donne $\lambda=1$, puis la première donne $y=0$, contradiction. Donc $y=0$ ; pour un vecteur non nul, $x\ne0$, et la première équation impose $\lambda=1$. Réciproquement, tout $(x,0)$ non nul est propre pour $1$. Tous les vecteurs propres sont sur le même axe, donc deux d’entre eux sont liés et ne peuvent former une base du plan. Cet exemple montre qu’un endomorphisme n’admet pas nécessairement une base de vecteurs propres.
+
+</Solution>
+
+</Exercise>
+
+<Exercise number="4" name="Zéro comme valeur propre" level="Raisonnement">
+
+Pour un endomorphisme $u$ d’un espace vectoriel $E$ sur un corps $K$, montrez que $0$ est une valeur propre si et seulement si $u$ n’est pas injectif. L’énoncé dépend-il de la dimension finie ?
+
+<Hint>
+
+Comparez $u(v)=0$ avec $u(0)=0$, puis considérez la différence de deux vecteurs ayant même image.
+
+</Hint>
+
+<Solution>
+
+Si $0$ est valeur propre, il existe $v\ne0$ tel que $u(v)=0=u(0)$ : $u$ n’est pas injectif. Réciproquement, si $u$ n’est pas injectif, il existe $v\ne w$ avec $u(v)=u(w)$. Alors $v-w\ne0$ et $u(v-w)=0$, donc $0$ est valeur propre. La preuve utilise seulement la linéarité ; elle reste valable en dimension infinie, y compris pour l’espace nul où les deux affirmations sont fausses.
+
+</Solution>
+
+</Exercise>
+
+</CourseSection>
+
+<CourseSection id="reconstruction" eyebrow="06 / Reconstruction" title="De l’action aux coordonnées, puis retour">
+
+Sans consulter les corrections, reconstruisez le raisonnement :
+
+1. Pourquoi les images des vecteurs d’une base déterminent-elles un endomorphisme ? Quelle information fournit chaque colonne de sa matrice ?
+2. Pourquoi une matrice dépend-elle de la base alors que l’application elle-même n’en dépend pas ? Dans quel sens la matrice $P$ change-t-elle les coordonnées ?
+3. Pourquoi exclure le vecteur nul de la définition d’un vecteur propre ? Que contient néanmoins chaque espace propre ?
+4. Reprenez l’exemple $u(x,y)=(2x+y,y)$ et justifiez que votre liste de valeurs propres est exhaustive.
+5. Qu’apporte le choix du corps ? Pourquoi l’existence de vecteurs propres ne garantit-elle pas une base de tels vecteurs ?
+
+Les calculs sur quelques vecteurs ont suggéré des directions particulières. L’équation propre a permis de les trouver toutes dans l’exemple ; le changement de base a ensuite montré comment distinguer l’objet de ses coordonnées.
+
+</CourseSection>

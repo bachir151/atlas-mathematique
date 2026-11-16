@@ -1,0 +1,210 @@
+---
+title: "Diagonalisation & directions propres"
+heading:
+  lead: "Diagonalisation &"
+  emphasis: "directions propres."
+summary: "Chercher les directions préservées par une transformation, déterminer quand elles forment une base et calculer ses itérations."
+domain: "Algèbre"
+number: "20"
+breadcrumb: "Diagonalisation"
+status: "draft"
+companion: false
+sections:
+  - { id: "exploration", label: "Exploration" }
+  - { id: "cours", label: "Le cours" }
+  - { id: "demonstration", label: "Démonstration" }
+  - { id: "preuve-integrale", label: "Preuve intégrale" }
+  - { id: "connexions", label: "Connexions" }
+  - { id: "exercices", label: "Exercices" }
+  - { id: "reconstruction", label: "À reconstruire" }
+---
+
+<CourseSection id="exploration" eyebrow="01 / Exploration" title="Existe-t-il des directions privilégiées ?">
+
+**Pour commencer :** connaître les corps, les espaces vectoriels de dimension finie, les bases, les matrices et les applications linéaires ; voir les leçons sur les espaces vectoriels et les endomorphismes. Nous rappelons les notions propres nécessaires ici.
+
+Dans le plan réel, considérons $u(x,y)=(2x+y,y)$. Le vecteur $(1,0)$ devient $(2,0)$ : il garde sa direction. Le vecteur $(-1,1)$ reste lui aussi sur sa droite, car $u(-1,1)=(-1,1)$. Ces deux vecteurs forment une base : tout $(x,y)$ s’écrit $(x+y)(1,0)+y(-1,1)$. L’application agit donc sur ces deux composantes par multiplication respective par $2$ et $1$.
+
+Après $n$ applications, pour tout entier $n\geq 0$, on obtient
+
+$$
+u^n(x,y)=2^n(x+y)(1,0)+y(-1,1).
+$$
+
+Cela suggère une méthode pour calculer des itérations : chercher une base de vecteurs dont chacun est simplement multiplié par un scalaire. Mais une telle base existe-t-elle toujours ? Les exemples ne suffisent pas à le décider.
+
+</CourseSection>
+
+<CourseSection id="cours" eyebrow="02 / Le cours" title="Décomposer selon les espaces propres">
+
+Dans cette leçon, $K$ est un corps et $E$ un espace vectoriel sur $K$ de dimension finie $n\geq 1$. Un endomorphisme $u$ est une application linéaire de $E$ dans lui-même. Les résultats généraux valent sur tout corps ; les exemples précisent leur corps.
+
+<Definition number="1" name="Valeur, vecteur et espace propres">
+
+Un scalaire $\lambda\in K$ est une **valeur propre** de $u$ s’il existe un vecteur non nul $v$ tel que $u(v)=\lambda v$. Un tel $v$ est un **vecteur propre** associé à $\lambda$. L’**espace propre** associé est
+
+$$
+E_\lambda=\ker(u-\lambda\operatorname{Id}_E).
+$$
+
+Il contient le vecteur nul, qui n’est jamais un vecteur propre. Une valeur propre est donc exactement un scalaire pour lequel cet espace est non réduit à zéro. Une valeur propre peut être nulle.
+
+</Definition>
+
+<Definition number="2" name="Diagonalisabilité">
+
+L’endomorphisme $u$ est **diagonalisable sur $K$** s’il existe une base de $E$ constituée de vecteurs propres de $u$. Dans cette base, sa matrice est diagonale : ses colonnes contiennent respectivement les valeurs propres correspondantes sur la diagonale et des zéros ailleurs.
+
+Pour une matrice $A$ de taille $n$ sur $K$, cela revient à trouver une matrice inversible $P$ et une matrice diagonale $D$ sur $K$ telles que $A=PDP^{-1}$. Les colonnes de $P$ sont les coordonnées, dans la base initiale, d’une base de vecteurs propres ; leur ordre est celui des entrées de $D$.
+
+</Definition>
+
+<Theorem kind="Théorème" number="1" name="Critère par les espaces propres">
+
+Soient $\lambda_1,\ldots,\lambda_r$ des valeurs propres deux à deux distinctes de $u$. La somme de leurs espaces propres est directe : si $v_i\in E_{\lambda_i}$ et $v_1+\cdots+v_r=0$, alors tous les $v_i$ sont nuls.
+
+En conséquence, $u$ possède au plus $n$ valeurs propres distinctes. Il est diagonalisable si et seulement si la somme des dimensions de **tous** ses espaces propres vaut $n$. En particulier, $n$ valeurs propres distinctes suffisent à assurer la diagonalisabilité.
+
+</Theorem>
+
+Le critère ne dit pas qu’il faut $n$ valeurs propres distinctes : l’identité est diagonale dans toute base et ne possède que la valeur propre $1$. La démonstration ci-dessous justifie tous les points du théorème.
+
+<Example name="Deux directions suffisent">
+
+Pour l’application de l’exploration, la matrice dans la base canonique de $\mathbb R^2$ est
+
+$$
+A=\begin{pmatrix}2&1\\0&1\end{pmatrix},\qquad
+P=\begin{pmatrix}1&-1\\0&1\end{pmatrix},\qquad
+D=\begin{pmatrix}2&0\\0&1\end{pmatrix}.
+$$
+
+Les colonnes de $P$ sont indépendantes et $AP=PD$, donc $A=PDP^{-1}$. Pour $n\geq 0$, $A^n=PD^nP^{-1}$ et $D^n$ a pour diagonale $2^n,1$. La formule initiale s’ensuit. Pour trouver les valeurs propres d’une matrice, on résout $(A-\lambda I)v=0$ avec $v\ne 0$ ; le déterminant donne aussi l’équation $\det(A-\lambda I)=0$ lorsque cet outil est disponible.
+
+</Example>
+
+<Example name="Une direction propre ne suffit pas">
+
+Sur $\mathbb R^2$, soit $J(x,y)=(x+y,y)$. Si $J(x,y)=\lambda(x,y)$ avec $(x,y)\ne(0,0)$, la seconde coordonnée donne $y=\lambda y$. Si $y\ne 0$, alors $\lambda=1$, et la première coordonnée impose $y=0$, contradiction. Donc $y=0$ et $\lambda=1$. L’unique espace propre est la droite engendrée par $(1,0)$, de dimension $1$ : $J$ n’est pas diagonalisable.
+
+</Example>
+
+<Example name="Le corps choisi compte">
+
+Sur $\mathbb R^2$, soit $R(x,y)=(-y,x)$, de matrice $\begin{pmatrix}0&-1\\1&0\end{pmatrix}$. Si $R(x,y)=\lambda(x,y)$ pour $\lambda\in\mathbb R$, alors $-y=\lambda x$ et $x=\lambda y$, donc $(\lambda^2+1)y=0$. Comme $\lambda^2+1>0$, on obtient $y=x=0$. Il n’y a aucune valeur propre réelle.
+
+Sur $\mathbb C^2$, la même matrice possède les vecteurs propres $(1,-i)$ et $(1,i)$ associés à $i$ et $-i$. Ils sont indépendants, donc elle est diagonalisable sur $\mathbb C$. Changer de corps change ici les vecteurs et les scalaires permis.
+
+</Example>
+
+</CourseSection>
+
+<Proof eyebrow="03 / Démonstration" title="Pourquoi les espaces propres ne se mélangent-ils pas ?" intro="Nous prouvons le théorème 1, puis le critère de dimension.">
+
+  <ProofStep title="Isoler une composante" open>
+
+Pour des valeurs propres distinctes, supposons une relation $v_1+\cdots+v_r=0$ avec $v_i\in E_{\lambda_i}$. Nous raisonnons par récurrence sur $r$. Pour $r=1$, le résultat est immédiat. Pour $r>1$, appliquons $u-\lambda_r\operatorname{Id}_E$ à la relation :
+
+$$
+\sum_{i=1}^{r-1}(\lambda_i-\lambda_r)v_i=0.
+$$
+
+Chaque terme appartient à son espace propre. L’hypothèse de récurrence l’annule ; les différences de valeurs propres sont non nulles, donc $v_i=0$ pour $i<r$. La relation initiale donne $v_r=0$.
+
+  </ProofStep>
+
+  <ProofStep title="Compter les dimensions">
+
+La réunion de bases des espaces propres considérés est libre : une relation se regroupe par espace, puis la somme directe et la liberté de chaque base annulent ses coefficients. Elle est une base de leur somme. La somme des dimensions est donc au plus $n$. Chaque espace propre a dimension au moins $1$ : il y a au plus $n$ valeurs propres distinctes.
+
+  </ProofStep>
+
+  <ProofStep title="Obtenir une base propre">
+
+Si la somme des dimensions de tous les espaces propres vaut $n$, la réunion de leurs bases est une famille libre de $n$ vecteurs dans $E$ ; c’est une base propre. Réciproquement, une base propre se répartit entre les espaces propres. Pour chaque valeur propre présente dans cette base, les vecteurs correspondants sont libres, donc leur nombre ne dépasse pas la dimension de son espace propre. La somme de ces dimensions est à la fois au moins $n$ et au plus $n$. Enfin, avec $n$ valeurs propres distinctes, les dimensions sont au moins $1$ chacune et leur somme vaut nécessairement $n$.
+
+  </ProofStep>
+
+  <FullProof slot="full">
+
+Montrons par récurrence sur $r$ que les espaces propres associés à des valeurs propres deux à deux distinctes sont en somme directe. Pour $r=1$, c’est immédiat. Supposons le résultat pour $r-1$ espaces et soit $\sum_{i=1}^r v_i=0$, avec $v_i\in E_{\lambda_i}$. En appliquant $u-\lambda_r\operatorname{Id}_E$, on obtient $\sum_{i=1}^{r-1}(\lambda_i-\lambda_r)v_i=0$. Chaque terme appartient à $E_{\lambda_i}$ ; l’hypothèse de récurrence impose son annulation. Les scalaires $\lambda_i-\lambda_r$ étant non nuls dans le corps, $v_i=0$ pour $i<r$, puis $v_r=0$ par la relation initiale.
+
+La réunion de bases de ces espaces est donc libre : toute relation se regroupe par espace, chaque groupe est nul par somme directe, puis ses coefficients sont nuls. Elle engendre leur somme, dont la dimension est ainsi la somme de leurs dimensions, au plus $n$. Chaque espace propre étant non nul, il y a au plus $n$ valeurs propres distinctes.
+
+Si la somme des dimensions de tous les espaces propres vaut $n$, la réunion de leurs bases est une famille libre de $n$ vecteurs, donc une base de $E$ constituée de vecteurs propres : $u$ est diagonalisable. Réciproquement, si $u$ possède une base propre, les vecteurs de cette base associés à une valeur propre donnée forment une famille libre dans l’espace propre correspondant. En additionnant leurs nombres, on obtient $n$ ; la somme des dimensions des espaces propres est donc au moins $n$, et elle est au plus $n$ par ce qui précède. Elle vaut $n$. Enfin, si $u$ a $n$ valeurs propres distinctes, leurs espaces propres ont chacun dimension au moins $1$ et leur somme des dimensions, au plus $n$, vaut $n$. Le critère donne alors la diagonalisabilité.
+
+  </FullProof>
+
+</Proof>
+
+<CourseSection id="connexions" eyebrow="04 / Connexions" title="Itérer sans multiplier toutes les matrices">
+
+**Lien mathématique démontré.** Si $A=PDP^{-1}$, alors $A^n=PD^nP^{-1}$ pour tout entier $n\geq 0$ : pour $n=0$, les deux membres valent l’identité ; pour passer de $n$ à $n+1$, les facteurs voisins $P^{-1}P$ s’annulent. Si $D$ a pour diagonale $\lambda_1,\ldots,\lambda_n$, celle de $D^k$ est $\lambda_1^k,\ldots,\lambda_n^k$, avec $D^0=I$ même si une valeur propre est nulle.
+
+**Application à une récurrence.** Pour une suite de vecteurs définie par $v_{k+1}=Av_k$, on a $v_k=A^kv_0$. La diagonalisation calcule séparément les composantes de $v_0$ dans une base propre. Cette conclusion concerne une récurrence linéaire exacte ; elle ne dit pas à elle seule qu’un phénomène réel suit ce modèle.
+
+</CourseSection>
+
+<CourseSection id="exercices" eyebrow="05 / Exercices" title="Trouver, tester, calculer">
+
+<Exercise number="1" name="Une matrice symétrique" level="Application" id="exercice-symetrique">
+
+Sur $\mathbb R^2$, diagonalisez $A=\begin{pmatrix}2&1\\1&2\end{pmatrix}$ et calculez $A^k(1,0)$ pour $k\geq 0$.
+
+<Hint>
+
+Essayez $(1,1)$ et $(1,-1)$, puis décomposez $(1,0)$ suivant ces vecteurs.
+
+</Hint>
+
+<Solution>
+
+$A(1,1)=3(1,1)$ et $A(1,-1)=(1,-1)$. Ces vecteurs forment une base. Ainsi $P=\begin{pmatrix}1&1\\1&-1\end{pmatrix}$ et $D=\begin{pmatrix}3&0\\0&1\end{pmatrix}$ vérifient $A=PDP^{-1}$. Comme $(1,0)=\frac12(1,1)+\frac12(1,-1)$, on obtient $A^k(1,0)=\frac12(3^k+1,3^k-1)$.
+
+</Solution>
+
+</Exercise>
+
+<Exercise number="2" name="Une valeur propre répétée" level="Raisonnement" id="exercice-repetee">
+
+Pour $a\in\mathbb R$, déterminez quand $B=\begin{pmatrix}1&a\\0&1\end{pmatrix}$ est diagonalisable sur $\mathbb R$.
+
+<Hint>
+
+Résolvez $B(x,y)=\lambda(x,y)$ en distinguant $\lambda=1$ et $\lambda\ne 1$.
+
+</Hint>
+
+<Solution>
+
+Les équations sont $(1-\lambda)x+ay=0$ et $(1-\lambda)y=0$. Si $\lambda\ne1$, elles imposent $y=x=0$ : ce n’est pas une valeur propre. Pour $\lambda=1$, la seule condition est $ay=0$. Si $a=0$, l’espace propre est tout $\mathbb R^2$ et $B=I$ est diagonale. Si $a\ne0$, cet espace est la droite $y=0$, de dimension $1$ ; le critère montre que $B$ n’est pas diagonalisable.
+
+</Solution>
+
+</Exercise>
+
+<Exercise number="3" name="Une projection" level="Approfondissement" id="exercice-projection">
+
+Soit $p$ un endomorphisme d’un espace vectoriel de dimension finie sur un corps $K$, tel que $p^2=p$. Montrez que $p$ est diagonalisable, y compris si l’un des espaces propres est nul.
+
+<Hint>
+
+Écrivez $v=p(v)+(v-p(v))$ et examinez les images de ces deux termes.
+
+</Hint>
+
+<Solution>
+
+Pour tout $v$, $p(p(v))=p(v)$ et $p(v-p(v))=0$. Le premier terme appartient donc à $\ker(p-\operatorname{Id})$ et le second à $\ker p$. Leur intersection est réduite à zéro : si $p(w)=w$ et $p(w)=0$, alors $w=0$. La décomposition est donc une somme directe égale à l’espace entier. Une base de chaque sous-espace, éventuellement vide si celui-ci est nul, fournit une base propre ; $p$ est diagonalisable. Les valeurs propres effectivement présentes sont parmi $0$ et $1$.
+
+</Solution>
+
+</Exercise>
+
+</CourseSection>
+
+<CourseSection id="reconstruction" eyebrow="06 / Reconstruction" title="Reconstruire le raisonnement">
+
+Sans consulter les corrections, choisissez une transformation du plan et recherchez ses vecteurs propres. Pourquoi le vecteur nul est-il exclu ? Distinguez ensuite une valeur propre répétée d’un manque de vecteurs propres indépendants. Reconstituez l’argument qui sépare les espaces propres de valeurs distinctes, puis expliquez pourquoi la somme de leurs dimensions décide de l’existence d’une base propre. Enfin, décomposez un vecteur initial dans une telle base pour retrouver ses itérations ; précisez ce qui change si le corps de base change.
+
+</CourseSection>

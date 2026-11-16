@@ -40,3 +40,7 @@ const heading = lesson.heading ?? { lead: lesson.title };
     {lesson.companion && <div class="companion-column"><Companion /></div>}
   </div>
 </Layout>
+<script>
+  import { initWideMath } from '../../scripts/wide-math';
+  initWideMath();
+</script>

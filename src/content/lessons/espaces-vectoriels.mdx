@@ -1,0 +1,231 @@
+---
+title: "Espaces vectoriels & bases"
+heading:
+  lead: "Espaces vectoriels"
+  emphasis: "& bases."
+summary: "Additionner et multiplier par des scalaires, reconnaître un sous-espace et comprendre pourquoi une base donne des coordonnées uniques."
+domain: "Algèbre"
+number: "17"
+breadcrumb: "Espaces vectoriels & bases"
+status: "draft"
+companion: false
+sections:
+  - { id: "exploration", label: "Exploration" }
+  - { id: "cours", label: "Le cours" }
+  - { id: "demonstration", label: "Démonstration" }
+  - { id: "preuve-integrale", label: "Preuve intégrale" }
+  - { id: "connexions", label: "Connexions" }
+  - { id: "exercices", label: "Exercices" }
+  - { id: "reconstruction", label: "À reconstruire" }
+---
+
+<CourseSection id="exploration" eyebrow="01 / Exploration" title="Combien de recettes pour un même polynôme ?">
+
+**Pour commencer :** savoir calculer dans un corps, par exemple $\mathbb Q$ ou $\mathbb R$, et manipuler des polynômes. La leçon sur les anneaux et corps présente les corps ; celle sur les polynômes précise leurs opérations. Le parcours principal vise le début de licence et reste accessible à une personne familière des preuves.
+
+Considérons les polynômes $1$, $X$ et $1+X$, à coefficients réels. On peut écrire
+
+$$
+2+3X=2\cdot1+3\cdot X=1\cdot1+2\cdot X+1\cdot(1+X).
+$$
+
+Avec les trois polynômes, les coefficients sont-ils uniques ? Avec seulement $1$ et $X$, quels polynômes peut-on obtenir ? Peut-on obtenir $X^2$ ?
+
+Les deux recettes ci-dessus diffèrent parce que $1+X$ est déjà la somme des deux premiers ingrédients. Avec $1$ et $X$, l'égalité $a+bX=c+dX$ impose $a=c$ et $b=d$ par égalité des coefficients. On obtient exactement les polynômes de degré au plus un, y compris le polynôme nul, mais pas $X^2$. Ces calculs suggèrent un lien entre deux questions distinctes : peut-on fabriquer tous les objets visés, et peut-on le faire d'une seule manière ? Nous allons le démontrer en général.
+
+</CourseSection>
+
+<CourseSection id="cours" eyebrow="02 / Le cours" title="Des opérations aux coordonnées">
+
+Dans toute la leçon, $K$ est un **corps commutatif** avec $0\ne 1$. Ses éléments sont appelés **scalaires**. Les symboles $0_K$ et $1_K$ désignent ses éléments neutres lorsque la distinction est utile.
+
+<Definition number="1" name="Espace vectoriel">
+
+Un **espace vectoriel sur $K$** est un ensemble $E$ muni d'une addition de vecteurs et d'une multiplication d'un vecteur par un scalaire, telles que :
+
+- $(E,+)$ est un groupe commutatif, de neutre $0_E$ ;
+- pour tous $u,v\in E$ et $a,b\in K$, on a $a(u+v)=au+av$, $(a+b)u=au+bu$, $(ab)u=a(bu)$ et $1_Ku=u$.
+
+Les objets de $E$ sont appelés **vecteurs**, même lorsqu'il s'agit de polynômes ou de fonctions. Les deux opérations doivent être définies pour tous les arguments indiqués et leurs résultats appartenir à $E$.
+
+</Definition>
+
+En particulier, $0_Ku=0_E$ et $a0_E=0_E$ : par distributivité, chacun de ces vecteurs est égal à sa somme avec lui-même, et l'on ajoute son opposé. De même $(-1_K)u=-u$, car $u+(-1_K)u=(1_K-1_K)u=0_E$.
+
+<Example name="Vecteurs de coordonnées et polynômes">
+
+Dans $K^2$, l'addition et la multiplication par un scalaire sont définies coordonnée par coordonnée : $(x,y)+(x',y')=(x+x',y+y')$ et $a(x,y)=(ax,ay)$. Les axiomes se vérifient coordonnée par coordonnée à partir de ceux du corps ; le vecteur nul est $(0_K,0_K)$.
+
+L'ensemble $K[X]$ des polynômes formels à coefficients dans $K$ est aussi un espace vectoriel : on additionne les coefficients de même degré et on multiplie chaque coefficient par le scalaire. Les axiomes résultent de ceux de $K$, coefficient par coefficient ; chaque opération conserve un nombre fini de coefficients non nuls. Le polynôme nul est le vecteur nul. Les éléments de $K$ peuvent eux-mêmes former un espace vectoriel sur $K$ avec les opérations du corps.
+
+</Example>
+
+<Definition number="2" name="Sous-espace vectoriel">
+
+Une partie $F$ de $E$ est un **sous-espace vectoriel** si $0_E\in F$ et si, pour tous $u,v\in F$ et $a,b\in K$, le vecteur $au+bv$ appartient à $F$. Avec les opérations de $E$ restreintes à $F$, c'est alors un espace vectoriel : la condition donne la stabilité par addition et multiplication scalaire ainsi que les opposés, et les autres axiomes sont hérités de $E$.
+
+</Definition>
+
+<Example name="Une droite et une droite décalée">
+
+Dans $\mathbb R^2$, l'ensemble $F$ des couples $(t,2t)$ avec $t\in\mathbb R$ est un sous-espace : il contient $(0,0)$ et $a(t,2t)+b(s,2s)=(at+bs,2(at+bs))$ y appartient. En revanche, l'ensemble des couples $(t,2t+1)$ n'est pas un sous-espace : il ne contient pas $(0,0)$. Une droite décalée n'est donc pas nécessairement un sous-espace.
+
+</Example>
+
+<Definition number="3" name="Combinaisons, famille génératrice, famille libre">
+
+Pour une famille finie $(v_1,\ldots,v_n)$ de vecteurs de $E$, une **combinaison linéaire** est une somme $a_1v_1+\cdots+a_nv_n$, avec $a_i\in K$. Son **espace engendré**, noté $\operatorname{Vect}(v_1,\ldots,v_n)$, est l'ensemble de ces sommes. Il est un sous-espace : la combinaison à coefficients nuls donne $0_E$, et une combinaison linéaire de deux de ses éléments s'obtient en regroupant les coefficients. La famille est **génératrice de $E$** si cet espace engendré est $E$.
+
+La famille est **libre** si l'égalité $a_1v_1+\cdots+a_nv_n=0_E$ implique $a_1=\cdots=a_n=0_K$. Sinon elle est **liée** : il existe une combinaison nulle dont au moins un coefficient est non nul.
+
+Une **base** de $E$ est une famille à la fois libre et génératrice. Pour la famille vide, la seule combinaison est par convention la somme vide $0_E$ ; elle est libre et constitue une base de l'espace nul $\lbrace 0_E\rbrace$.
+
+</Definition>
+
+<Example name="Le corps de base compte">
+
+Dans $\mathbb R^2$ sur $\mathbb R$, les vecteurs $e_1=(1,0)$ et $e_2=(0,1)$ forment une base : $(x,y)=xe_1+ye_2$, et une combinaison nulle impose $x=y=0$.
+
+Dans $\mathbb R$ considéré sur $\mathbb Q$, la famille $(1,\sqrt2)$ est libre : si $a+b\sqrt2=0$ avec $a,b\in\mathbb Q$ et $b\ne0$, alors $\sqrt2=-a/b$ serait rationnel. Rappelons pourquoi il ne l'est pas : si $\sqrt2=p/q$ avec $p,q$ entiers premiers entre eux et $q\ne0$, alors $p^2=2q^2$ rend $p$ pair, puis $q$ pair, contradiction. La famille $(1,\sqrt2)$ est liée sur $\mathbb R$, puisque $(-\sqrt2)\cdot1+1\cdot\sqrt2=0$ avec des coefficients non tous nuls. Changer le corps change donc les combinaisons autorisées.
+
+</Example>
+
+<Theorem kind="Théorème" number="1" name="Une base donne des coordonnées uniques">
+
+Soient $E$ un espace vectoriel sur $K$ et $(v_1,\ldots,v_n)$ une famille finie, éventuellement vide. Cette famille est une base de $E$ **si et seulement si** chaque $x\in E$ s'écrit de manière unique sous la forme
+
+$$
+x=a_1v_1+\cdots+a_nv_n,\qquad a_i\in K.
+$$
+
+Les scalaires $(a_1,\ldots,a_n)$ sont alors les **coordonnées de $x$ dans cette base**. Pour la famille vide, l'unique somme est $0_E$ et l'unique liste de coordonnées est vide.
+
+</Theorem>
+
+La preuve intégrale est accessible immédiatement ci-dessous. Le théorème n'affirme pas ici que tout espace possède une base finie, ni que deux bases finies ont le même nombre d'éléments.
+
+</CourseSection>
+
+<Proof eyebrow="03 / Démonstration" title="Pourquoi existence et unicité vont-elles ensemble ?" intro="Nous démontrons les deux sens du théorème 1, y compris le cas de la famille vide.">
+
+  <ProofStep title="Une famille génératrice fournit une écriture" open>
+
+Si la famille est une base, elle est génératrice. Par définition, chaque $x\in E$ est donc une combinaison de ses vecteurs. Pour une famille vide, cela signifie que $E$ ne contient que $0_E$.
+
+  </ProofStep>
+
+  <ProofStep title="La liberté empêche deux recettes différentes">
+
+Supposons que $x=\sum_{i=1}^n a_iv_i=\sum_{i=1}^n b_iv_i$. Par soustraction et distributivité, $\sum_{i=1}^n(a_i-b_i)v_i=0_E$. La liberté impose $a_i-b_i=0_K$ pour tout $i$ : les coefficients coïncident. Si la famille est vide, il n'y a qu'une liste vide de coefficients.
+
+  </ProofStep>
+
+  <ProofStep title="Retrouver les deux propriétés à partir des écritures">
+
+Si chaque vecteur possède une écriture, la famille est génératrice. Pour montrer qu'elle est libre, comparons toute écriture nulle à celle dont tous les coefficients sont nuls. L'unicité impose que tous ses coefficients soient nuls. Dans le cas vide, cette dernière condition est satisfaite par convention.
+
+  </ProofStep>
+
+  <FullProof slot="full">
+
+**Preuve intégrale du théorème 1.** Supposons d'abord que $(v_1,\ldots,v_n)$ soit une base. Elle est génératrice, donc chaque $x\in E$ possède une écriture $x=\sum_{i=1}^n a_iv_i$. Si $x$ possède aussi une écriture avec les coefficients $b_i$, la soustraction donne $\sum_{i=1}^n(a_i-b_i)v_i=0_E$. La liberté impose $a_i-b_i=0_K$ pour chaque indice, donc $a_i=b_i$ : l'écriture est unique.
+
+Réciproquement, supposons que chaque $x\in E$ possède une unique telle écriture. L'existence signifie précisément que la famille engendre $E$. Si $\sum_{i=1}^n a_iv_i=0_E$, cette écriture du vecteur nul coïncide, par unicité, avec celle dont tous les coefficients valent $0_K$. Donc tous les $a_i$ sont nuls : la famille est libre et c'est une base.
+
+Si $n=0$, la somme vide vaut $0_E$ et la seule liste de coefficients est vide. La famille vide est libre et engendre exactement $\lbrace 0_E\rbrace$ ; chacun des deux membres de l'équivalence est donc vrai exactement lorsque $E=\lbrace 0_E\rbrace$. La preuve couvre ainsi tous les cas annoncés.
+
+  </FullProof>
+
+</Proof>
+
+<CourseSection id="connexions" eyebrow="04 / Connexions" title="Un même objet, plusieurs coordonnées">
+
+**Lien mathématique démontré.** Dans $\mathbb R^2$, posons $u=(1,1)$ et $v=(1,-1)$. Pour tout $(x,y)$, résoudre $a+b=x$ et $a-b=y$ donne l'unique solution $a=(x+y)/2$, $b=(x-y)/2$. Ainsi $(u,v)$ est une base par le théorème 1. Le même vecteur $(3,1)$ a pour coordonnées $(3,1)$ dans la base $(e_1,e_2)$ et $(2,1)$ dans la base $(u,v)$.
+
+Les coordonnées décrivent un vecteur **relativement à une base ordonnée** : elles ne sont pas le vecteur indépendamment de ce choix. Cet exemple utilise la division par $2$ dans $\mathbb R$ ; sur le corps à deux éléments, les deux vecteurs $u$ et $v$ coïncident et ne forment pas une base. La leçon sur la dualité étudiera d'autres façons d'associer des scalaires aux vecteurs ; aucun de ses résultats n'est nécessaire ici.
+
+</CourseSection>
+
+<CourseSection id="exercices" eyebrow="05 / Exercices" title="Tester, construire, justifier">
+
+<Exercise number="1" name="Une condition linéaire" level="Application" id="exercice-sous-espace">
+
+Dans $\mathbb R^3$, l'ensemble $F$ des $(x,y,z)$ tels que $x+y+z=0$ est-il un sous-espace ? Même question pour l'ensemble défini par $x+y+z=1$.
+
+<Hint>
+
+Vérifiez d'abord le vecteur nul, puis la somme des coordonnées d'une combinaison $au+bv$.
+
+</Hint>
+
+<Solution>
+
+Le vecteur nul appartient à $F$. Si $u$ et $v$ sont dans $F$, la somme des coordonnées de $au+bv$ vaut $a\cdot0+b\cdot0=0$. Donc $F$ est un sous-espace. Le vecteur nul ne satisfait pas $x+y+z=1$ : le second ensemble n'est pas un sous-espace.
+
+</Solution>
+
+</Exercise>
+
+<Exercise number="2" name="Liberté et génération" level="Application" id="exercice-familles">
+
+Dans $\mathbb R^2$, les familles $((1,0),(0,1),(1,1))$ et $((1,0))$ sont-elles libres, génératrices, des bases ?
+
+<Hint>
+
+Cherchez une relation entre les trois premiers vecteurs, puis un vecteur impossible à fabriquer avec le dernier.
+
+</Hint>
+
+<Solution>
+
+La première famille engendre $\mathbb R^2$ car ses deux premiers vecteurs le font. Elle est liée : $(1,0)+(0,1)-(1,1)=(0,0)$ est une relation non triviale. La seconde est libre car $a(1,0)=(0,0)$ impose $a=0$, mais elle n'engendre pas $(0,1)$. Aucune des deux familles n'est une base.
+
+</Solution>
+
+</Exercise>
+
+<Exercise number="3" name="Une base de polynômes" level="Raisonnement" id="exercice-polynomes">
+
+Dans l'espace $P_2$ des polynômes réels de degré au plus $2$, polynôme nul compris, montrez que $(1,1+X,1+X+X^2)$ est une base et donnez les coordonnées de $2+3X+4X^2$ dans cette base.
+
+<Hint>
+
+Développez $a+b(1+X)+c(1+X+X^2)$ et identifiez les coefficients en commençant par celui de $X^2$.
+
+</Hint>
+
+<Solution>
+
+$P_2$ est un sous-espace de $\mathbb R[X]$ : le polynôme nul en fait partie et les combinaisons linéaires n'introduisent pas de terme de degré supérieur à $2$. Pour un polynôme quelconque $A+BX+CX^2$, l'égalité avec la combinaison demandée équivaut à $c=C$, $b+c=B$ et $a+b+c=A$. Elle a l'unique solution $c=C$, $b=B-C$, $a=A-B$. Le théorème 1 donne donc une base. Pour $A=2$, $B=3$, $C=4$, les coordonnées sont $(-1,-1,4)$.
+
+</Solution>
+
+</Exercise>
+
+<Exercise number="4" name="Un espace sans base finie" level="Approfondissement" id="exercice-infini">
+
+Montrez qu'aucune famille finie de $K[X]$ n'engendre $K[X]$. Que devient l'argument si tous les polynômes de la famille sont nuls, ou si la famille est vide ?
+
+<Hint>
+
+Une famille finie de polynômes non tous nuls a un degré maximal. Les combinaisons peuvent-elles faire apparaître un coefficient de degré supérieur ?
+
+</Hint>
+
+<Solution>
+
+Si la famille contient un polynôme non nul, soit $d$ le plus grand degré de ses éléments non nuls. Dans chaque combinaison linéaire, les coefficients de degré supérieur à $d$ sont nuls ; elle ne peut donc égaler $X^{d+1}$, dont ce coefficient vaut $1_K\ne0_K$. Si tous les polynômes sont nuls, ou si la famille est vide, son espace engendré est réduit à $\lbrace0\rbrace$ et ne contient pas le polynôme constant $1$. Ainsi aucune famille finie n'engendre $K[X]$. Ce résultat ne nie pas l'existence de bases infinies ; leur définition dépasse le cadre des familles finies de cette leçon.
+
+</Solution>
+
+</Exercise>
+
+</CourseSection>
+
+<CourseSection id="reconstruction" eyebrow="06 / Reconstruction" title="Rebâtir les deux conditions d'une base">
+
+Sans consulter les corrections, choisissez deux vecteurs de $\mathbb R^2$ et essayez de construire chaque couple avec eux. Cherchez ensuite une combinaison nulle non triviale. Reformulez ce que chacun de ces deux tests établit, puis reconstruisez les deux sens de la preuve du théorème 1.
+
+Pour finir, expliquez pourquoi une droite décalée peut échouer à être un sous-espace, pourquoi les coordonnées dépendent de la base et pourquoi l'exemple de $K[X]$ empêche de supposer une base finie sans hypothèse supplémentaire.
+
+</CourseSection>

@@ -1,0 +1,259 @@
+---
+title: "Exponentielle matricielle & premières algèbres de Lie"
+heading:
+  lead: "Exponentielle matricielle"
+  emphasis: "& mouvements infinitésimaux."
+summary: "Construire une rotation à partir de son mouvement initial, puis découvrir le crochet qui mesure la non-commutation des matrices."
+domain: "Algèbre"
+number: "22"
+breadcrumb: "Exponentielle & algèbres de Lie"
+status: "draft"
+companion: false
+sections:
+  - { id: "exploration", label: "Exploration" }
+  - { id: "cours", label: "Le cours" }
+  - { id: "demonstration", label: "Démonstration" }
+  - { id: "preuve-integrale", label: "Preuve intégrale" }
+  - { id: "connexions", label: "Connexions" }
+  - { id: "exercices", label: "Exercices" }
+  - { id: "reconstruction", label: "À reconstruire" }
+---
+
+<CourseSection id="exploration" eyebrow="01 / Exploration" title="Un mouvement entier à partir d’un instant ?">
+
+**Pour commencer :** connaître les matrices réelles, leur produit, l’identité $I$, les fonctions sinus et cosinus, les dérivées et les séries numériques absolument convergentes. Les leçons sur les endomorphismes et sur les rotations et groupes matriciels peuvent accompagner cette lecture ; les conventions nécessaires sont rappelées ici. Le parcours principal vise le début de licence.
+
+Dans un repère orthonormé direct, considérons la matrice
+
+$$
+J=\begin{pmatrix}0&-1\\1&0\end{pmatrix}.
+$$
+
+Elle envoie $(1,0)$ sur $(0,1)$ et vérifie $J^2=-I$. Pour un petit réel $h$, la matrice $I+hJ$ envoie $(1,0)$ sur $(1,h)$ : elle indique un déplacement initial vers le haut. Mais sa norme au carré vaut $1+h^2$ : pour $h\ne 0$, ce pas approximatif n’est pas une rotation exacte.
+
+Peut-on construire à partir de $J$ une famille exacte de rotations, dont la vitesse initiale est $J$ ? Les puissances successives de $J$ se répètent : $I,J,-I,-J,I,\ldots$. Leur somme infinie, avec des coefficients convenables, va faire apparaître cosinus et sinus. Les calculs finis suggèrent le résultat ; ils ne suffisent pas à justifier le passage à la limite.
+
+</CourseSection>
+
+<CourseSection id="cours" eyebrow="02 / Le cours" title="De la série au mouvement">
+
+Nous travaillons sur $\mathbb R$. Pour $n\geq 1$, $M_n(\mathbb R)$ désigne les matrices réelles carrées de taille $n$, et $I$ leur identité. Une série de matrices converge lorsque chacune de ses entrées converge. Nous utilisons les faits classiques sur les séries réelles absolument convergentes : comparaison, produit de Cauchy et regroupement des termes, ainsi que les développements de $\sin$ et $\cos$. La preuve ci-dessous explique pourquoi ils s’appliquent aux matrices.
+
+<Definition number="1" name="Exponentielle d’une matrice">
+
+Pour $A\in M_n(\mathbb R)$, on définit
+
+$$
+\exp(A)=e^A=\sum_{k=0}^{\infty}\frac{A^k}{k!},\qquad A^0=I.
+$$
+
+Cette série converge pour toute matrice réelle carrée, comme établi dans la preuve du théorème 1. Pour $t\in\mathbb R$, $e^{tA}$ est l’exponentielle de la matrice $tA$.
+
+</Definition>
+
+<Theorem kind="Théorème" number="1" name="Une famille issue d’une matrice" id="theoreme-exponentielle">
+
+Pour toute matrice $A\in M_n(\mathbb R)$ et tous réels $s,t$, la série définissant $e^{tA}$ converge et
+
+$$
+e^{0A}=I,\qquad e^{sA}e^{tA}=e^{(s+t)A},\qquad (e^{tA})^{-1}=e^{-tA}.
+$$
+
+La fonction matricielle $t\mapsto e^{tA}$ est dérivable entrée par entrée et
+
+$$
+\frac{d}{dt}e^{tA}=Ae^{tA}=e^{tA}A.
+$$
+
+En particulier sa dérivée en $0$ est $A$. Ces propriétés sont démontrées ci-dessous. Elles font de $t\mapsto e^{tA}$ un morphisme du groupe additif $\mathbb R$ vers le groupe des matrices inversibles, pour la multiplication.
+
+</Theorem>
+
+<Example name="Le générateur des rotations du plan">
+
+Avec la matrice $J$ de l’exploration, la séparation des puissances paires et impaires donne, pour tout réel $t$,
+
+$$
+e^{tJ}=\cos(t)I+\sin(t)J
+=\begin{pmatrix}\cos t&-\sin t\\\sin t&\cos t\end{pmatrix}=R(t).
+$$
+
+Nous **définissons ici** $R(t)$ par cette matrice : dans notre repère direct, elle envoie $(1,0)$ sur $(\cos t,\sin t)$, dans le sens antihoraire pour les petits $t>0$. Ses colonnes sont orthonormées et son déterminant vaut $1$ : c’est une rotation. Le théorème donne $R(s)R(t)=R(s+t)$ et $R'(0)=J$. Ainsi $J$ est la vitesse matricielle initiale, appelée ici **générateur infinitésimal** de cette famille.
+
+</Example>
+
+<Remark name="Deux limites à ne pas confondre">
+
+La relation $e^{sA}e^{tA}=e^{(s+t)A}$ concerne deux multiples de la **même** matrice. Pour deux matrices quelconques $A,B$, la formule $e^{A+B}=e^Ae^B$ n’est pas toujours vraie. Elle est vraie si $AB=BA$, par le même produit de séries et la formule du binôme. L’exercice 3 donne un contre-exemple explicite sans cette hypothèse.
+
+De plus, l’exponentielle n’est pas injective : $e^{0J}=e^{2\pi J}=I$, bien que $0J\ne 2\pi J$. Une vitesse initiale fixe détermine la famille construite ci-dessus, mais une matrice finale seule ne détermine pas son générateur.
+
+</Remark>
+
+<Definition number="2" name="Crochet et algèbre de Lie matricielle">
+
+Pour $A,B\in M_n(\mathbb R)$, leur **crochet** est $[A,B]=AB-BA$. Une **algèbre de Lie matricielle réelle**, au sens utilisé ici, est un sous-espace vectoriel réel de $M_n(\mathbb R)$ stable par ce crochet. Le crochet est bilinéaire et alterné : $[A,A]=0$. Il satisfait aussi l’identité de Jacobi
+
+$$
+[A,[B,C]]+[B,[C,A]]+[C,[A,B]]=0.
+$$
+
+En effet, la bilinéarité découle de la distributivité du produit matriciel ; pour Jacobi, développer les trois crochets donne les six produits ordonnés $ABC,ACB,BAC,BCA,CAB,CBA$, chacun une fois avec chaque signe. Nous ne définissons pas ici les groupes de Lie généraux ni leur espace tangent.
+
+</Definition>
+
+<Example name="L’algèbre des rotations du plan">
+
+Les matrices réelles antisymétriques de taille $2$, c’est-à-dire celles qui vérifient $A^T=-A$, sont exactement les matrices $aJ$, $a\in\mathbb R$. Elles forment un sous-espace vectoriel, et $[aJ,bJ]=0$ pour tous réels $a,b$. Elles constituent donc une algèbre de Lie matricielle, notée $\mathfrak{so}(2)$. Pour chacune, $e^{t(aJ)}=R(at)$ : ces générateurs produisent les rotations du plan.
+
+Le crochet nul ici reflète la commutation des multiples de $J$. Il ne signifie pas que tous les crochets de matrices sont nuls.
+
+</Example>
+
+</CourseSection>
+
+<Proof eyebrow="03 / Démonstration" title="Pourquoi la série définit-elle un mouvement ?" intro="Nous démontrons toutes les assertions du théorème 1. La preuve intégrale reste accessible directement.">
+
+  <ProofStep title="Contrôler les puissances" open>
+
+Posons $\|A\|=\max_i\sum_j |a_{ij}|$. Cette norme vérifie $\|I\|=1$ et $\|AB\|\leq\|A\|\|B\|$ : pour chaque ligne, l’inégalité triangulaire et la majoration des sommes de lignes donnent cette borne. Ainsi $\|A^k\|\leq\|A\|^k$. La série des normes de $(tA)^k/k!$ est dominée par la série réelle convergente $\sum |t|^k\|A\|^k/k!$. Chaque entrée converge donc absolument.
+
+  </ProofStep>
+
+  <ProofStep title="Multiplier deux séries">
+
+L’absolue convergence autorise le produit de Cauchy, entrée par entrée. Comme les puissances de $A$ commutent, le coefficient de $A^m$ dans $e^{sA}e^{tA}$ est $\sum_{k=0}^m s^k t^{m-k}/(k!(m-k)!)$, égal à $(s+t)^m/m!$ par le binôme. On obtient $e^{sA}e^{tA}=e^{(s+t)A}$. Le terme d’ordre zéro donne $e^{0A}=I$ et, avec $s=-t$, l’inverse annoncé.
+
+  </ProofStep>
+
+  <ProofStep title="Dériver et identifier la vitesse">
+
+Sur tout intervalle borné, les séries des entrées et de leurs dérivées terme à terme convergent uniformément par comparaison avec des séries exponentielles réelles. Le théorème usuel de dérivation des séries de fonctions donne
+
+$$
+\frac{d}{dt}e^{tA}=\sum_{k=1}^{\infty}\frac{t^{k-1}A^k}{(k-1)!}=Ae^{tA}=e^{tA}A.
+$$
+
+À $t=0$, cela vaut $A$. La commutation avec $A$ résulte de celle de ses puissances.
+
+  </ProofStep>
+
+  <FullProof slot="full">
+
+**Preuve intégrale du théorème 1.** Pour une matrice $A=(a_{ij})$, posons $\|A\|=\max_i\sum_j|a_{ij}|$. Par l’inégalité triangulaire, la somme des valeurs absolues de la ligne $i$ de $AB$ est au plus $\sum_k|a_{ik}|\sum_j|b_{kj}|$, donc au plus $\|A\|\|B\|$. Ainsi $\|AB\|\leq\|A\|\|B\|$ et, puisque $\|I\|=1$, $\|A^k\|\leq\|A\|^k$ pour tout $k\geq 0$. La série $\sum |t|^k\|A\|^k/k!$ converge pour tout réel $t$. Par comparaison, chaque entrée de la série définissant $e^{tA}$ converge absolument.
+
+Cette convergence absolue permet de multiplier les séries entrée par entrée et de regrouper leur produit par degré. Comme $A^kA^\ell=A^{k+\ell}$, le coefficient de $A^m$ dans le produit est
+
+$$
+\sum_{k=0}^{m}\frac{s^k t^{m-k}}{k!(m-k)!}=\frac{(s+t)^m}{m!}.
+$$
+
+La dernière égalité est la formule du binôme. Par conséquent $e^{sA}e^{tA}=e^{(s+t)A}$. En $t=0$, seul le terme $I$ subsiste. En prenant $s=-t$, et aussi en inversant les rôles de $s$ et $t$, on obtient les deux produits égaux à $I$ : $e^{tA}$ est inversible d’inverse $e^{-tA}$.
+
+Sur chaque intervalle borné $|t|\leq T$, les séries d’entrées et leurs séries de dérivées sont uniformément convergentes par comparaison respectivement avec $\sum T^k\|A\|^k/k!$ et $\|A\|\sum T^k\|A\|^k/k!$. Le théorème de dérivation des séries de fonctions s’applique entrée par entrée ; en réindexant,
+
+$$
+\frac{d}{dt}e^{tA}=\sum_{k=1}^{\infty}\frac{t^{k-1}A^k}{(k-1)!}=Ae^{tA}=e^{tA}A.
+$$
+
+Les deux dernières expressions coïncident car chaque puissance de $A$ commute avec $A$. À $t=0$, $e^{0A}=I$ et la dérivée vaut $A$. Toutes les assertions sont établies.
+
+  </FullProof>
+
+</Proof>
+
+<CourseSection id="connexions" eyebrow="04 / Connexions" title="Du mouvement initial à une équation">
+
+**Lien mathématique démontré.** Pour un vecteur initial $v_0\in\mathbb R^n$, la trajectoire $v(t)=e^{tA}v_0$ satisfait $v'(t)=Av(t)$ et $v(0)=v_0$, par le théorème 1. Elle est l’unique solution dérivable sur $\mathbb R$ de ce problème : si $w'=Aw$ et $w(0)=v_0$, la dérivée de $e^{-tA}w(t)$ est nulle par la règle du produit et le théorème 1. Cette expression est donc constante, égale à $v_0$, d’où $w(t)=e^{tA}v_0$.
+
+**Application — modèle de rotation uniforme.** Si $A=\omega J$ et $v_0=(1,0)$, alors $v(t)=(\cos(\omega t),\sin(\omega t))$. Cela modélise un point tournant à vitesse angulaire constante $\omega$ autour de l’origine. Le modèle suppose une vitesse constante et un mouvement plan idéal ; il ne décrit pas à lui seul les forces ou les frottements.
+
+</CourseSection>
+
+<CourseSection id="exercices" eyebrow="05 / Exercices" title="Calculer, contester, reconstruire">
+
+<Exercise number="1" name="Une série qui s’arrête" level="Découverte" id="exercice-nilpotente">
+
+Soit $N=\begin{pmatrix}0&1\\0&0\end{pmatrix}$. Calculez $N^2$, puis $e^{tN}$ et son inverse pour tout réel $t$.
+
+<Hint>
+
+Après $N^2$, toutes les puissances suivantes sont nulles.
+
+</Hint>
+
+<Solution>
+
+On trouve $N^2=0$, donc $e^{tN}=I+tN=\begin{pmatrix}1&t\\0&1\end{pmatrix}$. Son inverse est $e^{-tN}=I-tN$, et leur produit vaut $I-t^2N^2=I$.
+
+</Solution>
+
+</Exercise>
+
+<Exercise number="2" name="Un quart de tour" level="Application" id="exercice-rotation">
+
+Calculez $e^{(\pi/2)J}$ et son action sur $(2,1)$. Quelle est la dérivée en $t=0$ de $e^{t(2J)}$ ?
+
+<Hint>
+
+Utilisez la formule de $R(t)$ et le théorème 1.
+
+</Hint>
+
+<Solution>
+
+$e^{(\pi/2)J}=J$, qui envoie $(2,1)$ sur $(-1,2)$. Le générateur de $t\mapsto e^{t(2J)}$ est $2J$ : sa dérivée en $0$ vaut donc $2J$.
+
+</Solution>
+
+</Exercise>
+
+<Exercise number="3" name="L’ordre compte" level="Raisonnement" id="exercice-crochet">
+
+Soient $A=\begin{pmatrix}0&1\\0&0\end{pmatrix}$ et $B=\begin{pmatrix}0&0\\1&0\end{pmatrix}$. Calculez $[A,B]$, $e^A e^B$ et $e^{A+B}$. La formule $e^{A+B}=e^Ae^B$ est-elle toujours valable ?
+
+<Hint>
+
+$A^2=B^2=0$, mais $(A+B)^2=I$. Séparez alors les puissances paires et impaires.
+
+</Hint>
+
+<Solution>
+
+$AB=\begin{pmatrix}1&0\\0&0\end{pmatrix}$ et $BA=\begin{pmatrix}0&0\\0&1\end{pmatrix}$, donc $[A,B]=\begin{pmatrix}1&0\\0&-1\end{pmatrix}$. Comme les carrés de $A$ et $B$ sont nuls,
+
+$$
+e^Ae^B=(I+A)(I+B)=\begin{pmatrix}2&1\\1&1\end{pmatrix}.
+$$
+
+Posons $C=A+B$. Puisque $C^2=I$, la série donne $e^C=\cosh(1)I+\sinh(1)C$, où $\cosh(1)=\sum_{k\geq0}1/(2k)!$. Cette diagonale vaut strictement plus que $1$, tandis que l’entrée inférieure droite de $e^Ae^B$ vaut $1$. Les matrices diffèrent : la formule générale est fausse.
+
+</Solution>
+
+</Exercise>
+
+<Exercise number="4" name="Stabilité par crochet" level="Approfondissement" id="exercice-antisymetriques">
+
+Montrez que les matrices antisymétriques réelles de taille $n$ forment une algèbre de Lie matricielle. Leur produit ordinaire est-il toujours antisymétrique ?
+
+<Hint>
+
+Utilisez $(AB)^T=B^TA^T$ et testez $J^2$ pour la seconde question.
+
+</Hint>
+
+<Solution>
+
+Les matrices $A$ telles que $A^T=-A$ forment un sous-espace par linéarité de la transposition. Si $A,B$ en font partie, alors $(AB-BA)^T=B^TA^T-A^TB^T=BA-AB=-[A,B]$. Le crochet est donc stable et cet espace est une algèbre de Lie matricielle. En revanche $J$ est antisymétrique mais $J^2=-I$ ne l’est pas : son transposé vaut lui-même et il est non nul.
+
+</Solution>
+
+</Exercise>
+
+</CourseSection>
+
+<CourseSection id="reconstruction" eyebrow="06 / Reconstruction" title="Retrouver le chemin">
+
+Sans consulter les corrections, expliquez pourquoi $I+hJ$ n’est pas une rotation exacte, puis reconstruisez la série de $e^{tJ}$ à partir des puissances de $J$. Quelle estimation assure la convergence pour une matrice quelconque ? Pourquoi la loi de composition prouvée porte-t-elle sur une même matrice ? Retrouvez ensuite le crochet, ses propriétés et la raison pour laquelle les multiples de $J$ forment une algèbre de Lie. Enfin, distinguez la vitesse initiale $J$, la famille $R(t)$ et une position finale qui peut être atteinte après plusieurs tours.
+
+</CourseSection>

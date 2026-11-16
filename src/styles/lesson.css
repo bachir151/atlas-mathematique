@@ -83,6 +83,20 @@
   font-size: 1.08em;
 }
 
+/* Set by src/scripts/wide-math.ts on an inline formula wider than its line. */
+.katex-wide {
+  display: inline-block;
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  vertical-align: bottom;
+}
+
+.katex-wide:focus-visible {
+  outline: 3px solid var(--orange);
+  outline-offset: 2px;
+}
+
 /* Labelled blocks: definition, theorem, example, remark, commentary, exercise. */
 .math-block {
   --block-accent: var(--green);

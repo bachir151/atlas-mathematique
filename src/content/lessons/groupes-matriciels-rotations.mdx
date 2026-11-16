@@ -1,0 +1,221 @@
+---
+title: "Rotations & groupes matriciels"
+heading:
+  lead: "Rotations &"
+  emphasis: "groupes matriciels."
+summary: "Décrire les rotations du plan par des matrices, puis distinguer rotations et réflexions dans le groupe orthogonal."
+domain: "Algèbre"
+number: "21"
+breadcrumb: "Rotations & matrices"
+status: "draft"
+companion: false
+sections:
+  - { id: "exploration", label: "Exploration" }
+  - { id: "cours", label: "Le cours" }
+  - { id: "demonstration", label: "Démonstration" }
+  - { id: "preuve-integrale", label: "Preuve intégrale" }
+  - { id: "connexions", label: "Connexions" }
+  - { id: "exercices", label: "Exercices" }
+  - { id: "reconstruction", label: "À reconstruire" }
+---
+
+<CourseSection id="exploration" eyebrow="01 / Exploration" title="Tourner sans déformer">
+
+**Pour commencer :** connaître les groupes et la composition des applications, les coordonnées du plan, le produit de matrices de taille $2$, le déterminant, ainsi que sinus et cosinus et leurs formules d’addition. Le parcours vise le début de licence. La leçon sur les espaces vectoriels abstraits présente le cadre général des applications linéaires ; ici nous travaillons directement dans $\mathbb R^2$.
+
+Une transformation fixe l’origine et envoie le vecteur $(1,0)$ sur $(0,1)$. Cela suffit-il pour connaître l’image de tous les vecteurs si elle conserve les longueurs ? Essayez deux possibilités : envoyer $(0,1)$ sur $(-1,0)$ ou sur $(1,0)$. La première donne $(x,y)\mapsto(-y,x)$, la seconde $(x,y)\mapsto(y,x)$. Toutes deux conservent les longueurs, mais seule la première tourne le plan d’un quart de tour dans le sens antihoraire.
+
+Ces essais suggèrent que la conservation des longueurs ne suffit pas à distinguer rotation et réflexion. Il faudra caractériser toutes les matrices concernées, et non seulement examiner quelques exemples.
+
+</CourseSection>
+
+<CourseSection id="cours" eyebrow="02 / Le cours" title="Des vecteurs aux matrices">
+
+Nous utilisons des vecteurs colonnes et le produit scalaire usuel $u\cdot v=u_1v_1+u_2v_2$ sur $\mathbb R^2$. La norme est $\|u\|=\sqrt{u\cdot u}$. Pour une matrice réelle $A$, $A^T$ désigne sa transposée et $I$ la matrice identité. Le produit $AB$ agit d’abord par $B$, puis par $A$.
+
+<Definition number="1" name="Groupe matriciel et orthogonalité">
+
+Un **groupe matriciel réel de taille 2** est un sous-groupe du groupe $GL_2(\mathbb R)$ des matrices réelles inversibles de taille $2$, muni de la multiplication. On définit
+
+$$
+O(2)=\lbrace A\in M_2(\mathbb R)\mid A^TA=I\rbrace,
+\qquad SO(2)=\lbrace A\in O(2)\mid\det A=1\rbrace.
+$$
+
+Une matrice de $O(2)$ est dite **orthogonale**. Ses colonnes forment une base orthonormée : chacune a norme $1$ et leur produit scalaire est nul.
+
+</Definition>
+
+En effet, les coefficients de $A^TA$ sont les produits scalaires des colonnes de $A$. Si $A^TA=I$, alors $A$ est inversible et $A^{-1}=A^T$. Pour deux matrices orthogonales, $(AB)^T(AB)=B^TA^TAB=I$ ; l’identité et les inverses sont également orthogonaux. Ainsi $O(2)$ est un groupe. Comme $\det(AB)=\det A\det B$ et $\det(A^{-1})=(\det A)^{-1}$, $SO(2)$ en est un sous-groupe. Enfin $(\det A)^2=1$, donc $\det A$ vaut $1$ ou $-1$.
+
+<Definition number="2" name="Convention de rotation">
+
+Pour tout angle réel $\theta$, mesuré en radians, nous posons
+
+$$
+R_\theta=\begin{pmatrix}\cos\theta&-\sin\theta\\\sin\theta&\cos\theta\end{pmatrix}.
+$$
+
+Dans un repère orthonormé direct, cette matrice représente la rotation de centre l’origine et d’angle $\theta$ : l’angle positif est orienté du premier axe vers le second, donc dans le sens antihoraire. En particulier $R_{\pi/2}(x,y)=(-y,x)$. L’angle est entendu modulo $2\pi$ : $R_{\theta+2\pi}=R_\theta$.
+
+</Definition>
+
+Les formules d’addition donnent $R_\alpha R_\beta=R_{\alpha+\beta}$, $R_0=I$ et $R_\theta^{-1}=R_{-\theta}$. Par exemple, pour la première colonne du produit, on obtient $(\cos\alpha\cos\beta-\sin\alpha\sin\beta,\ \sin\alpha\cos\beta+\cos\alpha\sin\beta)$, soit $(\cos(\alpha+\beta),\sin(\alpha+\beta))$. Les deux rotations commutent. En revanche, le groupe de toutes les matrices inversibles n’est pas commutatif en général.
+
+<Theorem kind="Théorème" number="1" name="Classification orthogonale du plan" id="classification">
+
+Une matrice réelle $A$ appartient à $O(2)$ si et seulement si elle est de l’une des formes suivantes, pour un réel $\theta$ :
+
+$$
+R_\theta=\begin{pmatrix}\cos\theta&-\sin\theta\\\sin\theta&\cos\theta\end{pmatrix},
+\qquad
+F_\theta=\begin{pmatrix}\cos\theta&\sin\theta\\\sin\theta&-\cos\theta\end{pmatrix}.
+$$
+
+Dans le premier cas son déterminant vaut $1$ et elle représente une rotation ; dans le second il vaut $-1$ et elle représente une réflexion dans une droite passant par l’origine, d’angle $\theta/2$ avec le premier axe. Ainsi $SO(2)$ est exactement le groupe des matrices $R_\theta$.
+
+De plus, une matrice réelle $A$ est orthogonale si et seulement si elle conserve le produit scalaire de tous les vecteurs, ou, de façon équivalente, leur norme. Elle conserve alors toutes les distances entre points du plan.
+
+</Theorem>
+
+La preuve progressive et la preuve intégrale établissent aussi bien la réciproque que la classification. Une matrice orthogonale fixe toujours l’origine : les translations, bien qu’elles conservent les distances, ne sont donc pas représentées par ces matrices agissant seules sur les coordonnées.
+
+<Example name="Une réflexion et un ordre qui compte">
+
+Posons $S=F_0=\begin{pmatrix}1&0\\0&-1\end{pmatrix}$. Elle réfléchit par rapport à l’axe horizontal. La multiplication donne $R_\theta S=F_\theta$ et $S R_\theta=R_{-\theta}S$. Pour $\theta=\pi/2$, leurs images de $(1,0)$ sont respectivement $(0,1)$ et $(0,-1)$ : $O(2)$ n’est pas commutatif.
+
+</Example>
+
+</CourseSection>
+
+<Proof eyebrow="03 / Démonstration" title="Pourquoi deux formes seulement ?" intro="Nous prouvons le théorème 1 en étudiant les colonnes, puis les produits scalaires.">
+
+  <ProofStep title="Choisir la première colonne" open>
+
+Si $A\in O(2)$, sa première colonne $(a,b)$ est de norme $1$. Il existe donc un réel $\theta$ tel que $a=\cos\theta$ et $b=\sin\theta$ : c’est la paramétrisation du cercle unité. Une colonne $(c,d)$ perpendiculaire à $(a,b)$ est de la forme $t(-b,a)$, car $(a,b)$ et $(-b,a)$ forment une base. Sa norme vaut $|t|$ ; elle est unitaire exactement lorsque $t=1$ ou $t=-1$.
+
+  </ProofStep>
+
+  <ProofStep title="Reconnaître les deux transformations">
+
+Pour $t=1$, les colonnes donnent $R_\theta$, de déterminant $1$. Pour $t=-1$, elles donnent $F_\theta$, de déterminant $-1$. Inversement, les colonnes de ces deux matrices sont orthonormées ; elles sont donc dans $O(2)$.
+
+Posons $\phi=\theta/2$ et $S=\operatorname{diag}(1,-1)$. Le calcul $R_\phi S R_{-\phi}=F_{2\phi}=F_\theta$ montre que $F_\theta$ fait d’abord tourner le plan de $-\phi$, réfléchit dans l’axe horizontal, puis revient par une rotation de $\phi$. C’est la réflexion d’axe la droite dirigée par $(\cos\phi,\sin\phi)$. Remplacer $\theta$ par $\theta+2\pi$ change $\phi$ de $\pi$ mais pas cette droite.
+
+  </ProofStep>
+
+  <ProofStep title="Relier matrice, produit scalaire et distance">
+
+Pour tous $u,v$, $(Au)\cdot(Av)=u^T A^T A v$. Si $A^TA=I$, le produit scalaire et donc les normes sont conservés. Inversement, si les normes sont conservées, l’identité $2u\cdot v=\|u+v\|^2-\|u\|^2-\|v\|^2$ et la linéarité de $A$ donnent la conservation du produit scalaire. En l’appliquant aux deux vecteurs de la base usuelle, les colonnes sont orthonormées, donc $A^TA=I$. Enfin la distance entre $u$ et $v$ est $\|u-v\|$ et $Au-Av=A(u-v)$.
+
+  </ProofStep>
+
+  <FullProof slot="full">
+
+**Preuve intégrale du théorème 1.** Soit $A\in O(2)$. Ses colonnes sont orthonormées. La première, de norme $1$, s’écrit $(\cos\theta,\sin\theta)$ pour un réel $\theta$, par paramétrisation du cercle unité. Tout vecteur perpendiculaire à cette colonne est un multiple de $(-\sin\theta,\cos\theta)$ ; pour être unitaire, ce multiple doit valoir $1$ ou $-1$. La seconde colonne est donc soit $(-\sin\theta,\cos\theta)$, soit $(\sin\theta,-\cos\theta)$. On obtient respectivement $R_\theta$ et $F_\theta$.
+
+Réciproquement, dans chacune de ces deux matrices, les colonnes sont unitaires et perpendiculaires, par $\cos^2\theta+\sin^2\theta=1$. Les deux matrices sont donc orthogonales. Leurs déterminants valent respectivement $\cos^2\theta+\sin^2\theta=1$ et $-\cos^2\theta-\sin^2\theta=-1$. Les matrices de $SO(2)$ sont exactement les $R_\theta$, qui représentent les rotations selon notre convention.
+
+Pour identifier $F_\theta$, écrivons $\phi=\theta/2$ et $S=\operatorname{diag}(1,-1)$. Les formules d’addition donnent $R_\phi S R_{-\phi}=F_{2\phi}=F_\theta$. Cette composée transforme la droite faisant l’angle $\phi$ avec le premier axe en l’axe horizontal, y réfléchit, puis revient. Elle fixe donc cette droite point par point et inverse la direction perpendiculaire : c’est la réflexion dans cette droite. Le choix d’un représentant de $\theta$ modulo $2\pi$ ne change pas l’axe, puisque $\phi$ change alors d’un multiple de $\pi$.
+
+Pour tous vecteurs colonnes $u,v$, $(Au)\cdot(Av)=u^T A^T A v$. Ainsi $A^TA=I$ entraîne la conservation du produit scalaire, donc celle des normes. Réciproquement, si $\|Aw\|=\|w\|$ pour tout $w$, l’identité de polarisation
+
+$$
+2u\cdot v=\|u+v\|^2-\|u\|^2-\|v\|^2
+$$
+
+et la linéarité de $A$ assurent $(Au)\cdot(Av)=u\cdot v$ pour tous $u,v$. En prenant les vecteurs de la base usuelle, les colonnes de $A$ sont orthonormées et $A^TA=I$. Enfin, pour deux points $u,v$, leur distance est $\|u-v\|$ et celle de leurs images est $\|A(u-v)\|$ : elle est conservée. Cela établit toutes les affirmations.
+
+  </FullProof>
+
+</Proof>
+
+<CourseSection id="connexions" eyebrow="04 / Connexions" title="Du carré au cercle">
+
+**Lien mathématique démontré.** Soit le carré plein $Q=[-1,1]^2$ et $r=R_{\pi/2}$. Les matrices $I,r,r^2,r^3$ conservent $Q$ et sont distinctes, car elles donnent quatre images distinctes de $(1,0)$. Elles forment un sous-groupe cyclique de $SO(2)$, puisque $r^4=I$. Ce sont exactement les rotations de centre l’origine qui conservent $Q$ : une telle rotation permute les quatre sommets, caractérisés dans $Q$ par leur distance maximale $\sqrt2$ à l’origine. L’image de $(1,1)$ est donc l’un de ces sommets, ce qui impose successivement $\theta=0,\pi/2,\pi$ ou $3\pi/2$ modulo $2\pi$. Cette copie matricielle du groupe des rotations du carré ne dépend pas du nom donné au sens du quart de tour dans une autre leçon.
+
+**Application en informatique graphique.** Dans un modèle plan, multiplier les coordonnées relatives à un centre fixe par $R_\theta$ calcule une rotation autour de ce centre. Pour un centre $c$ quelconque, on utilise $p\mapsto c+R_\theta(p-c)$ : cette transformation est affine et n’est linéaire que si elle fixe l’origine. Les calculs numériques approchés peuvent introduire de petits écarts de longueur ; la conservation exacte est une propriété des matrices réelles idéales.
+
+</CourseSection>
+
+<CourseSection id="exercices" eyebrow="05 / Exercices" title="Calculer, distinguer, démontrer">
+
+<Exercise number="1" name="Deux quarts de tour" level="Découverte" id="exercice-quarts">
+
+Calculez $R_{\pi/2}(2,1)$ puis $R_{\pi/2}^2(2,1)$. Comparez avec $R_\pi(2,1)$.
+
+<Hint>
+
+Utilisez $\cos(\pi/2)=0$ et $\sin(\pi/2)=1$.
+
+</Hint>
+
+<Solution>
+
+$R_{\pi/2}(x,y)=(-y,x)$, donc les images successives sont $(-1,2)$ puis $(-2,-1)$. Comme $R_\pi=-I$, $R_\pi(2,1)=(-2,-1)$ ; cela illustre $R_{\pi/2}^2=R_\pi$.
+
+</Solution>
+
+</Exercise>
+
+<Exercise number="2" name="Orthogonale ou non ?" level="Application" id="exercice-orthogonale">
+
+Pour chacune des matrices $A=\frac15\begin{pmatrix}3&-4\\4&3\end{pmatrix}$ et $B=\begin{pmatrix}1&1\\0&1\end{pmatrix}$, déterminez si elle est orthogonale. Pour $A$, précisez s’il s’agit d’une rotation ou d’une réflexion.
+
+<Hint>
+
+Comparez les normes et le produit scalaire des colonnes, puis calculez le déterminant.
+
+</Hint>
+
+<Solution>
+
+Les colonnes de $A$ ont chacune pour norme $1$ et leur produit scalaire vaut $(-12+12)/25=0$. Donc $A\in O(2)$ et $\det A=(9+16)/25=1$ : c’est une rotation. Pour $B$, la seconde colonne $(1,1)$ a une norme $\sqrt2$, donc $B$ n’est pas orthogonale.
+
+</Solution>
+
+</Exercise>
+
+<Exercise number="3" name="Réflexion diagonale" level="Raisonnement" id="exercice-reflexion">
+
+Déterminez la matrice de la réflexion d’axe $y=x$, puis calculez son produit avec $R_{\pi/2}$ dans les deux ordres. Sont-ils égaux ?
+
+<Hint>
+
+Dans la classification, prenez $\theta=\pi/2$ pour obtenir un axe d’angle $\pi/4$.
+
+</Hint>
+
+<Solution>
+
+La matrice est $F_{\pi/2}=\begin{pmatrix}0&1\\1&0\end{pmatrix}$. On obtient $R_{\pi/2}F_{\pi/2}=\operatorname{diag}(-1,1)$ et $F_{\pi/2}R_{\pi/2}=\operatorname{diag}(1,-1)$. Ces matrices diffèrent : l’ordre des transformations compte.
+
+</Solution>
+
+</Exercise>
+
+<Exercise number="4" name="Noyau des angles" level="Approfondissement" id="exercice-noyau">
+
+Montrez que $\theta\mapsto R_\theta$ est un morphisme surjectif de $(\mathbb R,+)$ vers $SO(2)$ et déterminez son noyau. Que peut-on en déduire pour $\mathbb R/(2\pi\mathbb Z)$ ?
+
+<Hint>
+
+Examinez la première colonne de $R_\theta=I$, puis utilisez le théorème d’isomorphisme des groupes.
+
+</Hint>
+
+<Solution>
+
+La formule $R_{\alpha+\beta}=R_\alpha R_\beta$ donne le morphisme et la classification donne la surjectivité. L’égalité $R_\theta=I$ équivaut à $\cos\theta=1$ et $\sin\theta=0$, donc à $\theta\in 2\pi\mathbb Z$. Son noyau est $2\pi\mathbb Z$. Le théorème d’isomorphisme donne $\mathbb R/(2\pi\mathbb Z)\cong SO(2)$ : une classe d’angles détermine exactement une rotation.
+
+</Solution>
+
+</Exercise>
+
+</CourseSection>
+
+<CourseSection id="reconstruction" eyebrow="06 / Reconstruction" title="Rebâtir le passage du calcul au groupe">
+
+Sans consulter les corrections, expliquez pourquoi les colonnes d’une matrice orthogonale sont orthonormées, puis retrouvez les deux choix possibles pour la seconde colonne. Quel rôle joue le déterminant ? Pourquoi la conservation des normes entraîne-t-elle celle du produit scalaire ? Enfin, identifiez les quatre rotations qui conservent un carré centré à l’origine et expliquez pourquoi une réflexion en est exclue.
+
+</CourseSection>

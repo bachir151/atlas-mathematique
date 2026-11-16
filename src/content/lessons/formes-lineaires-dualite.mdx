@@ -1,0 +1,209 @@
+---
+title: "Formes linéaires & dualité"
+heading:
+  lead: "Formes linéaires &"
+  emphasis: "dualité."
+summary: "Mesurer les coordonnées d’un vecteur, construire les formes de la base duale et comprendre ce qui dépend du choix d’une base."
+domain: "Algèbre"
+number: "18"
+breadcrumb: "Formes linéaires & dualité"
+status: "draft"
+companion: false
+sections:
+  - { id: "exploration", label: "Exploration" }
+  - { id: "cours", label: "Le cours" }
+  - { id: "demonstration", label: "Démonstration" }
+  - { id: "preuve-integrale", label: "Preuve intégrale" }
+  - { id: "connexions", label: "Connexions" }
+  - { id: "exercices", label: "Exercices" }
+  - { id: "reconstruction", label: "À reconstruire" }
+---
+
+<CourseSection id="exploration" eyebrow="01 / Exploration" title="Comment lire un vecteur sans le dessiner ?">
+
+**Pour commencer :** connaître les corps, les espaces vectoriels, les combinaisons linéaires, les applications linéaires et les bases ; voir les leçons sur les anneaux et corps et sur les espaces vectoriels abstraits. Une base est ici une famille à la fois libre et génératrice : chaque vecteur s’écrit d’une unique façon comme combinaison linéaire finie de ses éléments. Le parcours vise le début de licence.
+
+Dans le plan réel, prenons $e_1=(1,0)$ et $e_2=(0,1)$. Pour $v=(3,2)$, la première coordonnée vaut $3$ et la seconde $2$. Chacune est obtenue par une règle qui prend un vecteur et renvoie un nombre. Si on additionne deux vecteurs, leurs premières coordonnées s’additionnent ; multiplier un vecteur par un réel multiplie aussi sa première coordonnée par ce réel.
+
+Changeons maintenant de base : $b_1=(1,0)$ et $b_2=(1,1)$. Puisque $(3,2)=1b_1+2b_2$, la première coordonnée du même vecteur est devenue $1$. Pour un vecteur quelconque $(x,y)$, elle vaut $x-y$. La règle qui lit cette coordonnée a changé avec la base.
+
+Peut-on construire une telle règle pour chaque vecteur d’une base quelconque ? Et toutes les règles linéaires qui renvoient un nombre s’obtiennent-elles en combinant ces lectures de coordonnées ? Les deux exemples suggèrent une réponse ; ils ne prouvent pas le cas général.
+
+</CourseSection>
+
+<CourseSection id="cours" eyebrow="02 / Le cours" title="Des vecteurs aux formes qui les mesurent">
+
+Dans toute cette section, $K$ est un corps commutatif et $E$ un espace vectoriel sur $K$. Les scalaires sont les éléments de $K$. Une application $f$ de $E$ dans $K$ est linéaire si, pour tous $u,v\in E$ et $a,b\in K$, $f(au+bv)=af(u)+bf(v)$.
+
+<Definition number="1" name="Forme linéaire et espace dual">
+
+Une **forme linéaire** sur $E$ est une application linéaire de $E$ dans $K$. L’ensemble de toutes ces formes est le **dual** de $E$, noté $E^*$. Pour $f,g\in E^*$ et $a\in K$, on définit $(f+g)(v)=f(v)+g(v)$ et $(af)(v)=af(v)$ pour tout $v\in E$.
+
+Ces opérations font de $E^*$ un espace vectoriel sur $K$ : les propriétés de l’addition et de la multiplication par un scalaire se vérifient en évaluant les deux membres en chaque vecteur. La forme nulle envoie tout vecteur sur $0$.
+
+</Definition>
+
+<Example name="Mesures et non-mesures linéaires">
+
+Sur $\mathbb R^2$, la règle $f(x,y)=2x-y$ est linéaire : pour $u=(x,y)$ et $v=(x',y')$, le développement donne $f(au+bv)=af(u)+bf(v)$. En revanche $g(x,y)=x^2+y^2$ ne l’est pas : $g(2,0)=4$ tandis que $2g(1,0)=2$. En particulier, une forme linéaire vérifie toujours $f(0)=0$.
+
+</Example>
+
+<Definition number="2" name="Base duale">
+
+Supposons que $E$ possède une base finie $(e_1,\ldots,e_n)$, avec $n\geq 1$. Pour chaque indice $i$, la forme coordonnée $e^i$ associe à $v=x_1e_1+\cdots+x_ne_n$ son unique coefficient $x_i$. La famille $(e^1,\ldots,e^n)$ est appelée **base duale** de $(e_1,\ldots,e_n)$. Elle vérifie $e^i(e_j)=1$ si $i=j$ et $e^i(e_j)=0$ sinon.
+
+</Definition>
+
+<Theorem kind="Théorème" number="1" name="Lire et reconstruire une forme" id="theoreme-dual">
+
+Soit $E$ un espace vectoriel sur un corps commutatif $K$, muni d’une base finie $(e_1,\ldots,e_n)$ avec $n\geq 1$. Les applications $e^i$ définies ci-dessus sont linéaires et constituent une base de $E^*$. Pour toute forme $f\in E^*$ et tout $v=x_1e_1+\cdots+x_ne_n$,
+
+$$
+f=f(e_1)e^1+\cdots+f(e_n)e^n,
+\qquad f(v)=x_1f(e_1)+\cdots+x_nf(e_n).
+$$
+
+Ainsi une forme est entièrement déterminée par ses valeurs sur les vecteurs de la base, et $\dim E^*=\dim E=n$.
+
+</Theorem>
+
+La preuve progressive et la preuve intégrale ci-dessous montrent l’existence, l’unicité et la linéarité des lectures de coordonnées, puis établissent que leur famille est libre et génératrice.
+
+<Example name="Une base oblique">
+
+Dans $\mathbb R^2$, reprenons $b_1=(1,0)$ et $b_2=(1,1)$. Comme $(x,y)=(x-y)b_1+yb_2$, les formes de la base duale sont $b^1(x,y)=x-y$ et $b^2(x,y)=y$. Par exemple, $b^1(b_1)=1$ et $b^1(b_2)=0$. Si $f(x,y)=2x-y$, alors $f(b_1)=1$ et $f(b_2)=1$, donc $f=b^1+b^2$.
+
+</Example>
+
+<Remark name="Même dimension ne veut pas dire même objet">
+
+Un vecteur appartient à $E$ ; une forme appartient à $E^*$ et prend un vecteur en entrée. Le choix d’une base donne une correspondance linéaire entre $E$ et $E^*$ en envoyant chaque $e_i$ sur $e^i$, mais cette correspondance dépend de la base. Sans structure supplémentaire choisie, nous n’identifions pas un vecteur à une forme. L’égalité des dimensions du théorème concerne la dimension finie.
+
+</Remark>
+
+</CourseSection>
+
+<Proof eyebrow="03 / Démonstration" title="Pourquoi les lectures de coordonnées forment-elles une base ?" intro="Nous démontrons le théorème 1 pour une base finie sur un corps quelconque.">
+
+  <ProofStep title="Définir et additionner les coordonnées" open>
+
+Chaque vecteur $v$ a une unique écriture $v=\sum_{j=1}^{n}x_je_j$ : prendre son coefficient $x_i$ définit donc une application $e^i$ sans ambiguïté. Si $u=\sum u_je_j$ et $v=\sum v_je_j$, alors $au+bv=\sum(au_j+bv_j)e_j$. Par unicité des coordonnées, $e^i(au+bv)=ae^i(u)+be^i(v)$ : $e^i$ est linéaire.
+
+  </ProofStep>
+
+  <ProofStep title="Reconstruire toute forme">
+
+Pour $f\in E^*$, la linéarité et l’écriture de $v$ donnent $f(v)=\sum x_jf(e_j)$. Or $x_j=e^j(v)$, donc $f(v)=(\sum f(e_j)e^j)(v)$ pour tout $v$. Les deux applications sont égales : les $e^j$ engendrent $E^*$.
+
+  </ProofStep>
+
+  <ProofStep title="Prouver l’unicité de la reconstruction">
+
+Si $\sum a_je^j$ est la forme nulle, évaluons-la en $e_i$. Comme $e^j(e_i)$ vaut $1$ pour $j=i$ et $0$ sinon, nous obtenons $a_i=0$. Ceci vaut pour chaque indice : la famille est libre. Elle est donc une base de $E^*$, de même longueur que celle de $E$.
+
+  </ProofStep>
+
+  <FullProof slot="full">
+
+**Preuve intégrale du théorème 1.** Puisque $(e_1,\ldots,e_n)$ est une base, chaque $v\in E$ possède une unique écriture $v=\sum_{j=1}^{n}x_je_j$. La règle $e^i(v)=x_i$ est donc bien définie. Pour $u=\sum u_je_j$, $v=\sum v_je_j$ et $a,b\in K$, on a $au+bv=\sum(au_j+bv_j)e_j$. L’unicité des coordonnées donne $e^i(au+bv)=au_i+bv_i=ae^i(u)+be^i(v)$. Ainsi $e^i\in E^*$.
+
+Soit $f\in E^*$. Pour tout $v=\sum x_je_j$, la linéarité donne $f(v)=\sum x_jf(e_j)=\sum f(e_j)e^j(v)$. Les applications $f$ et $\sum f(e_j)e^j$ coïncident sur tout $E$, donc sont égales. La famille $(e^1,\ldots,e^n)$ engendre $E^*$.
+
+Enfin, si $\sum a_je^j=0$ dans $E^*$, l’évaluation en $e_i$ donne $a_i=0$, car $e^j(e_i)$ vaut $1$ si $i=j$ et $0$ sinon. Tous les coefficients sont nuls : la famille est libre. C’est donc une base de $E^*$, et les deux espaces ont la même dimension finie $n$. Les formules et l’unicité annoncées en résultent.
+
+  </FullProof>
+
+</Proof>
+
+<CourseSection id="connexions" eyebrow="04 / Connexions" title="Évaluer un polynôme, lire des coefficients">
+
+**Lien mathématique démontré.** Soit $K[X]$ l’espace vectoriel des polynômes à coefficients dans $K$. Pour chaque $a\in K$, l’évaluation $P\mapsto P(a)$ est une forme linéaire : les règles de calcul des polynômes donnent $(\lambda P+\mu Q)(a)=\lambda P(a)+\mu Q(a)$. Elle relie cette leçon à celle sur les polynômes et leurs racines : les polynômes qui s’annulent en $a$ sont exactement ceux envoyés sur $0$ par cette forme.
+
+Pour les polynômes de degré au plus $2$, la base $(1,X,X^2)$ a pour base duale les trois applications qui extraient respectivement le coefficient constant, celui de $X$ et celui de $X^2$. L’évaluation en $a$ est leur combinaison avec les coefficients $1,a,a^2$. Cette description concerne ce sous-espace de dimension trois ; elle ne dit pas que trois formes suffisent pour tous les polynômes de degré arbitraire.
+
+</CourseSection>
+
+<CourseSection id="exercices" eyebrow="05 / Exercices" title="Calculer, changer de base, tester les limites">
+
+<Exercise number="1" name="Reconnaître la linéarité" level="Découverte" id="exercice-lineaire">
+
+Sur $\mathbb R^2$, décidez si $f(x,y)=3x+2y$ et $g(x,y)=x+y+1$ sont des formes linéaires. Donnez les coordonnées de $f$ dans la base duale de la base usuelle.
+
+<Hint>
+
+Vérifiez la règle sur une combinaison linéaire et regardez l’image du vecteur nul.
+
+</Hint>
+
+<Solution>
+
+Le développement montre que $f(au+bv)=af(u)+bf(v)$ : $f$ est linéaire. Mais $g(0,0)=1$, donc $g$ ne l’est pas. Si $e^1(x,y)=x$ et $e^2(x,y)=y$, alors $f=3e^1+2e^2$ : ses coordonnées sont $(3,2)$.
+
+</Solution>
+
+</Exercise>
+
+<Exercise number="2" name="Construire une base duale" level="Application" id="exercice-base">
+
+Dans $\mathbb R^2$, on pose $b_1=(1,1)$ et $b_2=(1,-1)$. Vérifiez que cette famille est une base, puis calculez sa base duale et exprimez $f(x,y)=2x+3y$ dans celle-ci.
+
+<Hint>
+
+Résolvez $(x,y)=sb_1+tb_2$ pour trouver $s$ et $t$.
+
+</Hint>
+
+<Solution>
+
+Les équations $x=s+t$ et $y=s-t$ ont l’unique solution $s=(x+y)/2$, $t=(x-y)/2$ pour tout $(x,y)$. La famille est donc libre et génératrice. Les formes duales sont $b^1(x,y)=(x+y)/2$ et $b^2(x,y)=(x-y)/2$. Puisque $f(b_1)=5$ et $f(b_2)=-1$, le théorème donne $f=5b^1-b^2$.
+
+</Solution>
+
+</Exercise>
+
+<Exercise number="3" name="Valeurs imposées" level="Raisonnement" id="exercice-valeurs">
+
+Soit $E$ de base $(e_1,e_2,e_3)$ sur un corps $K$. Existe-t-il une unique forme $f$ telle que $f(e_1)=1$, $f(e_2)=0$ et $f(e_3)=1$ ? Calculez $f(ae_1+be_2+ce_3)$ et décrivez les vecteurs envoyés sur $0$.
+
+<Hint>
+
+Utilisez les formes de la base duale, puis résolvez une équation dans $K$.
+
+</Hint>
+
+<Solution>
+
+La forme $f=e^1+e^3$ existe et a les valeurs demandées. Le théorème assure son unicité. Elle envoie $ae_1+be_2+ce_3$ sur $a+c$ ; les vecteurs envoyés sur $0$ sont ceux pour lesquels $c=-a$, soit $a(e_1-e_3)+be_2$ avec $a,b\in K$. Cela reste vrai en caractéristique deux, où $-a=a$.
+
+</Solution>
+
+</Exercise>
+
+<Exercise number="4" name="Pourquoi préciser dimension finie ?" level="Approfondissement" id="exercice-infini">
+
+Dans $K[X]$, pour chaque entier $i\geq 0$, soit $c_i$ la forme qui extrait le coefficient de $X^i$. Montrez que l’évaluation en $1$ est une forme linéaire qui n’est aucune combinaison linéaire finie des $c_i$. Pourquoi cela ne contredit-il pas le théorème ?
+
+<Hint>
+
+Une combinaison finie ne regarde qu’un nombre fini de coefficients. Testez-la sur une puissance de degré plus grand.
+
+</Hint>
+
+<Solution>
+
+L’évaluation en $1$ est linéaire comme dans la connexion. Si elle était une combinaison finie des $c_i$, les indices utilisés seraient bornés par un entier $N$. Sur $X^{N+1}$, chacun de ces $c_i$ vaut $0$, tandis que l’évaluation vaut $1\ne 0$ : contradiction. La famille infinie $(1,X,X^2,\ldots)$ est une base de $K[X]$, mais le théorème suppose une base **finie**. Il n’affirme donc pas que les formes coordonnées d’une base infinie engendrent tout le dual.
+
+</Solution>
+
+</Exercise>
+
+</CourseSection>
+
+<CourseSection id="reconstruction" eyebrow="06 / Reconstruction" title="Retrouver les deux côtés de la lecture">
+
+Sans consulter la preuve, expliquez pourquoi une coordonnée définit une application sans ambiguïté et pourquoi cette application est linéaire. À partir des seules valeurs d’une forme sur une base finie, reconstruisez sa valeur sur un vecteur quelconque ; puis expliquez pourquoi aucune autre combinaison des formes coordonnées ne peut donner la même forme.
+
+Reprenez ensuite la base oblique de l’exemple : quelles données changent quand on change de base, et quel vecteur reste le même ? Enfin, utilisez l’évaluation en $1$ sur $K[X]$ pour expliquer précisément pourquoi la preuve d’engendrement ne se transpose pas en une somme finie lorsque la base est infinie.
+
+</CourseSection>
